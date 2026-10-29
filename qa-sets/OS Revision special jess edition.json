@@ -1,0 +1,3510 @@
+{
+  "title": "OSP Notes Revision",
+  "sets": [
+    "W1",
+    "W2",
+    "W3",
+    "W4",
+    "W5",
+    "W6",
+    "W7",
+    "W8",
+    "W9"
+  ],
+  "questions": [
+    {
+      "id": "n1_1",
+      "set": "W1",
+      "n": 1,
+      "q": "What is a modern operating system?",
+      "a": "A <b>resource manager</b> for a computing machine. It <b>controls access to hardware</b> (CPU, I/O, memory) and provides <b>high-level abstractions</b> so application programmers can use the hardware without driving it directly.",
+      "kw": [
+        [
+          "resource manager",
+          "resource",
+          "manag"
+        ],
+        [
+          "hardware",
+          "cpu",
+          "memory",
+          "i/o",
+          "io"
+        ],
+        [
+          "abstraction",
+          "abstract",
+          "high level",
+          "high-level"
+        ]
+      ],
+      "src": "Notes W1 'What is a modern operating system?'; S-W1",
+      "mcq": [
+        {
+          "q": "Which best describes a modern OS?",
+          "a": "A resource manager that controls hardware access and provides abstractions to programs",
+          "w": [
+            "A compiler that turns source code into machine code",
+            "The user interface program only",
+            "The hardware that executes instructions"
+          ]
+        },
+        {
+          "q": "What does the OS give application programmers?",
+          "a": "High-level abstractions for using the hardware",
+          "w": [
+            "Direct access to privileged instructions",
+            "The physical address of every frame",
+            "A guarantee their program never crashes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n1_2",
+      "set": "W1",
+      "n": 2,
+      "q": "What are the goals of a modern OS?",
+      "a": "<b>1. Efficient resource use:</b> maximise utilisation and avoid bottlenecks.<br><b>2. Availability and reliability:</b> systems are critical and data is valuable.<br><b>3. User convenience and productivity:</b> user time is expensive.",
+      "kw": [
+        [
+          "efficiency",
+          "efficien",
+          "utilis",
+          "utiliz",
+          "bottleneck"
+        ],
+        [
+          "availability",
+          "availab"
+        ],
+        [
+          "reliability",
+          "reliab"
+        ],
+        [
+          "convenience",
+          "convenien",
+          "productiv"
+        ]
+      ],
+      "src": "Notes W1 'What are the goals of a modern OS?'; S-W1 'OS Goals'",
+      "mcq": [
+        {
+          "q": "Why is user convenience a goal of a modern OS?",
+          "a": "User time is expensive",
+          "w": [
+            "Hardware is more expensive than people",
+            "Convenience maximises CPU utilisation",
+            "It removes the need for a kernel"
+          ]
+        },
+        {
+          "q": "Which is NOT one of the goals of a modern OS listed in the course?",
+          "a": "Maximising the number of privileged instructions executed",
+          "w": [
+            "Efficient use of resources",
+            "Availability and reliability",
+            "User convenience and productivity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n1_3",
+      "set": "W1",
+      "n": 3,
+      "q": "What were batching systems, and what were their advantages and disadvantages?",
+      "a": "Early OSes were <b>batch job control systems</b>. Operators had to set up each program's runtime context by hand, so jobs with <b>similar runtime environments were grouped into batches</b> to reduce that work. The OS was a simple control program that worked through the batch one job at a time, with <b>no parallelism</b>.<br><b>Problem:</b> I/O is slow and the CPU is fast, so the CPU sat idle during I/O and was <b>under-utilised</b>.",
+      "kw": [
+        [
+          "batch",
+          "batches"
+        ],
+        [
+          "operator",
+          "manual",
+          "runtime"
+        ],
+        [
+          "one at a time",
+          "no parallel",
+          "sequential"
+        ],
+        [
+          "under-utilised",
+          "underutil",
+          "idle",
+          "slow i/o",
+          "io slow"
+        ]
+      ],
+      "src": "Notes W1 'What are Batching Systems?'; S-W1",
+      "mcq": [
+        {
+          "q": "Why were jobs grouped into batches?",
+          "a": "To cut operator work by grouping jobs with similar runtime environments",
+          "w": [
+            "To let several jobs run on the CPU in parallel",
+            "To give each user an interactive terminal",
+            "To protect the kernel from user programs"
+          ]
+        },
+        {
+          "q": "What was the main weakness of simple batching systems?",
+          "a": "The CPU sat idle while slow I/O completed",
+          "w": [
+            "Context switches were too frequent",
+            "Too many users shared the machine at once",
+            "Page tables used too much memory"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n1_4",
+      "set": "W1",
+      "n": 4,
+      "q": "What is pipelined (spooling) batching, and how did it compare with simple batching?",
+      "a": "The next step after simple batching. Like <b>CPU instruction pipelining</b>, several jobs run at once but at <b>different stages</b> (e.g. one reading input, one computing, one printing).<br><b>Pros:</b> about <b>30% faster</b> than simple batching.<br><b>Cons:</b> still under-utilised, because a <b>slower stage leaves the other stages waiting</b>.",
+      "kw": [
+        [
+          "pipeline",
+          "pipelin",
+          "spool"
+        ],
+        [
+          "different stages",
+          "stage"
+        ],
+        [
+          "30%",
+          "30 %",
+          "faster"
+        ],
+        [
+          "slow stage",
+          "slower stage",
+          "waiting",
+          "under-utilised",
+          "underutil"
+        ]
+      ],
+      "src": "Notes W1 'What is Pipelined Batching?'; S-W1",
+      "mcq": [
+        {
+          "q": "Pipelined batching works like which hardware idea?",
+          "a": "CPU instruction pipelining",
+          "w": [
+            "Translation lookaside buffers",
+            "Interrupt vectors",
+            "Cache write-back"
+          ]
+        },
+        {
+          "q": "Why was pipelined batching still under-utilised?",
+          "a": "A slower stage left the other stages waiting",
+          "w": [
+            "Only one job could be in memory",
+            "It had no I/O devices",
+            "Every job needed its own CPU"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n1_5",
+      "set": "W1",
+      "n": 5,
+      "q": "What is multiprogramming, and what are its advantages and disadvantages?",
+      "a": "<b>Several programs are resident in memory at once, sharing one CPU.</b> When one blocks on I/O, the OS picks another and runs it. While at least one job is ready, the CPU counts as fully utilised. It's the foundation of modern OSes.<br><b>It required:</b> job scheduling (which jobs are resident), memory management and protection, and CPU scheduling (fairness between resident jobs).<br><b>Pros:</b> very efficient, high hardware utilisation.<br><b>Cons:</b> no illusion of parallelism, so it's poor for user interaction.",
+      "kw": [
+        [
+          "resident",
+          "multiple programs",
+          "in memory"
+        ],
+        [
+          "one cpu",
+          "share",
+          "sharing"
+        ],
+        [
+          "blocked",
+          "block",
+          "i/o",
+          "io"
+        ],
+        [
+          "utilisation",
+          "utilis",
+          "utiliz",
+          "efficien"
+        ],
+        [
+          "interaction",
+          "interactiv",
+          "no illusion"
+        ]
+      ],
+      "src": "Notes W1 'What is Multi-Programming?'; S-W1",
+      "mcq": [
+        {
+          "q": "In multiprogramming, when does the OS switch to another program?",
+          "a": "When the running program blocks on I/O",
+          "w": [
+            "Every 10 ms on a timer",
+            "Only when the program terminates",
+            "When the user presses a key"
+          ]
+        },
+        {
+          "q": "What is the main drawback of plain multiprogramming?",
+          "a": "No illusion of parallelism, so it's poor for interactive users",
+          "w": [
+            "Low CPU utilisation",
+            "It needs multiple CPUs",
+            "It cannot keep several programs in memory"
+          ]
+        },
+        {
+          "q": "Which new OS responsibility did multiprogramming introduce?",
+          "a": "Memory management and protection between resident jobs",
+          "w": [
+            "File allocation tables",
+            "Graphical user interfaces",
+            "Network routing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n1_6",
+      "set": "W1",
+      "n": 6,
+      "q": "What are time-sharing (multitasking) systems?",
+      "a": "The natural evolution of multiprogramming. The OS <b>switches between user programs very frequently</b> so many users can <b>interact</b> with the same machine at once. With N users, each effectively gets a computer of <b>1/N</b> the power. It still switches on I/O blocks too.",
+      "kw": [
+        [
+          "switch frequently",
+          "frequent",
+          "rapid",
+          "switch"
+        ],
+        [
+          "interact",
+          "interactiv",
+          "users"
+        ],
+        [
+          "1/n",
+          "1 / n",
+          "share"
+        ]
+      ],
+      "src": "Notes W1 'What are Time-Sharing Systems?'; S-W1",
+      "mcq": [
+        {
+          "q": "What does time-sharing add on top of multiprogramming?",
+          "a": "Frequent switching so users can interact with their programs",
+          "w": [
+            "Multiple physical CPUs",
+            "Batching of similar jobs",
+            "Removal of the kernel"
+          ]
+        },
+        {
+          "q": "With N users on a time-sharing system, each effectively gets…",
+          "a": "A computer of about 1/N the power",
+          "w": [
+            "The full machine",
+            "N times the power",
+            "No CPU time until the others finish"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n1_7",
+      "set": "W1",
+      "n": 7,
+      "q": "What was the personal computer paradigm shift?",
+      "a": "The final stage of OS evolution: <b>the user is the most important part</b> of the computation, and <b>hardware is cheap</b>. The goal became <b>convenience and responsiveness</b>, not hardware utilisation. Early PCs didn't multitask or support multiple users; these features were added as power grew, and PCs now have multiple processing units in a shared-memory architecture.",
+      "kw": [
+        [
+          "user",
+          "user most important"
+        ],
+        [
+          "cheap",
+          "hardware cost"
+        ],
+        [
+          "convenience",
+          "convenien",
+          "responsive"
+        ],
+        [
+          "not utilisation",
+          "utilisation",
+          "utilis"
+        ]
+      ],
+      "src": "Notes W1 'What was the Personal Computer paradigm switch?'; S-W1",
+      "mcq": [
+        {
+          "q": "What is the main goal of a PC operating system?",
+          "a": "Convenience and responsiveness for the user",
+          "w": [
+            "Maximum hardware utilisation",
+            "Batch throughput",
+            "Serving thousands of terminal users"
+          ]
+        },
+        {
+          "q": "Why could PCs drop utilisation as the main goal?",
+          "a": "Hardware became cheap compared with the user's time",
+          "w": [
+            "PCs have no I/O devices",
+            "PCs only ever run one program",
+            "Utilisation can't be measured on a PC"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n1_8",
+      "set": "W1",
+      "n": 8,
+      "q": "What are cluster computing and distributed systems?",
+      "a": "<b>Cluster:</b> many cheap commodity computers linked by a <b>high-speed LAN</b>, for availability, performance or both.<br><b>Distributed system:</b> a <b>loosely coupled</b> collection of processes and clusters that <b>don't share a clock or memory</b>, do share a communication network, are heterogeneous and allow resource sharing.<br><b>Issues:</b> load balancing, process migration, distributed transactions, security, communications and reliability.",
+      "kw": [
+        [
+          "commodity",
+          "cheap"
+        ],
+        [
+          "lan",
+          "network"
+        ],
+        [
+          "loosely coupled",
+          "loose"
+        ],
+        [
+          "no shared clock",
+          "clock"
+        ],
+        [
+          "no shared memory",
+          "memory"
+        ],
+        [
+          "heterogeneous",
+          "heterogen"
+        ]
+      ],
+      "src": "Notes W1 'What are the other computing methods?'; S-W1",
+      "mcq": [
+        {
+          "q": "Which is true of a distributed system?",
+          "a": "Its nodes don't share a clock or memory but do share a network",
+          "w": [
+            "All nodes share one physical memory",
+            "All nodes run in lockstep from one clock",
+            "It must be made of identical machines"
+          ]
+        },
+        {
+          "q": "What connects the machines in a cluster?",
+          "a": "A high-speed LAN",
+          "w": [
+            "A shared system bus",
+            "A single shared cache",
+            "The interrupt vector"
+          ]
+        },
+        {
+          "q": "Which is listed as an issue for distributed systems?",
+          "a": "Process migration and load balancing",
+          "w": [
+            "Too few context switches",
+            "Lack of any network",
+            "Too much shared memory"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_1",
+      "set": "W2",
+      "n": 1,
+      "q": "What is a process, and why is it the most fundamental concept in an OS?",
+      "a": "A process is a <b>program in execution</b>: an abstraction of a running program, a container holding everything needed to run it, and an entity with an <b>address space and a set of resources</b>. It has <b>text (code), data and stack segments</b>, plus open files, the PC, registers and stack pointer.<br>It's the most fundamental concept because <b>every program runs as one or more processes</b>.",
+      "kw": [
+        [
+          "program in execution",
+          "running program",
+          "execution"
+        ],
+        [
+          "address space",
+          "resources"
+        ],
+        [
+          "text",
+          "code"
+        ],
+        [
+          "data"
+        ],
+        [
+          "stack"
+        ],
+        [
+          "one or more",
+          "runs as"
+        ]
+      ],
+      "src": "Notes W2 'What is a process?'; S-W2 'Processes'",
+      "mcq": [
+        {
+          "q": "What three memory segments does a process have?",
+          "a": "Text (code), data and stack",
+          "w": [
+            "Kernel, user and cache",
+            "Heap, TLB and page table",
+            "PCB, TCB and FCB"
+          ]
+        },
+        {
+          "q": "Why is the process the most fundamental OS concept?",
+          "a": "Every program runs as one or more processes",
+          "w": [
+            "Processes are the only thing stored on disk",
+            "The CPU can only execute PCBs",
+            "Threads cannot exist without files"
+          ]
+        },
+        {
+          "q": "Which benefit comes from splitting a program into more than one process?",
+          "a": "Better protection (and better resource utilisation)",
+          "w": [
+            "No need for any IPC",
+            "Cheaper context switches than threads",
+            "Shared address space with no synchronisation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_2",
+      "set": "W2",
+      "n": 2,
+      "q": "When does a process run kernel code, and how does it get there?",
+      "a": "A process normally runs in <b>user mode</b>. When it needs a service the OS provides, it makes a <b>system call</b>, which <b>traps</b> into the kernel and switches to kernel mode. The modes give different privilege levels; separating them <b>protects the OS from errant users</b>.",
+      "kw": [
+        [
+          "user mode",
+          "user"
+        ],
+        [
+          "system call",
+          "syscall"
+        ],
+        [
+          "trap"
+        ],
+        [
+          "kernel mode",
+          "kernel"
+        ],
+        [
+          "protect",
+          "errant"
+        ]
+      ],
+      "src": "Notes W2 'When should we run kernel code?'; S-W2 'Kernel vs User Mode'",
+      "mcq": [
+        {
+          "q": "How does a user process normally request an OS service?",
+          "a": "By making a system call (a trap into the kernel)",
+          "w": [
+            "By disabling interrupts",
+            "By writing directly to the device registers",
+            "By editing its own PCB"
+          ]
+        },
+        {
+          "q": "What is the main benefit of separating user and kernel mode?",
+          "a": "It protects the OS from errant users",
+          "w": [
+            "It makes every instruction faster",
+            "It removes the need for scheduling",
+            "It lets user code run privileged instructions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_3",
+      "set": "W2",
+      "n": 3,
+      "q": "What are the five process states?",
+      "a": "<b>New</b>: being created.<br><b>Ready</b>: waiting to run on the CPU.<br><b>Running</b>: its instructions are executing.<br><b>Blocked</b> (waiting): waiting for I/O or an event.<br><b>Terminated</b>: finished.<br>The scheduler moves Ready → Running; a timer interrupt moves Running → Ready; an I/O request moves Running → Blocked; I/O completion moves Blocked → Ready.",
+      "kw": [
+        [
+          "new"
+        ],
+        [
+          "ready"
+        ],
+        [
+          "running"
+        ],
+        [
+          "blocked",
+          "waiting"
+        ],
+        [
+          "terminated",
+          "exit"
+        ]
+      ],
+      "src": "Notes W2 'What are the different process states in a PCB?'; S-W2 'Process State'",
+      "mcq": [
+        {
+          "q": "A process waiting for a disk read to finish is in which state?",
+          "a": "Blocked",
+          "w": [
+            "Ready",
+            "Running",
+            "New"
+          ]
+        },
+        {
+          "q": "A process that could run but is waiting for the CPU is in which state?",
+          "a": "Ready",
+          "w": [
+            "Blocked",
+            "Terminated",
+            "New"
+          ]
+        },
+        {
+          "q": "Which event moves a process from Running back to Ready?",
+          "a": "A timer interrupt (its time slice expires)",
+          "w": [
+            "Its I/O request completes",
+            "It calls exit()",
+            "It is first created"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_4",
+      "set": "W2",
+      "n": 4,
+      "q": "What fields does a PCB hold, and where is it stored?",
+      "a": "<b>Process ID</b> (unique number), <b>program counter</b> (next instruction), <b>registers</b> (stack pointer, index registers…), <b>scheduling info</b> (priority, pointer to scheduling queue), <b>memory structure</b> (page/segment tables, base register), <b>open file table</b>, and <b>accounting info</b> (CPU time, page faults, time limits…), plus the process <b>state</b>. Exact contents depend on the system.<br>PCBs live in <b>kernel space, not user space</b>, for protection. The OS keeps a <b>process table</b>: one PCB entry per process.",
+      "kw": [
+        [
+          "process id",
+          "pid"
+        ],
+        [
+          "program counter",
+          "pc"
+        ],
+        [
+          "registers",
+          "register"
+        ],
+        [
+          "scheduling",
+          "priority"
+        ],
+        [
+          "memory",
+          "page table",
+          "segment"
+        ],
+        [
+          "open file",
+          "files"
+        ],
+        [
+          "accounting"
+        ],
+        [
+          "kernel space",
+          "kernel"
+        ]
+      ],
+      "src": "Notes W2 'What are the other fields in the PCB?'; S-W2 'PCB: Other Fields', 'PCB: Managing Processes'",
+      "mcq": [
+        {
+          "q": "Which PCB field holds the page or segment tables?",
+          "a": "Memory structure",
+          "w": [
+            "Accounting information",
+            "Open file table",
+            "Scheduling info"
+          ]
+        },
+        {
+          "q": "CPU time used and number of page faults are stored in which PCB field?",
+          "a": "Accounting information",
+          "w": [
+            "Program counter",
+            "Memory structure",
+            "Registers"
+          ]
+        },
+        {
+          "q": "Where are PCBs placed, and why?",
+          "a": "In kernel space, so user programs can't tamper with them",
+          "w": [
+            "In user space, so programs can read them quickly",
+            "On disk only, to save memory",
+            "In the TLB, for fast lookup"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_5",
+      "set": "W2",
+      "n": 5,
+      "q": "How does the OS regain control of the CPU from a running process?",
+      "a": "While a process runs, the dispatcher isn't running, so the OS has lost control. It gets it back through:<br><b>Traps</b> (internal, software): a system call, an error (illegal instruction, addressing violation, divide by 0) or a page fault.<br><b>Interrupts</b> (external, hardware): a key typed, a disk operation completing, or the <b>hardware timer</b> at the end of a time slice.",
+      "kw": [
+        [
+          "trap"
+        ],
+        [
+          "system call",
+          "syscall"
+        ],
+        [
+          "error",
+          "divide",
+          "illegal"
+        ],
+        [
+          "page fault"
+        ],
+        [
+          "interrupt"
+        ],
+        [
+          "timer",
+          "time slice"
+        ]
+      ],
+      "src": "Notes W2 'How does the OS control the processor?'; S-W2 'OS and Control?'",
+      "mcq": [
+        {
+          "q": "A divide-by-zero error returns control to the OS through a…",
+          "a": "Trap",
+          "w": [
+            "Hardware interrupt",
+            "Timer interrupt",
+            "Context switch request from the user"
+          ]
+        },
+        {
+          "q": "Which mechanism guarantees the OS gets control back even from a process in an infinite loop?",
+          "a": "The hardware timer interrupt",
+          "w": [
+            "A system call",
+            "A page fault",
+            "The process calling exit()"
+          ]
+        },
+        {
+          "q": "A disk controller finishing an operation is an example of…",
+          "a": "An interrupt",
+          "w": [
+            "A trap",
+            "A system call",
+            "A page fault"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_6",
+      "set": "W2",
+      "n": 6,
+      "q": "What is the difference between preemptive and cooperative multitasking?",
+      "a": "<b>Preemptive:</b> the OS can <b>interrupt</b> a running process (e.g. on a timer) and give the CPU to another.<br><b>Cooperative:</b> a running process must <b>voluntarily give up</b> the CPU before another can run, so one misbehaving process can hog the CPU.",
+      "kw": [
+        [
+          "preemptive",
+          "interrupt",
+          "take away"
+        ],
+        [
+          "cooperative",
+          "voluntar",
+          "give up",
+          "yield"
+        ],
+        [
+          "timer"
+        ]
+      ],
+      "src": "Notes W2 'What is the difference between preemptive vs cooperative multi-tasking?'; S-W2",
+      "mcq": [
+        {
+          "q": "In cooperative multitasking, how does another process get the CPU?",
+          "a": "The running process voluntarily gives it up",
+          "w": [
+            "A timer interrupt forces a switch",
+            "The kernel kills the running process",
+            "The MMU raises a fault"
+          ]
+        },
+        {
+          "q": "What risk does cooperative multitasking have that preemptive avoids?",
+          "a": "One process that never yields can hog the CPU",
+          "w": [
+            "Too many timer interrupts",
+            "Processes can never share memory",
+            "It needs multiple CPUs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_7",
+      "set": "W2",
+      "n": 7,
+      "q": "What is the difference between independent and cooperating processes, and why use cooperating processes?",
+      "a": "<b>Independent</b> processes can't affect or be affected by other processes. <b>Cooperating</b> processes can, and they communicate using IPC.<br><b>Advantages of cooperating:</b><br>• <b>Information sharing</b>: concurrent access to shared files and resources<br>• <b>Speedup</b>: while one is blocked on I/O, another computes<br>• <b>Modularity</b>: smaller programs doing specific tasks is safer, better design<br>• <b>Convenience</b>: users want to do several things at once",
+      "kw": [
+        [
+          "independent",
+          "cannot affect"
+        ],
+        [
+          "cooperating",
+          "affect"
+        ],
+        [
+          "information sharing",
+          "sharing"
+        ],
+        [
+          "speedup",
+          "speed"
+        ],
+        [
+          "modularity",
+          "modular"
+        ],
+        [
+          "convenience",
+          "convenien"
+        ]
+      ],
+      "src": "Notes W2 'What are the advantages of cooperating processes?'; S-W2 'Interprocess Communication'",
+      "mcq": [
+        {
+          "q": "Which is NOT a listed advantage of cooperating processes?",
+          "a": "No synchronisation is ever needed",
+          "w": [
+            "Information sharing",
+            "Speedup",
+            "Modularity"
+          ]
+        },
+        {
+          "q": "How do cooperating processes give a speedup?",
+          "a": "While one is blocked on I/O, another can still compute",
+          "w": [
+            "They share a single PCB",
+            "They disable interrupts",
+            "They skip the scheduler"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_8",
+      "set": "W2",
+      "n": 8,
+      "q": "What is RPC, and how does it relate to the two IPC variants?",
+      "a": "IPC lets cooperating processes communicate, through <b>shared memory</b> (fast and convenient, but needs synchronisation) or <b>message passing</b> (no conflicts, easy, good for small data). <b>RPC (remote procedure call)</b> is a type of IPC that runs a procedure <b>in another address space over a network</b>, as if it were a local call.",
+      "kw": [
+        [
+          "remote procedure call",
+          "rpc"
+        ],
+        [
+          "another address space",
+          "address space"
+        ],
+        [
+          "network",
+          "remote"
+        ],
+        [
+          "shared memory"
+        ],
+        [
+          "message passing",
+          "message"
+        ]
+      ],
+      "src": "Notes W2 'What is RPC?'; S-W2 'Interprocess Communication'",
+      "mcq": [
+        {
+          "q": "What does RPC allow?",
+          "a": "Running a procedure in another address space over a network",
+          "w": [
+            "Sharing one stack between threads",
+            "Swapping pages to disk",
+            "Disabling interrupts on all CPUs"
+          ]
+        },
+        {
+          "q": "Which IPC variant is fast but needs synchronisation?",
+          "a": "Shared memory",
+          "w": [
+            "Message passing",
+            "RPC",
+            "Signals"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_9",
+      "set": "W2",
+      "n": 9,
+      "q": "What system calls does the kernel provide to manage processes?",
+      "a": "<b>Create:</b> <code>fork</code> (duplicate the caller) and <code>exec</code> (load a different program).<br><b>Coordinate:</b> <code>wait</code> (parent waits for a child).<br><b>Terminate:</b> <code>exit</code>.<br><b>Communicate:</b> IPC and RPC.",
+      "kw": [
+        [
+          "fork"
+        ],
+        [
+          "exec"
+        ],
+        [
+          "wait"
+        ],
+        [
+          "exit"
+        ],
+        [
+          "ipc",
+          "rpc",
+          "communicat"
+        ]
+      ],
+      "src": "Notes W2 'What are some of the system calls...'; S-W2",
+      "mcq": [
+        {
+          "q": "Which system call makes a parent block until its child finishes?",
+          "a": "wait",
+          "w": [
+            "fork",
+            "exec",
+            "exit"
+          ]
+        },
+        {
+          "q": "Which system call replaces the calling process's program with a new one?",
+          "a": "exec",
+          "w": [
+            "fork",
+            "wait",
+            "exit"
+          ]
+        },
+        {
+          "q": "Which system call creates a duplicate of the calling process?",
+          "a": "fork",
+          "w": [
+            "exec",
+            "wait",
+            "kill"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n2_10",
+      "set": "W2",
+      "n": 10,
+      "q": "What happens when a process forks, and how does a process terminate?",
+      "a": "<b>Fork:</b> the parent creates a child, then either keeps running alongside it or waits for it to terminate. The child gets a <b>different PID</b> and runs the same program from the same PC (or a different program after <code>exec</code>).<br><b>Three steps:</b> (1) allocate and initialise a new process structure, including a <b>PCB</b>; (2) <b>duplicate the parent's whole context</b>, including virtual memory; (3) <b>schedule the child</b> to run. The parent is blocked while the child is created.<br><b>Termination:</b> voluntarily with <code>exit</code>, or involuntarily from a <b>signal</b> (e.g. kill). A <b>status code is returned to the parent</b>, and a waiting parent then resumes.",
+      "kw": [
+        [
+          "pcb",
+          "process structure"
+        ],
+        [
+          "duplicate",
+          "copy",
+          "context"
+        ],
+        [
+          "schedule"
+        ],
+        [
+          "different pid",
+          "pid"
+        ],
+        [
+          "exit"
+        ],
+        [
+          "signal",
+          "kill"
+        ],
+        [
+          "status code",
+          "status",
+          "parent"
+        ]
+      ],
+      "src": "Notes W2 'What happens when a process is created?', 'How does termination occur?'; S-W2",
+      "mcq": [
+        {
+          "q": "Which is NOT one of the three main steps of fork?",
+          "a": "Load a new program from disk into the child",
+          "w": [
+            "Allocate and initialise a new PCB",
+            "Duplicate the parent's context, including virtual memory",
+            "Schedule the child to run"
+          ]
+        },
+        {
+          "q": "What does the parent receive when its child exits?",
+          "a": "A status code",
+          "w": [
+            "The child's PCB",
+            "The child's address space",
+            "A new PID"
+          ]
+        },
+        {
+          "q": "How can a process terminate involuntarily?",
+          "a": "Through a signal such as kill",
+          "w": [
+            "By calling wait()",
+            "By calling fork()",
+            "By taking a page fault"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n3_1",
+      "set": "W3",
+      "n": 1,
+      "q": "What are the key benefits of using threads?",
+      "a": "<b>Efficiency:</b> creating and switching threads is cheaper than processes.<br><b>Sharing:</b> threads share memory and files, so no expensive IPC.<br><b>Responsiveness:</b> another thread can run when one blocks (a same-process switch may be cheaper, but isn't free).<br><b>Multiprocessing:</b> threads of one process can run on different cores at once. On one core threads take turns (<b>concurrency</b>); on many cores they run together (<b>parallelism</b>).",
+      "kw": [
+        [
+          "efficiency",
+          "cheap",
+          "efficien"
+        ],
+        [
+          "sharing",
+          "share",
+          "no ipc"
+        ],
+        [
+          "responsive",
+          "responsiv",
+          "block"
+        ],
+        [
+          "multiprocessing",
+          "multiple cores",
+          "multicore",
+          "cores"
+        ],
+        [
+          "concurrency vs parallelism",
+          "parallel",
+          "concurren"
+        ]
+      ],
+      "src": "Notes W3 'What are the key benefits of using threads?'; S-W3 'Threads: Benefits'",
+      "mcq": [
+        {
+          "q": "On a single-core CPU, multiple threads achieve…",
+          "a": "Concurrency (taking turns), not true parallelism",
+          "w": [
+            "True parallelism",
+            "No benefit at all",
+            "Automatic deadlock freedom"
+          ]
+        },
+        {
+          "q": "Why do threads communicate more cheaply than processes?",
+          "a": "They share the same memory, so no IPC is needed",
+          "w": [
+            "They each have their own address space",
+            "The kernel copies data between them for free",
+            "They never need synchronisation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n3_2",
+      "set": "W3",
+      "n": 2,
+      "q": "Compare user threads and kernel threads.",
+      "a": "<b>User threads:</b> managed entirely in user space by a library (e.g. pthreads); <b>cheap and fast</b>; the kernel is generally <b>unaware</b> of them, so they can't exploit full multiprogramming/multiprocessing.<br><b>Kernel threads:</b> managed by the kernel (TCB / thread table in the kernel); <b>expensive and slow</b> to create; support <b>true multiprogramming and multiprocessing</b>; exist to support user threads.",
+      "kw": [
+        [
+          "user space",
+          "library"
+        ],
+        [
+          "cheap",
+          "fast"
+        ],
+        [
+          "unaware",
+          "kernel can't see",
+          "kernel cannot see"
+        ],
+        [
+          "kernel",
+          "tcb",
+          "thread table"
+        ],
+        [
+          "expensive",
+          "slow"
+        ],
+        [
+          "multiprocessing",
+          "parallel"
+        ]
+      ],
+      "src": "Notes W3 'What are user threads?', 'What are kernel threads?'; S-W3 'User Threads', 'Kernel Threads'",
+      "mcq": [
+        {
+          "q": "Which statement about user threads is true?",
+          "a": "They are cheap and fast, but the kernel is generally unaware of them",
+          "w": [
+            "They are scheduled directly by the kernel",
+            "They are more expensive to create than kernel threads",
+            "Each has its own address space"
+          ]
+        },
+        {
+          "q": "Where is the TCB / thread table for kernel threads managed?",
+          "a": "In the kernel",
+          "w": [
+            "In the user-level thread library",
+            "In the TLB",
+            "On disk"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n3_3",
+      "set": "W3",
+      "n": 3,
+      "q": "Describe the thread models for mapping user threads onto kernel threads.",
+      "a": "<b>Many-to-one:</b> many user threads on one kernel thread. Low cost; supports multiprogramming but <b>not multiprocessing</b> (threads of one process can't run in parallel).<br><b>One-to-one:</b> each user thread gets a kernel thread. Expensive, but supports <b>multiprogramming and multiprocessing</b>.<br><b>Many-to-many:</b> M user threads on N kernel threads (M &gt; N). Neither too slow nor blocking, but <b>difficult to program</b>.<br><b>Hybrid:</b> many-to-one + one-to-one.",
+      "kw": [
+        [
+          "many-to-one",
+          "many to one",
+          "m:1"
+        ],
+        [
+          "one-to-one",
+          "one to one",
+          "1:1"
+        ],
+        [
+          "many-to-many",
+          "many to many",
+          "m:n"
+        ],
+        [
+          "hybrid"
+        ],
+        [
+          "multiprocessing",
+          "parallel"
+        ],
+        [
+          "difficult",
+          "complex"
+        ]
+      ],
+      "src": "Notes W3 'What are the thread models...'; S-W3 'Thread Models'",
+      "mcq": [
+        {
+          "q": "Which model cannot run threads of the same process in parallel on multiple cores?",
+          "a": "Many-to-one",
+          "w": [
+            "One-to-one",
+            "Many-to-many",
+            "Hybrid"
+          ]
+        },
+        {
+          "q": "What is the main drawback of the many-to-many model?",
+          "a": "It is difficult to program",
+          "w": [
+            "It cannot use multiple cores",
+            "One blocking call blocks every thread",
+            "It needs one kernel thread per user thread"
+          ]
+        },
+        {
+          "q": "According to the slides, the hybrid model combines…",
+          "a": "Many-to-one and one-to-one",
+          "w": [
+            "One-to-one and many-to-many",
+            "Paging and segmentation",
+            "User mode and kernel mode"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n3_4",
+      "set": "W3",
+      "n": 4,
+      "q": "How are PIDs and TIDs used for threads?",
+      "a": "A <b>PID</b> identifies a process; a <b>TID</b> identifies an individual thread. Threads in the same process <b>share a PID</b>. The kernel may still use PID-style IDs for threads internally.",
+      "kw": [
+        [
+          "pid",
+          "process id"
+        ],
+        [
+          "tid",
+          "thread id"
+        ],
+        [
+          "share a pid",
+          "share",
+          "same pid"
+        ]
+      ],
+      "src": "Notes W3 'Are PID used for Threads?'; S-W3",
+      "mcq": [
+        {
+          "q": "Two threads in the same process have…",
+          "a": "The same PID but different TIDs",
+          "w": [
+            "Different PIDs and the same TID",
+            "Different PIDs and different TIDs",
+            "No identifiers at all"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n3_5",
+      "set": "W3",
+      "n": 5,
+      "q": "What is concurrency, and why can it be a problem?",
+      "a": "Concurrency is the <b>simultaneous execution</b> of threads and processes: <b>actual</b> simultaneity on multiple cores/processors, or <b>apparent</b> simultaneity through time slicing. Concurrent threads usually access <b>shared data</b>; if that sharing is uncontrolled, the data can become <b>inconsistent or incorrect</b>. The fix is <b>synchronisation</b>.",
+      "kw": [
+        [
+          "simultaneous",
+          "concurren"
+        ],
+        [
+          "multicore",
+          "multi-core",
+          "actual"
+        ],
+        [
+          "time slicing",
+          "time-slicing",
+          "apparent"
+        ],
+        [
+          "shared data",
+          "shared"
+        ],
+        [
+          "inconsistent",
+          "incorrect",
+          "corrupt"
+        ],
+        [
+          "synchronisation",
+          "synchroniz",
+          "synchronis"
+        ]
+      ],
+      "src": "Notes W3 'What is concurrency?'; S-W3",
+      "mcq": [
+        {
+          "q": "Apparent simultaneous execution on one core comes from…",
+          "a": "Time slicing",
+          "w": [
+            "Multiple processors",
+            "Paging",
+            "Message passing"
+          ]
+        },
+        {
+          "q": "What is the fix for shared data becoming inconsistent under concurrency?",
+          "a": "Synchronisation",
+          "w": [
+            "Adding more cores",
+            "Using larger time slices",
+            "Increasing the page size"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n4_1",
+      "set": "W4",
+      "n": 1,
+      "q": "What are the three requirements for a critical-section solution?",
+      "a": "<b>Mutual exclusion:</b> only one thread in the critical section at a time.<br><b>Progress:</b> if the critical section is free and a thread wants to enter, only threads in their entry/exit sections may take part in deciding who enters (and the decision can't be postponed forever).<br><b>Bounded waiting:</b> there's a finite bound on how many times a waiting thread must stand aside for others.",
+      "kw": [
+        [
+          "mutual exclusion",
+          "mutual"
+        ],
+        [
+          "progress"
+        ],
+        [
+          "bounded wait",
+          "bounded"
+        ]
+      ],
+      "src": "Notes W4 'What are the critical section requirements?'; S-W4",
+      "mcq": [
+        {
+          "q": "Which requirement says a waiting thread can only be passed over a finite number of times?",
+          "a": "Bounded waiting",
+          "w": [
+            "Mutual exclusion",
+            "Progress",
+            "No preemption"
+          ]
+        },
+        {
+          "q": "Which requirement says only one thread may be in the critical section at a time?",
+          "a": "Mutual exclusion",
+          "w": [
+            "Progress",
+            "Bounded waiting",
+            "Hold and wait"
+          ]
+        },
+        {
+          "q": "Which is NOT a critical-section requirement?",
+          "a": "Circular wait",
+          "w": [
+            "Mutual exclusion",
+            "Progress",
+            "Bounded waiting"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n4_2",
+      "set": "W4",
+      "n": 2,
+      "q": "What is Peterson's solution, and what are its problems?",
+      "a": "A software algorithm giving <b>mutual exclusion</b> between two processes. It uses a <b>boolean flag</b> per process (\"I want to enter\") and an integer <b>turn</b> (whose turn it is if both want in).<br><b>Problems:</b><br>• <b>Limited to two</b> threads/processes (variations exist for more)<br>• <b>Busy waiting</b>: a waiting thread keeps checking flag and turn in a loop, wasting CPU time",
+      "kw": [
+        [
+          "flag",
+          "boolean"
+        ],
+        [
+          "turn"
+        ],
+        [
+          "two",
+          "2 processes",
+          "two processes"
+        ],
+        [
+          "busy wait",
+          "busy-wait",
+          "spin"
+        ]
+      ],
+      "src": "Notes W4 'What is Peterson's Solution?'; S-W4",
+      "mcq": [
+        {
+          "q": "Which variables does Peterson's solution use?",
+          "a": "A flag per process and a shared turn variable",
+          "w": [
+            "A semaphore and a condition variable",
+            "A Test-and-Set lock only",
+            "A page table and a TLB"
+          ]
+        },
+        {
+          "q": "What are the two main problems with Peterson's solution?",
+          "a": "It only works for two processes and it busy-waits",
+          "w": [
+            "It breaks mutual exclusion and deadlocks",
+            "It needs special hardware and a monitor",
+            "It only works on multicore CPUs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n4_3",
+      "set": "W4",
+      "n": 3,
+      "q": "What are atomic machine instructions, and what are their problems?",
+      "a": "Hardware assistance: special CPU instructions that execute <b>atomically</b>.<br><b>Test-and-Set:</b> sets the lock to true and returns its original value.<br><b>Swap:</b> exchanges two values.<br>They guarantee <b>mutual exclusion and progress</b>, but <b>not bounded waiting</b>, since they can't arbitrate who goes next.<br><b>Problems:</b> <b>busy waiting</b>, and <b>starvation</b> (e.g. a frequently scheduled high-priority process keeps grabbing the lock while a low-priority one rarely gets it).",
+      "kw": [
+        [
+          "test-and-set",
+          "test and set",
+          "tas"
+        ],
+        [
+          "swap"
+        ],
+        [
+          "atomic",
+          "indivisible"
+        ],
+        [
+          "not bounded waiting",
+          "bounded"
+        ],
+        [
+          "busy wait",
+          "busy-wait",
+          "spin"
+        ],
+        [
+          "starvation",
+          "starv"
+        ]
+      ],
+      "src": "Notes W4 'What is Hardware Assistance?'; S-W4",
+      "mcq": [
+        {
+          "q": "What does Test-and-Set do?",
+          "a": "Atomically sets the lock to true and returns its old value",
+          "w": [
+            "Atomically sets the lock to false and wakes a waiter",
+            "Disables interrupts on every core",
+            "Puts the caller to sleep on a queue"
+          ]
+        },
+        {
+          "q": "Which critical-section requirement do Test-and-Set and Swap NOT guarantee?",
+          "a": "Bounded waiting",
+          "w": [
+            "Mutual exclusion",
+            "Progress",
+            "Atomicity"
+          ]
+        },
+        {
+          "q": "Why can a low-priority process starve on a Test-and-Set lock?",
+          "a": "A frequently scheduled process keeps reacquiring the lock first",
+          "w": [
+            "Test-and-Set always favours the lowest PID",
+            "The lock is reset on every interrupt",
+            "Low-priority processes can't execute atomic instructions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n4_4",
+      "set": "W4",
+      "n": 4,
+      "q": "What problem do sleep/wakeup primitives solve, and how do mutex locks and condition variables work together?",
+      "a": "They avoid <b>busy waiting</b>.<br><b>Sleep/wait:</b> blocks the process so it doesn't burn CPU while it waits.<br><b>Wakeup/signal:</b> unblocks a waiting process so it can try again.<br><b>Mutex + condition variable:</b> the mutex is a boolean saying whether the lock is free. If the condition isn't met, the thread <b>waits on the CV, which releases the lock</b> and sleeps; when the condition becomes true, another thread <b>signals</b> to wake a waiter. Acquiring the mutex itself may still involve a short busy wait.",
+      "kw": [
+        [
+          "busy wait",
+          "busy-wait"
+        ],
+        [
+          "sleep",
+          "block"
+        ],
+        [
+          "wakeup",
+          "wake",
+          "signal"
+        ],
+        [
+          "release the lock",
+          "release",
+          "releases"
+        ],
+        [
+          "mutex",
+          "lock"
+        ],
+        [
+          "condition variable",
+          "condition"
+        ]
+      ],
+      "src": "Notes W4 'What problem do primitives fix?', 'How do Mutex Locks and Condition Variables work together?'; S-W4",
+      "mcq": [
+        {
+          "q": "What happens to the mutex when a thread waits on a condition variable?",
+          "a": "It is released while the thread sleeps",
+          "w": [
+            "It stays held until the thread is signalled",
+            "It is destroyed",
+            "It is converted into a semaphore"
+          ]
+        },
+        {
+          "q": "What is the main purpose of sleep/wakeup primitives?",
+          "a": "To avoid wasting CPU time on busy waiting",
+          "w": [
+            "To guarantee bounded waiting for two processes only",
+            "To translate logical addresses",
+            "To choose the next process to schedule"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n4_5",
+      "set": "W4",
+      "n": 5,
+      "q": "What is the producer-consumer problem, and how can a count variable with sleep/wakeup solve it?",
+      "a": "Producers and consumers <b>share a common buffer</b>: producers insert items, consumers remove them. Uncontrolled access causes <b>race conditions</b>.<br><b>Count-based solution:</b> keep a <code>count</code> of items.<br>• Buffer <b>full</b> → producer sleeps<br>• Buffer <b>empty</b> → consumer sleeps<br>• Buffer no longer full → wake the producer<br>• Buffer no longer empty → wake the consumer<br><code>count</code> is itself shared, so access to it must be protected; the course then solves this properly with semaphores.",
+      "kw": [
+        [
+          "shared buffer",
+          "buffer"
+        ],
+        [
+          "producer"
+        ],
+        [
+          "consumer"
+        ],
+        [
+          "count"
+        ],
+        [
+          "full",
+          "producer sleep"
+        ],
+        [
+          "empty",
+          "consumer sleep"
+        ],
+        [
+          "race",
+          "race condition"
+        ]
+      ],
+      "src": "Notes W4 'What is the Producer-Consumer problem?'; S-W4",
+      "mcq": [
+        {
+          "q": "In the count-based solution, what does the producer do when the buffer is full?",
+          "a": "Sleeps until a consumer wakes it",
+          "w": [
+            "Overwrites the oldest item",
+            "Busy-waits on Test-and-Set",
+            "Terminates"
+          ]
+        },
+        {
+          "q": "When should a sleeping consumer be woken?",
+          "a": "When the buffer becomes non-empty",
+          "w": [
+            "When the buffer becomes full",
+            "Every timer interrupt",
+            "Only when the producer exits"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n5_1",
+      "set": "W5",
+      "n": 1,
+      "q": "What is the difference between counting and binary semaphores?",
+      "a": "A semaphore is an integer signalling mechanism with atomic <b>P()</b> (down/acquire/test) and <b>V()</b> (up/release/increment).<br><b>Counting semaphore:</b> any value from 0 up. Controls a resource with <b>n instances</b>: initialise to n; the first n threads decrement it to 0; later threads wait.<br><b>Binary semaphore:</b> only <b>0 (locked) or 1 (unlocked)</b>. Used for mutual exclusion with a P(mutex)…V(mutex) pair. Test-and-Set can make P and V atomic.",
+      "kw": [
+        [
+          "counting",
+          "count"
+        ],
+        [
+          "n instances",
+          "initialise to n",
+          "n"
+        ],
+        [
+          "binary"
+        ],
+        [
+          "0 and 1",
+          "0 or 1",
+          "0/1"
+        ],
+        [
+          "mutual exclusion",
+          "mutex"
+        ],
+        [
+          "p()",
+          "p ",
+          "down",
+          "wait"
+        ],
+        [
+          "v()",
+          "v ",
+          "up",
+          "signal"
+        ]
+      ],
+      "src": "Notes W5 'What are the two types of Semaphores?'; S-W5",
+      "mcq": [
+        {
+          "q": "A semaphore guards 5 identical printers. What should it be initialised to?",
+          "a": "5",
+          "w": [
+            "0",
+            "1",
+            "-5"
+          ]
+        },
+        {
+          "q": "What values can a binary semaphore take?",
+          "a": "0 (locked) and 1 (unlocked)",
+          "w": [
+            "Any non-negative integer",
+            "Only negative integers",
+            "True, false and null"
+          ]
+        },
+        {
+          "q": "Which operation decrements a semaphore and may block the caller?",
+          "a": "P() / down() / acquire()",
+          "w": [
+            "V() / up() / release()",
+            "signal()",
+            "fork()"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n5_2",
+      "set": "W5",
+      "n": 2,
+      "q": "How do you solve the producer-consumer problem with semaphores?",
+      "a": "Use <b>three semaphores</b>: <code>mutex = 1</code> (mutual exclusion on the buffer), <code>empty = N</code> (free slots), <code>full = 0</code> (filled slots).<br><b>Producer:</b> P(empty); P(mutex); insert; V(mutex); V(full).<br><b>Consumer:</b> P(full); P(mutex); remove; V(mutex); V(empty).<br>Order matters: doing P(mutex) <b>before</b> P(empty)/P(full) can deadlock (a thread sleeps while holding the mutex).",
+      "kw": [
+        [
+          "mutex = 1",
+          "mutex"
+        ],
+        [
+          "empty = n",
+          "empty"
+        ],
+        [
+          "full = 0",
+          "full"
+        ],
+        [
+          "three semaphores",
+          "three",
+          "3"
+        ],
+        [
+          "order",
+          "deadlock"
+        ]
+      ],
+      "src": "Notes W5 'What is now the alternative solution to the Producer-Consumer problem?'; S-W5; T-W12",
+      "mcq": [
+        {
+          "q": "What are the initial values of mutex, empty and full for a buffer of size N?",
+          "a": "mutex = 1, empty = N, full = 0",
+          "w": [
+            "mutex = 0, empty = 0, full = N",
+            "mutex = N, empty = 1, full = 0",
+            "mutex = 1, empty = 0, full = N"
+          ]
+        },
+        {
+          "q": "What does the 'empty' semaphore count?",
+          "a": "The number of free slots in the buffer",
+          "w": [
+            "The number of filled slots",
+            "The number of waiting consumers",
+            "Whether the buffer lock is held"
+          ]
+        },
+        {
+          "q": "What goes wrong if a producer does P(mutex) before P(empty) on a full buffer?",
+          "a": "It sleeps holding the mutex, so no consumer can enter: deadlock",
+          "w": [
+            "Nothing; the order doesn't matter",
+            "The buffer overflows",
+            "The consumer reads a stale item"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n5_3",
+      "set": "W5",
+      "n": 3,
+      "q": "What are the limitations of semaphores?",
+      "a": "<b>Priority inversion:</b> a low-priority process holding a semaphore blocks a high-priority one.<br><b>Deadlock:</b> processes wait on each other's semaphores in a cycle.<br><b>Complex to manage:</b> P and V calls must be placed exactly right; misuse causes errors.<br><b>Busy waiting:</b> simple implementations keep checking the value, wasting CPU.",
+      "kw": [
+        [
+          "priority inversion",
+          "inversion"
+        ],
+        [
+          "deadlock"
+        ],
+        [
+          "complex",
+          "error-prone",
+          "misuse"
+        ],
+        [
+          "busy wait",
+          "busy-wait"
+        ]
+      ],
+      "src": "Notes W5 'What are the limitations of using semaphores?'; S-W5",
+      "mcq": [
+        {
+          "q": "What is priority inversion?",
+          "a": "A low-priority process holding a semaphore blocks a high-priority process",
+          "w": [
+            "A high-priority process is demoted by ageing",
+            "Two processes swap priorities each quantum",
+            "The scheduler always runs the lowest priority first"
+          ]
+        },
+        {
+          "q": "Which is NOT a listed limitation of semaphores?",
+          "a": "They cannot provide mutual exclusion",
+          "w": [
+            "Priority inversion",
+            "Possible deadlock",
+            "Easy to misuse"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n5_4",
+      "set": "W5",
+      "n": 4,
+      "q": "What are monitors, and how do they differ from semaphores?",
+      "a": "A <b>higher-level synchronisation construct</b> that bundles <b>shared data and the operations on it</b> into one structure. <b>Only one thread can execute a monitor's methods at a time</b>, so mutual exclusion is automatic, rather than the programmer placing every wait()/signal() by hand as with semaphores. <b>Condition variables</b> are still used inside the monitor for waiting and signalling.<br>CV vs semaphore: semaphores count resources (an integer); CVs wait for a condition to become true.",
+      "kw": [
+        [
+          "higher-level",
+          "high level",
+          "higher level"
+        ],
+        [
+          "shared data",
+          "data and operations",
+          "encapsulat"
+        ],
+        [
+          "one thread at a time",
+          "one thread",
+          "automatic"
+        ],
+        [
+          "mutual exclusion",
+          "mutual"
+        ],
+        [
+          "condition variable",
+          "condition"
+        ]
+      ],
+      "src": "Notes W5 'What are monitors?', 'Conditional Variables vs Semaphores'; S-W5",
+      "mcq": [
+        {
+          "q": "What does a monitor provide automatically?",
+          "a": "Mutual exclusion: only one thread runs its methods at a time",
+          "w": [
+            "Deadlock freedom in all cases",
+            "Bounded waiting with no condition variables",
+            "Fair CPU scheduling"
+          ]
+        },
+        {
+          "q": "What do threads inside a monitor still use to wait for a condition?",
+          "a": "Condition variables",
+          "w": [
+            "Test-and-Set spin loops",
+            "Page faults",
+            "Message passing"
+          ]
+        },
+        {
+          "q": "Semaphores are best for…, condition variables are best for…",
+          "a": "Counting limited resources / waiting for a specific condition",
+          "w": [
+            "Waiting for a condition / counting resources",
+            "Scheduling / paging",
+            "IPC / file access"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n6_1",
+      "set": "W6",
+      "n": 1,
+      "q": "What is deadlock, and what is the Dining Philosophers problem?",
+      "a": "<b>Deadlock:</b> a set of processes is deadlocked if <b>each is waiting for an event that only another process in the set can cause</b>, so none can proceed. It happens because resources are finite.<br><b>Dining Philosophers:</b> n philosophers sit at a round table, alternating between thinking and eating. There's one chopstick between each pair (n in total), and eating needs <b>both</b> neighbouring chopsticks. If every philosopher picks up their left chopstick at once, everyone waits for the right one forever: deadlock. It illustrates resource sharing, deadlock and starvation.",
+      "kw": [
+        [
+          "waiting for an event",
+          "waiting",
+          "event"
+        ],
+        [
+          "another process in the set",
+          "each other",
+          "set"
+        ],
+        [
+          "finite",
+          "resources"
+        ],
+        [
+          "two chopsticks",
+          "chopstick",
+          "fork"
+        ],
+        [
+          "all pick up left",
+          "left",
+          "circular"
+        ]
+      ],
+      "src": "Notes W6 'What is Deadlock?', 'What is the Dining Philosophers problem?'; S-W6",
+      "mcq": [
+        {
+          "q": "When is a set of processes deadlocked?",
+          "a": "Each is waiting for an event only another process in the set can cause",
+          "w": [
+            "They all have the same priority",
+            "They all use more than one resource",
+            "One of them is in an infinite loop"
+          ]
+        },
+        {
+          "q": "In Dining Philosophers, what causes deadlock?",
+          "a": "Every philosopher picks up one chopstick and waits for the other",
+          "w": [
+            "A philosopher eats for too long",
+            "There are more chopsticks than philosophers",
+            "Philosophers think instead of eating"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n6_2",
+      "set": "W6",
+      "n": 2,
+      "q": "What is a resource allocation graph, and what does a cycle tell you?",
+      "a": "A visual model of resource assignment, used to formalise deadlock. It contains a set of <b>processes</b> (circles) and <b>resources</b> (boxes, with dots for instances). A <b>request edge</b> goes P → R; an <b>assignment edge</b> goes R → P.<br><b>No cycle → no deadlock.</b> With <b>single-instance</b> resources, a cycle <b>means deadlock</b>; with <b>multiple instances</b>, a cycle means deadlock is <b>possible</b> but not certain.",
+      "kw": [
+        [
+          "processes",
+          "process"
+        ],
+        [
+          "resources",
+          "resource"
+        ],
+        [
+          "request edge",
+          "request"
+        ],
+        [
+          "assignment edge",
+          "assign",
+          "allocat"
+        ],
+        [
+          "cycle"
+        ],
+        [
+          "single instance",
+          "one instance",
+          "single"
+        ]
+      ],
+      "src": "Notes W6 'What is a Resource Allocation Graph?'; S-W6 'Resource-Allocation Graph'",
+      "mcq": [
+        {
+          "q": "In a RAG where every resource has a single instance, a cycle means…",
+          "a": "Deadlock",
+          "w": [
+            "Possible deadlock only",
+            "No deadlock",
+            "Starvation but not deadlock"
+          ]
+        },
+        {
+          "q": "In a RAG with multi-instance resources, a cycle means…",
+          "a": "Deadlock is possible but not certain",
+          "w": [
+            "Deadlock is certain",
+            "Deadlock is impossible",
+            "The graph is invalid"
+          ]
+        },
+        {
+          "q": "Which way does a request edge point?",
+          "a": "From the process to the resource",
+          "w": [
+            "From the resource to the process",
+            "From process to process",
+            "Request edges have no direction"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n6_3",
+      "set": "W6",
+      "n": 3,
+      "q": "What are the four strategies for handling deadlock?",
+      "a": "<b>1. Ignore it</b> (the \"ostrich\" approach): do nothing; most general-purpose OSes do this.<br><b>2. Detect and recover:</b> allow deadlocks, detect them, then fix them.<br><b>3. Dynamic avoidance:</b> check each request before granting it, keeping the system in a safe state.<br><b>4. Prevention:</b> break one of the four necessary conditions.",
+      "kw": [
+        [
+          "ignore",
+          "ostrich",
+          "do nothing"
+        ],
+        [
+          "detect",
+          "recover"
+        ],
+        [
+          "avoid",
+          "avoidance",
+          "safe"
+        ],
+        [
+          "prevent",
+          "prevention"
+        ]
+      ],
+      "src": "Notes W6 'What are the main strategies with handling deadlock?'; S-W6",
+      "mcq": [
+        {
+          "q": "Which strategy checks each resource request before granting it so the system stays safe?",
+          "a": "Dynamic avoidance",
+          "w": [
+            "Prevention",
+            "Ignoring the problem",
+            "Detection and recovery"
+          ]
+        },
+        {
+          "q": "Which strategy works by breaking one of the four necessary conditions?",
+          "a": "Prevention",
+          "w": [
+            "Avoidance",
+            "Detection",
+            "Ignoring the problem"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n6_4",
+      "set": "W6",
+      "n": 4,
+      "q": "How can each deadlock condition be broken to prevent deadlock?",
+      "a": "<b>Mutual exclusion:</b> generally not possible to eliminate.<br><b>No preemption:</b> if we wait on a resource held by another waiting process, preempt it and give it to us. Not always possible.<br><b>Hold and wait:</b> release everything held before waiting, or <b>request all resources at once</b>. Poor utilisation; popular resources can cause starvation.<br><b>Circular wait:</b> impose an <b>ordering</b> on resource requests; multiple resources of the same type must be requested together.<br>Prevention in general can lower device utilisation and throughput.",
+      "kw": [
+        [
+          "mutual exclusion",
+          "not possible"
+        ],
+        [
+          "preempt",
+          "preemption"
+        ],
+        [
+          "request all at once",
+          "all at once",
+          "release"
+        ],
+        [
+          "ordering",
+          "order"
+        ],
+        [
+          "utilisation",
+          "throughput",
+          "starvation"
+        ]
+      ],
+      "src": "Notes W6 'How does preventing deadlock work for each condition?'; S-W6",
+      "mcq": [
+        {
+          "q": "Requiring every process to request resources in a fixed global order breaks which condition?",
+          "a": "Circular wait",
+          "w": [
+            "Mutual exclusion",
+            "Hold and wait",
+            "No preemption"
+          ]
+        },
+        {
+          "q": "Requiring a process to request all its resources at once breaks which condition?",
+          "a": "Hold and wait",
+          "w": [
+            "Circular wait",
+            "No preemption",
+            "Mutual exclusion"
+          ]
+        },
+        {
+          "q": "Which condition is generally NOT possible to eliminate?",
+          "a": "Mutual exclusion",
+          "w": [
+            "Circular wait",
+            "Hold and wait",
+            "No preemption"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n6_5",
+      "set": "W6",
+      "n": 5,
+      "q": "How do deadlock avoidance and deadlock detection/recovery work?",
+      "a": "<b>Avoidance:</b> a state is <b>safe</b> if there's a sequence in which every process can finish; all other states are unsafe. The OS only grants requests that keep the state safe. It needs <b>prior knowledge of each process's maximum needs</b>. Unsafe doesn't always mean deadlock, but safe guarantees none. Costs: lower utilisation and overhead from the safety check.<br><b>Detection:</b> if we don't prevent or avoid, check current allocations against availability to find deadlocked processes.<br><b>Recovery:</b> <b>preemption</b>, <b>rollback to a checkpoint</b>, or <b>killing processes</b>.",
+      "kw": [
+        [
+          "safe state",
+          "safe"
+        ],
+        [
+          "sequence",
+          "all finish"
+        ],
+        [
+          "maximum needs",
+          "max",
+          "prior knowledge"
+        ],
+        [
+          "unsafe is not deadlock",
+          "unsafe"
+        ],
+        [
+          "detect",
+          "detection"
+        ],
+        [
+          "preemption",
+          "preempt"
+        ],
+        [
+          "rollback",
+          "checkpoint"
+        ],
+        [
+          "kill",
+          "terminate"
+        ]
+      ],
+      "src": "Notes W6 'How does avoiding deadlock work?', 'How does detecting deadlock work?'; S-W6",
+      "mcq": [
+        {
+          "q": "What must the OS know in advance for deadlock avoidance?",
+          "a": "Each process's maximum resource needs",
+          "w": [
+            "The exact time each process will finish",
+            "The physical address of every resource",
+            "Nothing; avoidance needs no prior information"
+          ]
+        },
+        {
+          "q": "Which is true about an unsafe state?",
+          "a": "It may lead to deadlock but is not necessarily deadlocked",
+          "w": [
+            "It is always deadlocked",
+            "It can never lead to deadlock",
+            "It means the RAG has no edges"
+          ]
+        },
+        {
+          "q": "Which is NOT a deadlock recovery method?",
+          "a": "Increasing the time quantum",
+          "w": [
+            "Preempting resources",
+            "Rolling back to a checkpoint",
+            "Killing processes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n7_1",
+      "set": "W7",
+      "n": 1,
+      "q": "Define the CPU scheduling criteria.",
+      "a": "<b>CPU utilisation:</b> keep the CPU as busy as possible (used/available).<br><b>Throughput:</b> number of threads that complete per time unit.<br><b>Response time:</b> time from submitting a request until the <b>first response</b>.<br><b>Waiting time:</b> time spent waiting in the <b>ready queue</b>.<br><b>Turnaround time:</b> time from <b>submission to finish</b>.",
+      "kw": [
+        [
+          "utilisation",
+          "utilis",
+          "utiliz",
+          "busy"
+        ],
+        [
+          "throughput",
+          "per time"
+        ],
+        [
+          "response time",
+          "first response"
+        ],
+        [
+          "waiting time",
+          "ready queue"
+        ],
+        [
+          "turnaround",
+          "submission to finish",
+          "completion"
+        ]
+      ],
+      "src": "Notes W7 'What are the goals of CPU Scheduling?'; S-W7 'Scheduling Criteria'",
+      "mcq": [
+        {
+          "q": "Time spent sitting in the ready queue is called…",
+          "a": "Waiting time",
+          "w": [
+            "Response time",
+            "Turnaround time",
+            "Burst time"
+          ]
+        },
+        {
+          "q": "Time from submission until the first response is produced is…",
+          "a": "Response time",
+          "w": [
+            "Turnaround time",
+            "Waiting time",
+            "Throughput"
+          ]
+        },
+        {
+          "q": "Time from submission until the task finishes is…",
+          "a": "Turnaround time",
+          "w": [
+            "Response time",
+            "Waiting time",
+            "CPU utilisation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n7_2",
+      "set": "W7",
+      "n": 2,
+      "q": "What are the scheduling goals for each category of system?",
+      "a": "<b>All systems:</b> fairness (fair share of CPU), balance (keep the system busy), policy enforcement.<br><b>Multiprogramming (batch):</b> throughput, turnaround time, CPU utilisation.<br><b>Interactive:</b> response time, proportionality (meet user expectations).<br><b>Real-time:</b> meet deadlines, predictability (e.g. audio/video).",
+      "kw": [
+        [
+          "fairness",
+          "fair"
+        ],
+        [
+          "balance",
+          "busy"
+        ],
+        [
+          "policy"
+        ],
+        [
+          "throughput",
+          "turnaround"
+        ],
+        [
+          "response time",
+          "proportional"
+        ],
+        [
+          "deadlines",
+          "deadline",
+          "predictab"
+        ]
+      ],
+      "src": "Notes W7 'What are the goals of scheduling?'; S-W7",
+      "mcq": [
+        {
+          "q": "Predictability (e.g. smooth audio/video) is a goal of which kind of system?",
+          "a": "Real-time",
+          "w": [
+            "Multiprogramming",
+            "Interactive",
+            "Batch"
+          ]
+        },
+        {
+          "q": "Response time and proportionality are goals of which kind of system?",
+          "a": "Interactive",
+          "w": [
+            "Real-time",
+            "Multiprogramming",
+            "Distributed"
+          ]
+        },
+        {
+          "q": "Which goal applies to ALL systems?",
+          "a": "Fairness",
+          "w": [
+            "Meeting deadlines",
+            "Maximising throughput",
+            "Minimising response time"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n7_3",
+      "set": "W7",
+      "n": 3,
+      "q": "What is the difference between CPU-bound and I/O-bound processes, and why does it matter?",
+      "a": "Processes alternate between <b>CPU bursts</b> and periods <b>waiting for I/O</b>. A <b>CPU-bound</b> process has long CPU bursts and little I/O; an <b>I/O-bound</b> process has short CPU bursts and frequent I/O waits. The <b>CPU burst distribution affects the choice of scheduling algorithm</b> (e.g. favour I/O-bound jobs to keep devices busy and interactive programs responsive).",
+      "kw": [
+        [
+          "cpu burst",
+          "burst"
+        ],
+        [
+          "cpu-bound",
+          "cpu bound",
+          "long burst"
+        ],
+        [
+          "i/o-bound",
+          "io-bound",
+          "i/o bound",
+          "short burst"
+        ],
+        [
+          "scheduling",
+          "choice"
+        ]
+      ],
+      "src": "Notes W7 'CPU vs I/O Bound Process'; S-W7",
+      "mcq": [
+        {
+          "q": "An I/O-bound process typically has…",
+          "a": "Short CPU bursts with frequent I/O waits",
+          "w": [
+            "Long CPU bursts and little I/O",
+            "No CPU bursts at all",
+            "Only one very long burst"
+          ]
+        },
+        {
+          "q": "Why does the burst pattern matter to the scheduler?",
+          "a": "The CPU burst distribution affects which scheduling algorithm works well",
+          "w": [
+            "It decides how big a page is",
+            "It decides the process's PID",
+            "It has no effect on scheduling"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n7_4",
+      "set": "W7",
+      "n": 4,
+      "q": "Compare FIFO, SJF and SRTF scheduling.",
+      "a": "<b>FIFO:</b> simple, non-preemptive; short jobs get stuck behind long ones.<br><b>SJF:</b> run the process with the shortest next CPU burst. <b>Optimal: minimum average waiting time.</b> But the OS can't know the next burst length, so it has to <b>estimate</b> it, and long jobs can <b>starve</b> (unfair).<br><b>Non-preemptive SJF</b> lets the current process finish its burst. <b>Preemptive SJF = SRTF</b> (shortest remaining time first): if a new arrival's burst is shorter than the current process's remaining time, preempt.",
+      "kw": [
+        [
+          "fifo",
+          "first in",
+          "first-in"
+        ],
+        [
+          "stuck",
+          "convoy",
+          "short jobs wait"
+        ],
+        [
+          "shortest",
+          "sjf"
+        ],
+        [
+          "optimal",
+          "minimum average waiting",
+          "min average"
+        ],
+        [
+          "estimate",
+          "predict"
+        ],
+        [
+          "starvation",
+          "starv",
+          "unfair"
+        ],
+        [
+          "srtf",
+          "remaining",
+          "preempt"
+        ]
+      ],
+      "src": "Notes W7 'What scheduling algorithms can be used for multiprogramming systems?'; S-W7",
+      "mcq": [
+        {
+          "q": "Which algorithm gives the minimum average waiting time?",
+          "a": "SJF (shortest job first)",
+          "w": [
+            "FIFO",
+            "Round robin with a small quantum",
+            "Priority with ageing"
+          ]
+        },
+        {
+          "q": "What is the main practical problem with SJF?",
+          "a": "The OS can't know the next CPU burst length, so it must estimate it",
+          "w": [
+            "It has too many context switches",
+            "It never finishes long jobs early enough",
+            "It requires multiple CPUs"
+          ]
+        },
+        {
+          "q": "Preemptive SJF is also called…",
+          "a": "SRTF (shortest remaining time first)",
+          "w": [
+            "Round robin",
+            "MLFQ",
+            "FIFO"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n7_5",
+      "set": "W7",
+      "n": 5,
+      "q": "How does round-robin scheduling work, and what is the longest a thread waits?",
+      "a": "Each thread gets a <b>quantum q</b> of CPU time. When it expires, the thread is <b>preempted and put back on the ready queue</b>. With n threads, each gets <b>1/n</b> of the CPU, and <b>no thread waits more than q(n−1)</b> for its next quantum.<br><b>q large</b> → behaves like FIFO, less responsive. <b>q small</b> → more responsive but more context-switch overhead, so q must be much larger than a context switch.<br><b>Pros:</b> good response time. <b>Cons:</b> context-switch overhead.",
+      "kw": [
+        [
+          "quantum",
+          "time slice"
+        ],
+        [
+          "preempt",
+          "back of the queue",
+          "ready queue"
+        ],
+        [
+          "1/n"
+        ],
+        [
+          "q(n-1)",
+          "q(n−1)",
+          "q*(n-1)",
+          "(n-1)"
+        ],
+        [
+          "fifo",
+          "large"
+        ],
+        [
+          "context switch",
+          "overhead"
+        ]
+      ],
+      "src": "Notes W7 'How does Round-Robin Scheduling work?'; S-W7",
+      "mcq": [
+        {
+          "q": "With 5 threads and q = 20 ms, what is the longest a thread waits for its next quantum?",
+          "a": "80 ms",
+          "w": [
+            "100 ms",
+            "20 ms",
+            "4 ms"
+          ]
+        },
+        {
+          "q": "What happens when a thread's quantum expires?",
+          "a": "It is preempted and returned to the ready queue",
+          "w": [
+            "It is terminated",
+            "It moves to the blocked state",
+            "It keeps running until it does I/O"
+          ]
+        },
+        {
+          "q": "What is the main cost of round robin?",
+          "a": "Context-switch overhead",
+          "w": [
+            "Starvation of short jobs",
+            "Needing to know burst lengths in advance",
+            "No preemption"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n7_6",
+      "set": "W7",
+      "n": 6,
+      "q": "What is priority scheduling, what problem does it have, and how is it fixed?",
+      "a": "Each process gets an integer <b>priority</b>, and the CPU goes to the highest priority. <b>Non-preemptive:</b> a newly arrived higher-priority task waits for the current task to release the CPU. <b>Preemptive:</b> it takes the CPU immediately.<br><b>Problem:</b> <b>starvation</b>; low-priority processes may never run.<br><b>Fix:</b> <b>ageing</b>; a process's priority rises the longer it waits.",
+      "kw": [
+        [
+          "priority"
+        ],
+        [
+          "highest priority",
+          "highest"
+        ],
+        [
+          "preemptive",
+          "non-preemptive",
+          "preempt"
+        ],
+        [
+          "starvation",
+          "starv"
+        ],
+        [
+          "ageing",
+          "aging"
+        ]
+      ],
+      "src": "Notes W7 'What is priority scheduling?'; S-W7",
+      "mcq": [
+        {
+          "q": "What is the main problem with priority scheduling?",
+          "a": "Starvation of low-priority processes",
+          "w": [
+            "Too many context switches",
+            "Deadlock between equal priorities",
+            "It cannot be preemptive"
+          ]
+        },
+        {
+          "q": "How does ageing fix starvation?",
+          "a": "It raises a process's priority the longer it waits",
+          "w": [
+            "It lowers the priority of new processes",
+            "It kills old processes",
+            "It doubles the quantum each round"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n7_7",
+      "set": "W7",
+      "n": 7,
+      "q": "How do multilevel queues and multilevel feedback queues differ?",
+      "a": "<b>Multilevel queue:</b> the ready queue is split into fixed queues, e.g. <b>foreground</b> (interactive, RR) and <b>background</b> (batch, FIFO). There's <b>fixed priority between queues</b> (foreground first), so background jobs can starve.<br><b>Multilevel feedback queue:</b> processes can <b>move between queues</b> as their behaviour changes, which also implements <b>ageing</b>. It's defined by: the number of queues and their algorithms, plus methods to choose a process's initial queue, <b>upgrade</b> it and <b>demote</b> it.",
+      "kw": [
+        [
+          "foreground",
+          "interactive",
+          "round robin",
+          "rr"
+        ],
+        [
+          "background",
+          "batch",
+          "fifo"
+        ],
+        [
+          "fixed priority",
+          "starv"
+        ],
+        [
+          "move between queues",
+          "move",
+          "feedback"
+        ],
+        [
+          "upgrade",
+          "promote"
+        ],
+        [
+          "demote",
+          "downgrade"
+        ],
+        [
+          "ageing",
+          "aging"
+        ]
+      ],
+      "src": "Notes W7 'How do Multilevel Queues work', 'How do Multilevel Feedback Queues work'; S-W7",
+      "mcq": [
+        {
+          "q": "What does a multilevel FEEDBACK queue add over a plain multilevel queue?",
+          "a": "Processes can move between queues",
+          "w": [
+            "A single FIFO queue",
+            "Fixed priority between queues",
+            "No preemption"
+          ]
+        },
+        {
+          "q": "In the course's multilevel queue example, which algorithms are used?",
+          "a": "RR for foreground, FIFO for background",
+          "w": [
+            "FIFO for foreground, RR for background",
+            "SJF for both",
+            "Priority for both"
+          ]
+        },
+        {
+          "q": "Why can background jobs starve in a plain multilevel queue?",
+          "a": "Fixed priority always serves the foreground queue first",
+          "w": [
+            "Background jobs have no PCB",
+            "RR never preempts",
+            "Background jobs can't do I/O"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n8_1",
+      "set": "W8",
+      "n": 1,
+      "q": "What are dynamic loading and dynamic linking?",
+      "a": "Both reduce memory consumption.<br><b>Dynamic loading:</b> load a routine into memory <b>only when it's called</b>; the rest stays on disk.<br><b>Dynamic linking:</b> instead of copying library code into every program, shared libraries are <b>linked at run time</b> (a stub locates the library), so many programs share one copy.<br><i>Note: your notes say \"at compile time\". It's <b>run time</b>; compile-time copying is static linking.</i>",
+      "kw": [
+        [
+          "load when called",
+          "on demand",
+          "when called",
+          "when needed"
+        ],
+        [
+          "disk"
+        ],
+        [
+          "run time",
+          "runtime",
+          "execution time"
+        ],
+        [
+          "shared library",
+          "shared"
+        ],
+        [
+          "stub"
+        ],
+        [
+          "memory",
+          "save"
+        ]
+      ],
+      "src": "Notes W8 'How does Dynamic loading work?', 'How does Dynamic linking work?'; S-W8; Tute W8-10 Q1",
+      "mcq": [
+        {
+          "q": "When does dynamic linking resolve shared libraries?",
+          "a": "At run time",
+          "w": [
+            "At compile time",
+            "At boot time only",
+            "When the program is deleted"
+          ]
+        },
+        {
+          "q": "What is dynamic loading?",
+          "a": "Loading a routine into memory only when it is called",
+          "w": [
+            "Loading every routine at startup",
+            "Copying library code into every executable",
+            "Moving a process between frames"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n8_2",
+      "set": "W8",
+      "n": 2,
+      "q": "What is address binding, and when can it happen?",
+      "a": "Binding maps program addresses to memory: <b>symbolic</b> (e.g. <code>count</code>) → <b>relocatable</b> (\"14 bytes from the start of this module\", by the compiler) → <b>absolute</b> (e.g. 74014, by the linker/loader).<br><b>Compile time</b> (embedded systems): the compiler produces absolute addresses.<br><b>Load time</b> (early OSes): the loader turns relocatable addresses into absolute ones; if the base changes, reload.<br><b>Execution time</b> (modern OSes): hardware maps logical to physical addresses at run time, so a process can be <b>moved while running</b>. This enables compaction and dynamic loading.",
+      "kw": [
+        [
+          "symbolic"
+        ],
+        [
+          "relocatable",
+          "relative"
+        ],
+        [
+          "absolute"
+        ],
+        [
+          "compile time",
+          "compile"
+        ],
+        [
+          "load time",
+          "load"
+        ],
+        [
+          "execution time",
+          "run time",
+          "runtime"
+        ],
+        [
+          "moved",
+          "compaction"
+        ]
+      ],
+      "src": "Notes W8 'What does Address Binding refer to?', 'When does Address Binding occur?'; S-W8",
+      "mcq": [
+        {
+          "q": "Which binding time do modern OSes use, allowing a process to move during execution?",
+          "a": "Execution time",
+          "w": [
+            "Compile time",
+            "Load time",
+            "Link time only"
+          ]
+        },
+        {
+          "q": "A compiler typically turns symbolic addresses into…",
+          "a": "Relocatable (relative) addresses",
+          "w": [
+            "Physical frame numbers",
+            "Absolute addresses always",
+            "Page table entries"
+          ]
+        },
+        {
+          "q": "Compile-time binding to absolute addresses is typical of…",
+          "a": "Embedded systems",
+          "w": [
+            "Modern desktop OSes",
+            "Time-sharing systems",
+            "Distributed systems"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n8_3",
+      "set": "W8",
+      "n": 3,
+      "q": "What is the difference between logical and physical addresses, and what does the MMU do?",
+      "a": "<b>Logical (virtual) address:</b> generated by the CPU at run time, from the process's point of view; it doesn't exist physically. The <b>logical address space</b> is all logical addresses a program generates.<br><b>Physical address:</b> a real location in RAM. The <b>physical address space</b> is the matching set of physical addresses.<br>The <b>MMU</b> is <b>hardware</b> that maps virtual to physical addresses at run time; user programs <b>never see real physical addresses</b>.<br><b>Relocation-register scheme:</b> the relocation (base) register holds the smallest physical address; the <b>limit register</b> holds the range of logical addresses. physical = logical + relocation, if logical &lt; limit; otherwise trap. Each process can only reach its own space.",
+      "kw": [
+        [
+          "logical",
+          "virtual"
+        ],
+        [
+          "cpu generated",
+          "generated by the cpu",
+          "cpu"
+        ],
+        [
+          "physical",
+          "ram",
+          "real"
+        ],
+        [
+          "mmu",
+          "memory management unit"
+        ],
+        [
+          "hardware"
+        ],
+        [
+          "relocation",
+          "base"
+        ],
+        [
+          "limit"
+        ]
+      ],
+      "src": "Notes W8 'Logical vs physical addresses', 'What is a Memory-Management Unit?', 'relocation-register scheme'; S-W8",
+      "mcq": [
+        {
+          "q": "Logical address 300, relocation register 14000, limit 500. What is the physical address?",
+          "a": "14300",
+          "w": [
+            "300",
+            "14500",
+            "Trap"
+          ]
+        },
+        {
+          "q": "Logical address 600, relocation register 14000, limit 500. What happens?",
+          "a": "Trap: addressing error",
+          "w": [
+            "Physical address 14600",
+            "Physical address 600",
+            "The limit is raised to 600"
+          ]
+        },
+        {
+          "q": "What is the MMU?",
+          "a": "Hardware that maps virtual addresses to physical addresses at run time",
+          "w": [
+            "A kernel data structure listing processes",
+            "Software that compiles addresses",
+            "The disk scheduler"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n8_4",
+      "set": "W8",
+      "n": 4,
+      "q": "What is contiguous allocation, and how do fixed and variable partitions compare?",
+      "a": "Memory is split into two partitions: the <b>OS</b> (usually low memory, with the interrupt vector) and <b>user processes</b> (high memory). Each process sits in a <b>single contiguous block</b>.<br><b>Fixed partitions:</b> memory is statically divided into partitions of set sizes; a process gets the smallest free partition that fits. Fast with per-size free lists, but <b>inflexible and wasteful</b> (internal fragmentation).<br><b>Variable partitions:</b> sized to each process's needs, but leave <b>holes of various sizes</b> scattered through memory (external fragmentation). Holes are chosen with <b>first fit</b> (first hole big enough) or <b>best fit</b> (smallest hole big enough, leaving the smallest leftover).",
+      "kw": [
+        [
+          "single contiguous",
+          "contiguous"
+        ],
+        [
+          "os low memory",
+          "low memory",
+          "interrupt vector"
+        ],
+        [
+          "fixed partition",
+          "fixed"
+        ],
+        [
+          "variable partition",
+          "variable"
+        ],
+        [
+          "holes",
+          "hole"
+        ],
+        [
+          "first fit",
+          "first-fit"
+        ],
+        [
+          "best fit",
+          "best-fit"
+        ]
+      ],
+      "src": "Notes W8 'What is Contiguous Allocation?', 'Fixed vs Variable Partitions', 'allocation strategies'; S-W8",
+      "mcq": [
+        {
+          "q": "Which partitioning scheme leaves holes of various sizes scattered through memory?",
+          "a": "Variable partitions",
+          "w": [
+            "Fixed partitions",
+            "Paging",
+            "Single-partition batch systems"
+          ]
+        },
+        {
+          "q": "Best fit chooses…",
+          "a": "The smallest hole that is big enough",
+          "w": [
+            "The first hole that is big enough",
+            "The largest hole",
+            "A random hole"
+          ]
+        },
+        {
+          "q": "Where does the OS usually sit in contiguous allocation?",
+          "a": "Low memory, with the interrupt vector",
+          "w": [
+            "High memory, above user processes",
+            "On disk only",
+            "In the TLB"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n8_5",
+      "set": "W8",
+      "n": 5,
+      "q": "What is the difference between internal and external fragmentation, and how is external fragmentation reduced?",
+      "a": "<b>Internal fragmentation:</b> allocated memory is slightly <b>larger than requested</b>; the unused space is <b>inside</b> a partition.<br><b>External fragmentation:</b> enough total free memory exists, but it <b>isn't contiguous</b>.<br><b>Compaction</b> reduces external fragmentation by shuffling memory contents so all free memory forms one large block. It needs execution-time binding, and can't be done while <b>I/O is in progress</b> on the memory being moved.",
+      "kw": [
+        [
+          "internal",
+          "inside",
+          "larger than requested"
+        ],
+        [
+          "external",
+          "not contiguous",
+          "non-contiguous"
+        ],
+        [
+          "compaction",
+          "compact"
+        ],
+        [
+          "shuffle",
+          "move",
+          "one large block"
+        ],
+        [
+          "i/o",
+          "io in progress"
+        ]
+      ],
+      "src": "Notes W8 'internal and external fragmentation', 'How can external fragmentation be reduced?'; S-W8",
+      "mcq": [
+        {
+          "q": "A process asks for 18,462 bytes and gets an 18,464-byte block. The 2 unused bytes are…",
+          "a": "Internal fragmentation",
+          "w": [
+            "External fragmentation",
+            "Compaction",
+            "A page fault"
+          ]
+        },
+        {
+          "q": "Enough total free memory exists but no single hole is big enough. This is…",
+          "a": "External fragmentation",
+          "w": [
+            "Internal fragmentation",
+            "Thrashing",
+            "Deadlock"
+          ]
+        },
+        {
+          "q": "When can't compaction be done on a region of memory?",
+          "a": "While I/O involving that memory is in progress",
+          "w": [
+            "When the system uses execution-time binding",
+            "When there are no holes",
+            "When paging is disabled"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n9_1",
+      "set": "W9",
+      "n": 1,
+      "q": "How does segmentation work, and what fragmentation does it suffer?",
+      "a": "Non-contiguous allocation splits a program into small units placed anywhere in memory (needs hardware support): segmentation, paging, or paged segmentation.<br><b>Segmentation:</b> the program is a collection of logical <b>segments</b> (main program, function, stack…). A <b>segment table</b> in memory maps the 2D logical address (segment, offset) to a 1D physical address. Each entry has a <b>base</b> (starting physical address) and a <b>limit</b> (segment length).<br>Each segment is <b>contiguous</b> in physical memory, but segments needn't be next to each other.<br><b>Internal fragmentation:</b> generally no; each segment gets exactly what it needs.<br><b>External fragmentation:</b> <b>yes</b>; free memory breaks into holes between segments.",
+      "kw": [
+        [
+          "segment",
+          "logical unit"
+        ],
+        [
+          "segment table"
+        ],
+        [
+          "base"
+        ],
+        [
+          "limit",
+          "length"
+        ],
+        [
+          "contiguous"
+        ],
+        [
+          "no internal",
+          "internal"
+        ],
+        [
+          "external fragmentation",
+          "external"
+        ]
+      ],
+      "src": "Notes W9 'What is non-contiguous allocation?', 'How does segmentation work?'; S-W9",
+      "mcq": [
+        {
+          "q": "What does each segment-table entry contain?",
+          "a": "A base (start address) and a limit (length)",
+          "w": [
+            "A frame number and a valid bit only",
+            "A process ID and a priority",
+            "A page number and an offset"
+          ]
+        },
+        {
+          "q": "Which fragmentation does pure segmentation suffer from?",
+          "a": "External fragmentation",
+          "w": [
+            "Internal fragmentation only",
+            "Neither",
+            "Both, equally"
+          ]
+        },
+        {
+          "q": "Is a single segment stored contiguously in physical memory?",
+          "a": "Yes, though different segments can be anywhere",
+          "w": [
+            "No, it is split into pages",
+            "Only the stack segment is",
+            "Only if it is smaller than a frame"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n9_2",
+      "set": "W9",
+      "n": 2,
+      "q": "How does paging work, and what fragmentation does it suffer?",
+      "a": "Divide <b>logical memory into fixed-size pages</b> and <b>physical memory into frames</b> of the same size. To run an n-page program, find n free frames (the OS keeps a <b>free-frame list</b>) and load it. A <b>page table</b> per process (stored in its context) maps each <b>page number → frame number</b>.<br><b>Internal fragmentation:</b> <b>yes</b>; the last page may not be full.<br><b>External fragmentation:</b> <b>no</b>; any free frame can hold any page, even if scattered.<br><i>Note: your notes say \"maps page to page\". It maps <b>page → frame</b>.</i>",
+      "kw": [
+        [
+          "pages",
+          "page"
+        ],
+        [
+          "frames",
+          "frame"
+        ],
+        [
+          "same size",
+          "fixed size",
+          "fixed-size"
+        ],
+        [
+          "page table"
+        ],
+        [
+          "page to frame",
+          "frame number"
+        ],
+        [
+          "free frame",
+          "free list"
+        ],
+        [
+          "internal fragmentation",
+          "last page"
+        ],
+        [
+          "no external",
+          "external"
+        ]
+      ],
+      "src": "Notes W9 'How does Paging work?'; S-W9 'Paging'",
+      "mcq": [
+        {
+          "q": "What does a page table map?",
+          "a": "Page number → frame number",
+          "w": [
+            "Page number → page number",
+            "Segment number → base and limit",
+            "Frame number → disk block"
+          ]
+        },
+        {
+          "q": "Which fragmentation does paging suffer from?",
+          "a": "Internal only (the last page may not be full)",
+          "w": [
+            "External only",
+            "Both",
+            "Neither"
+          ]
+        },
+        {
+          "q": "Why does paging avoid external fragmentation?",
+          "a": "Any free frame can hold any page, so pages needn't be contiguous",
+          "w": [
+            "Pages are always smaller than 1 byte",
+            "It compacts memory after every allocation",
+            "It allocates the exact size requested"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "n9_3",
+      "set": "W9",
+      "n": 3,
+      "q": "How does paged segmentation combine segmentation and paging?",
+      "a": "Partition the program into <b>segments</b>, then partition <b>each segment into pages</b>. Each segment has <b>its own page table</b>; the segment-table entry points to that segment's page table (and holds its length). A logical address is (segment, page, offset): the segment number selects the page table, the page number selects the frame, and the offset is added. This keeps segmentation's logical view while avoiding its external fragmentation.",
+      "kw": [
+        [
+          "segments",
+          "segment"
+        ],
+        [
+          "pages",
+          "page"
+        ],
+        [
+          "page table per segment",
+          "each segment has a page table",
+          "page table"
+        ],
+        [
+          "segment table"
+        ],
+        [
+          "offset"
+        ],
+        [
+          "no external",
+          "external"
+        ]
+      ],
+      "src": "Notes W9 'Can you combine segmentation and paging?'; S-W9; T-W10 (could be an exam question)",
+      "mcq": [
+        {
+          "q": "In paged segmentation, how many page tables are there?",
+          "a": "One per segment",
+          "w": [
+            "One for the whole system",
+            "One per frame",
+            "None; segments are never paged"
+          ]
+        },
+        {
+          "q": "What does the segment number select in paged segmentation?",
+          "a": "That segment's page table",
+          "w": [
+            "The physical frame directly",
+            "The offset within a page",
+            "The process's PCB"
+          ]
+        },
+        {
+          "q": "What advantage does paged segmentation have over pure segmentation?",
+          "a": "It removes external fragmentation while keeping the logical segment view",
+          "w": [
+            "It removes internal fragmentation completely",
+            "It needs no hardware support",
+            "It avoids having any tables"
+          ]
+        }
+      ]
+    }
+  ],
+  "videos": {
+    "cc18": [
+      "26QPDBe-NB8",
+      "Operating Systems: Crash Course CS #18",
+      "CrashCourse",
+      "13:36"
+    ],
+    "cs162L1": [
+      "pPzVV2kkGHc",
+      "CS162 Lecture 1: What is an Operating System?",
+      "UC Berkeley (Kubiatowicz)",
+      "1:23:03"
+    ],
+    "cs162L3": [
+      "QSep-J6vtdc",
+      "CS162 Lecture 3: Threads and Processes",
+      "UC Berkeley (Kubiatowicz)",
+      "1:27:53"
+    ],
+    "cpKernel": [
+      "yV4fGeIv7MI",
+      "CPU Kernel Mode",
+      "Computerphile",
+      "13:27"
+    ],
+    "cdBit": [
+      "H4SDPLiUnv4",
+      "How a Single Bit Inside Your Processor Shields Your OS's Integrity",
+      "Core Dumped",
+      "21:30"
+    ],
+    "cpInt": [
+      "tGMSARJk7cA",
+      "CPU Interrupts",
+      "Computerphile",
+      "16:47"
+    ],
+    "cpProgInt": [
+      "54BrU82ANww",
+      "Program, Interrupted",
+      "Computerphile",
+      "6:41"
+    ],
+    "cdHw": [
+      "1HHeyUVz43k",
+      "How Hardware Assists Software When Multitasking",
+      "Core Dumped",
+      "13:15"
+    ],
+    "cpMP": [
+      "MB0yDMQj1lU",
+      "Multi Programming",
+      "Computerphile",
+      "12:30"
+    ],
+    "cdThreads": [
+      "M9HHWFp84f0",
+      "Why Are Threads Needed On Single Core Processors",
+      "Core Dumped",
+      "16:07"
+    ],
+    "cdProg": [
+      "7ge7u5VUSbE",
+      "A PROGRAM is not a PROCESS.",
+      "Core Dumped",
+      "8:08"
+    ],
+    "nesoPCB": [
+      "4s2MKuVYKV8",
+      "Process Control Block",
+      "Neso Academy",
+      "7:02"
+    ],
+    "cdIPC": [
+      "Y2mDwW2pMv4",
+      "IPC: To Share Memory Or To Send Messages",
+      "Core Dumped",
+      "14:15"
+    ],
+    "nesoIPC": [
+      "dJuYKfR8vec",
+      "Interprocess Communication",
+      "Neso Academy",
+      "12:49"
+    ],
+    "nesoThreads": [
+      "LOfGJcVnvAk",
+      "Introduction to Threads",
+      "Neso Academy",
+      "14:06"
+    ],
+    "nesoModels": [
+      "HW2Wcx-ktsc",
+      "Multithreading Models & Hyperthreading",
+      "Neso Academy",
+      "17:57"
+    ],
+    "cdFork": [
+      "SwIPOf2YAgI",
+      "The Weird Way Linux Creates Processes",
+      "Core Dumped",
+      "17:51"
+    ],
+    "cpRace": [
+      "W0jPTqIo5oE",
+      "Race Conditions on a Human Scale",
+      "Computerphile",
+      "20:14"
+    ],
+    "cdRace": [
+      "bhpzTWtee2A",
+      "The Weirdest Bug in Programming: Race Conditions",
+      "Core Dumped",
+      "18:19"
+    ],
+    "nesoCS": [
+      "UtEORPakw5Y",
+      "The Critical-Section Problem",
+      "Neso Academy",
+      "13:50"
+    ],
+    "nesoPeterson": [
+      "gYCiTtgGR5Q",
+      "Peterson's Solution",
+      "Neso Academy",
+      "21:31"
+    ],
+    "nesoTSL": [
+      "5oZYS5dTrmk",
+      "Test and Set Lock",
+      "Neso Academy",
+      "19:01"
+    ],
+    "cdHwThreads": [
+      "IMceN4_rieo",
+      "How Hardware Makes Threads Less of a Nightmare",
+      "Core Dumped",
+      "18:41"
+    ],
+    "cdSleep": [
+      "e5g8eYKEhMw",
+      "What Happens When a Program Calls Sleep?",
+      "Core Dumped",
+      "19:41"
+    ],
+    "cdMulticore": [
+      "5sw9XJokAqw",
+      "Threads On Multicore Systems",
+      "Core Dumped",
+      "11:27"
+    ],
+    "nesoSem": [
+      "XDIOC2EY5JE",
+      "Semaphores",
+      "Neso Academy",
+      "22:51"
+    ],
+    "sorberSem": [
+      "ukM_zzrIeXs",
+      "What is a semaphore? How do they work? (Example in C)",
+      "Jacob Sorber",
+      "13:27"
+    ],
+    "nesoSemDis": [
+      "2cGo2HdA0dM",
+      "Disadvantages of Semaphores",
+      "Neso Academy",
+      "11:05"
+    ],
+    "nesoMon": [
+      "ufdQ0GR855M",
+      "Monitors",
+      "Neso Academy",
+      "13:46"
+    ],
+    "nesoDP": [
+      "FYUi-u7UWgw",
+      "The Dining Philosophers Problem",
+      "Neso Academy",
+      "20:16"
+    ],
+    "jennyDL": [
+      "x9FF723STvo",
+      "Necessary Conditions for Deadlock",
+      "Jenny's Lectures CS IT",
+      "13:15"
+    ],
+    "kanichDL": [
+      "oEbXlSH8hyE",
+      "Everything you should know about deadlock in three minutes",
+      "Chris Kanich (UIC)",
+      "2:50"
+    ],
+    "gsPrev": [
+      "pPM9Ajqmy_4",
+      "Deadlock Handling Methods and Deadlock Prevention",
+      "Gate Smashers",
+      "24:49"
+    ],
+    "gsBank": [
+      "7gMLNiEz3nw",
+      "Deadlock Avoidance: Banker's Algorithm with Example",
+      "Gate Smashers",
+      "24:04"
+    ],
+    "nesoPre": [
+      "4DhFmL-6SDA",
+      "Preemptive and Non-Preemptive Scheduling",
+      "Neso Academy",
+      "18:57"
+    ],
+    "nesoSJF": [
+      "t0g9b3SJECg",
+      "Scheduling Algorithms: Shortest Job First",
+      "Neso Academy",
+      "28:47"
+    ],
+    "nesoRR": [
+      "YzBBJYfwdi8",
+      "Scheduling Algorithms: Round Robin",
+      "Neso Academy",
+      "15:16"
+    ],
+    "nesoPrio": [
+      "yKD3pcFvGmY",
+      "Scheduling Algorithms: Priority Scheduling",
+      "Neso Academy",
+      "17:11"
+    ],
+    "nesoMLQ": [
+      "fvkSXMZaBNY",
+      "Multilevel Queue Scheduling",
+      "Neso Academy",
+      "14:36"
+    ],
+    "nesoMLFQ": [
+      "1KLuC0knvs8",
+      "Multilevel Feedback-Queue Scheduling",
+      "Neso Academy",
+      "14:13"
+    ],
+    "nesoSolved": [
+      "g6QjVDyGgSE",
+      "Scheduling Algorithms: Solved Problems",
+      "Neso Academy",
+      "21:59"
+    ],
+    "cdSched": [
+      "O2tV9q6784k",
+      "The Fancy Algorithms That Make Your Computer Feel Smoother",
+      "Core Dumped",
+      "45:02"
+    ],
+    "kanichLink": [
+      "l8oIupRzahU",
+      "What's so good about dynamic linking anyway?",
+      "Chris Kanich (UIC)",
+      "11:55"
+    ],
+    "cdMem": [
+      "Zmtxl7LZwjQ",
+      "Why Can't Programs Access Each Other's Memory?",
+      "Core Dumped",
+      "14:51"
+    ],
+    "gsFit": [
+      "N3rG_1CEQkQ",
+      "First Fit, Next Fit, Best Fit, Worst Fit",
+      "Gate Smashers",
+      "16:22"
+    ],
+    "coleContig": [
+      "dFrDy8910j8",
+      "Contiguous Memory Allocation",
+      "Casey Cole",
+      "23:42"
+    ],
+    "gsSeg": [
+      "dz9Tk6KCMlQ",
+      "Segmentation vs Paging",
+      "Gate Smashers",
+      "16:30"
+    ],
+    "cpVM": [
+      "5lFnKYCZT5o",
+      "What's Virtual Memory?",
+      "Computerphile",
+      "22:40"
+    ],
+    "bitlemonVM": [
+      "fGP6VHxqkIM",
+      "Virtual Memory Explained (including Paging)",
+      "BitLemon",
+      "7:54"
+    ],
+    "colePaging": [
+      "LKYKp_ZzlvM",
+      "Paging",
+      "Casey Cole",
+      "29:12"
+    ]
+  },
+  "questionVideos": {
+    "n1_1": [
+      "cc18",
+      "cs162L1"
+    ],
+    "n1_2": [
+      "cs162L1"
+    ],
+    "n1_3": [
+      "cpMP"
+    ],
+    "n1_4": [
+      "cpMP"
+    ],
+    "n1_5": [
+      "cpMP"
+    ],
+    "n1_6": [
+      "cpMP",
+      "cc18"
+    ],
+    "n1_7": [
+      "cc18"
+    ],
+    "n2_1": [
+      "cdProg"
+    ],
+    "n2_2": [
+      "cpKernel",
+      "cdBit"
+    ],
+    "n2_3": [
+      "cdProg"
+    ],
+    "n2_4": [
+      "nesoPCB"
+    ],
+    "n2_5": [
+      "cpInt",
+      "cpProgInt"
+    ],
+    "n2_6": [
+      "cdHw"
+    ],
+    "n2_7": [
+      "cdIPC",
+      "nesoIPC"
+    ],
+    "n2_8": [
+      "cdIPC",
+      "nesoIPC"
+    ],
+    "n2_9": [
+      "cdFork"
+    ],
+    "n2_10": [
+      "cdFork"
+    ],
+    "n3_1": [
+      "cdThreads",
+      "nesoThreads",
+      "cdMulticore"
+    ],
+    "n3_2": [
+      "nesoModels",
+      "cs162L3"
+    ],
+    "n3_3": [
+      "nesoModels"
+    ],
+    "n3_5": [
+      "cdRace",
+      "cpRace"
+    ],
+    "n4_1": [
+      "nesoCS"
+    ],
+    "n4_2": [
+      "nesoPeterson"
+    ],
+    "n4_3": [
+      "nesoTSL",
+      "cdHwThreads"
+    ],
+    "n4_4": [
+      "cdSleep"
+    ],
+    "n4_5": [
+      "sorberSem"
+    ],
+    "n5_1": [
+      "nesoSem",
+      "sorberSem"
+    ],
+    "n5_2": [
+      "sorberSem",
+      "nesoSem"
+    ],
+    "n5_3": [
+      "nesoSemDis"
+    ],
+    "n5_4": [
+      "nesoMon"
+    ],
+    "n6_1": [
+      "nesoDP",
+      "kanichDL"
+    ],
+    "n6_2": [
+      "kanichDL"
+    ],
+    "n6_3": [
+      "gsPrev"
+    ],
+    "n6_4": [
+      "gsPrev",
+      "jennyDL"
+    ],
+    "n6_5": [
+      "gsBank"
+    ],
+    "n7_1": [
+      "nesoSolved"
+    ],
+    "n7_2": [
+      "cdSched"
+    ],
+    "n7_3": [
+      "nesoSJF"
+    ],
+    "n7_4": [
+      "nesoSJF",
+      "nesoPre",
+      "nesoSolved"
+    ],
+    "n7_5": [
+      "nesoRR"
+    ],
+    "n7_6": [
+      "nesoPrio"
+    ],
+    "n7_7": [
+      "nesoMLQ",
+      "nesoMLFQ"
+    ],
+    "n8_1": [
+      "kanichLink"
+    ],
+    "n8_2": [
+      "cdMem"
+    ],
+    "n8_3": [
+      "cdMem",
+      "cpVM"
+    ],
+    "n8_4": [
+      "coleContig",
+      "gsFit"
+    ],
+    "n8_5": [
+      "coleContig"
+    ],
+    "n9_1": [
+      "gsSeg"
+    ],
+    "n9_2": [
+      "colePaging",
+      "bitlemonVM"
+    ],
+    "n9_3": [
+      "gsSeg"
+    ]
+  }
+}

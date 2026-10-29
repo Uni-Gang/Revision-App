@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revision</title>
+<!-- KaTeX renders \( inline \) and \[ display \] LaTeX in question and answer text -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="typesetAll()"></script>
+<style>
+:root{
+  --bg:#f6f5f2; --card:#ffffff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e2e0da;
+  --accent:#2f5bd3; --accent-ink:#ffffff; --good:#1f8a4c; --good-bg:#e5f4ea; --bad:#c0392b; --bad-bg:#fbe9e7;
+  --chip:#eceae4; --code:#f0eee8;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#16171a; --card:#1f2024; --ink:#ececee; --muted:#9a9aa2; --line:#33343a;
+    --accent:#6f93ff; --accent-ink:#0d1020; --good:#5fd08a; --good-bg:#17301f; --bad:#ff7b6b; --bad-bg:#3a1c18;
+    --chip:#2a2b30; --code:#2a2b30;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0 6px}
+h1{font-size:18px;margin:0;letter-spacing:.2px}
+.score{font-size:13px;color:var(--muted)}
+nav{display:flex;gap:6px;overflow-x:auto;padding:6px 0 10px;scrollbar-width:none}
+nav button{flex:0 0 auto}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on,button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:disabled{opacity:.5;cursor:default}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.chip{font-size:13px;padding:5px 11px;background:var(--chip);border:1px solid transparent}
+.chip.on{background:var(--accent);color:var(--accent-ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:14px 0}
+.meta{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px}
+.q{font-size:18px;font-weight:600;margin:0 0 14px;white-space:pre-line}
+.ans{border-top:1px dashed var(--line);margin-top:14px;padding-top:14px}
+.ans table{border-collapse:collapse;margin:8px 0;font-size:14px;width:100%}
+.ans td,.ans th{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+.src{font-size:13px;color:var(--muted);margin-top:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.opt{display:block;width:100%;text-align:left;border-radius:10px;padding:12px 14px;margin:8px 0}
+.opt.good{background:var(--good-bg);border-color:var(--good);color:var(--ink)}
+.opt.bad{background:var(--bad-bg);border-color:var(--bad);color:var(--ink)}
+textarea,input[type=text]{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{min-height:130px;resize:vertical}
+.kw{display:inline-block;font-size:13px;padding:3px 9px;border-radius:999px;margin:3px 4px 3px 0}
+.kw.hit{background:var(--good-bg);color:var(--good)}
+.kw.miss{background:var(--bad-bg);color:var(--bad)}
+.bar{height:8px;background:var(--chip);border-radius:99px;overflow:hidden;margin:8px 0}
+.bar>i{display:block;height:100%;background:var(--accent)}
+.good-t{color:var(--good);font-weight:600}.bad-t{color:var(--bad);font-weight:600}
+code,.mono{font-family:ui-monospace,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.drill{cursor:pointer;text-align:left;border-radius:12px;padding:14px}
+.drill b{display:block;margin-bottom:4px}
+.drill span{font-size:13px;color:var(--muted)}
+.stat{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.stat:last-child{border:0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.data-loader{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 0 10px}
+.data-loader input{max-width:100%}
+.data-loader label{font-size:13px;font-weight:600}
+#data-status{margin:0;font-size:13px;color:var(--muted)}
+#data-status.error{color:var(--bad)}
+.refs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px;margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.refs h4{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.refs ul{margin:0;padding:0;list-style:none;font-size:14px}
+.refs li{padding:3px 0}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:999px;background:var(--chip);color:var(--muted);margin-right:4px;white-space:nowrap}
+.tag.slides{background:#e3ebff;color:#2f5bd3}
+.tag.trans{background:#f3e6ff;color:#7a3db8}
+.tag.book{background:#fff1d6;color:#9a6200}
+@media (prefers-color-scheme: dark){
+  .tag.slides{background:#1f2a4a;color:#9db5ff}
+  .tag.trans{background:#33204a;color:#d2a8ff}
+  .tag.book{background:#3a2c10;color:#f0c060}
+}
+.vlink{display:block;font-size:14px;color:var(--accent);text-decoration:none;padding:3px 0}
+.vlink:hover{text-decoration:underline}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:10px 0 24px}
+.vcard{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;color:var(--ink);text-decoration:none}
+.vcard:hover{border-color:var(--accent)}
+.vcard img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--chip)}
+.vcard div{padding:10px 12px;font-size:14px}
+.vcard .muted{font-size:12px;margin-top:4px}
+h2{font-size:16px;margin:22px 0 4px}
+pre.work{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(--code);padding:10px;border-radius:8px}
+.q.rich{white-space:normal}
+.q.rich p,.opt p{margin:0 0 8px}.q.rich p:last-child,.opt p:last-child{margin-bottom:0}
+pre.code{white-space:pre;overflow-x:auto;font-family:ui-monospace,Consolas,monospace;font-size:13px;background:var(--code);padding:10px;border-radius:8px}
+figure{margin:10px 0}
+figure img,.q img,.ans img,.opt img{display:block;max-width:100%;height:auto;background:#fff;border-radius:8px;padding:4px;cursor:zoom-in}
+img.zoom{position:fixed;inset:0;margin:auto;max-width:96vw;max-height:96vh;z-index:20;cursor:zoom-out;box-shadow:0 0 0 100vmax rgba(0,0,0,.6)}
+figcaption{font-size:13px;color:var(--muted);margin-top:4px}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+details.ctx{margin:0 0 12px;padding:8px 12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:14px}
+details.ctx summary{cursor:pointer;color:var(--muted)}
+.opt.sel{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.blank{display:inline-block;min-width:60px;padding:0 8px;border-bottom:2px solid var(--accent);color:var(--muted);font-size:13px;text-align:center}
+select.blank-sel{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+select.blank-sel.good{border-color:var(--good);background:var(--good-bg)}
+select.blank-sel.bad{border-color:var(--bad);background:var(--bad-bg)}
+ol.opts-list{margin:0 0 8px;padding-left:22px}ol.opts-list li{margin:6px 0}
+ul.correct{margin:4px 0 10px}
+.filters .sep{flex-basis:100%;height:0}
+.ans .generated{margin:0 0 12px;padding:8px 12px;border-left:3px solid var(--bad);background:var(--bad-bg);border-radius:6px;font-size:14px}
+details.sets{flex-basis:100%}details.sets summary{cursor:pointer;color:var(--muted);padding:4px 0}details.sets .filters{margin:6px 0 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top"><h1>Revision</h1><div class="score" id="score"></div></div>
+    <nav id="nav">
+      <button data-m="flash">Flashcards</button>
+      <button data-m="mcq">Multiple choice</button>
+      <button data-m="type">Type &amp; match</button>
+      <button data-m="calc">Calc drills</button>
+      <button data-m="list">All answers</button>
+      <button data-m="videos">Videos</button>
+      <button data-m="stats">Progress</button>
+    </nav>
+    <div class="data-loader">
+      <label for="data-file">Load JSON</label>
+      <input id="data-file" type="file" accept=".json,application/json" aria-describedby="data-status">
+      <p id="data-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+
+<script>
+let Q = [], SETS = [], V = {}, VID = {}, GROUPS = {}, SET_LABEL = "Tute ";
+
+// ---------------------------------------------------------------------------
+// State / storage (per-browser)
+// ---------------------------------------------------------------------------
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(storagePrefix+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(storagePrefix+k, JSON.stringify(v)); }catch(e){} }
+};
+let storagePrefix = "osp_";
+let stats = {};                              // id -> {r, w}
+let sets = [];                               // active filters
+let weakOnly = store.get("weak", false);
+let mode  = store.get("mode", "flash");
+
+function record(id, ok){
+  const s = stats[id] || (stats[id] = {r:0, w:0});
+  ok ? s.r++ : s.w++;
+  store.set("stats", stats);
+  renderScore();
+}
+function weakness(id){ const s = stats[id]; if(!s) return 1; return (s.w + 1) / (s.r + s.w + 2); }
+function renderScore(){
+  let r=0,w=0; Object.values(stats).forEach(s=>{r+=s.r;w+=s.w;});
+  document.getElementById("score").textContent = r+w ? `${r}/${r+w} correct (${Math.round(100*r/(r+w))}%)` : "";
+}
+
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const rnd = (lo,hi) => lo + Math.floor(Math.random()*(hi-lo+1));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const app = document.getElementById("app");
+
+// questions in the active sets that a mode can use (fit), narrowed to weak ones if asked
+function pool(fit = () => true){
+  let p = Q.filter(q => sets.includes(q.set) && fit(q));
+  if(weakOnly){ const weak = p.filter(q => weakness(q.id) > 0.45); if(weak.length) p = weak; }
+  return p;
+}
+// weighted pick so weak questions come up more often
+function nextQ(list, avoid){
+  const cands = list.length > 1 ? list.filter(q => q.id !== avoid) : list;
+  const ws = cands.map(q => 0.3 + weakness(q.id));
+  let t = Math.random() * ws.reduce((a,b)=>a+b,0);
+  for(let i=0;i<cands.length;i++){ t -= ws[i]; if(t<=0) return cands[i]; }
+  return cands[cands.length-1];
+}
+
+const setName = s => SET_LABEL + s;
+let setsOpen = false;                        // long set lists fold away so the question stays near the top
+function filtersHTML(){
+  const groups = Object.keys(GROUPS);
+  const chips = SETS.map(s=>`<button class="chip ${sets.includes(s)?"on":""}" data-set="${esc(s)}">${esc(setName(s))}</button>`).join("");
+  return `<div class="filters">${groups.length ? `<button class="chip" data-group="*">All</button>${groups.map(g=>`<button class="chip" data-group="${esc(g)}">Only ${esc(g)}</button>`).join("")}` : ""}
+  <button class="chip ${weakOnly?"on":""}" data-weak="1">Weak only</button>
+  ${SETS.length > 8 ? `<details class="sets" ${setsOpen?"open":""}><summary class="small">Sets: ${sets.length} of ${SETS.length} selected</summary><div class="filters">${chips}</div></details>` : `<span class="sep"></span>${chips}`}</div>`;
+}
+function bindFilters(rerender){
+  app.querySelectorAll("[data-set]").forEach(b=>b.onclick=()=>{
+    const s=b.dataset.set; sets = sets.includes(s) ? sets.filter(x=>x!==s) : sets.concat(s);
+    if(!sets.length) sets=[s]; store.set("sets",sets); rerender();
+  });
+  app.querySelectorAll("[data-group]").forEach(b=>b.onclick=()=>{
+    sets = b.dataset.group === "*" ? SETS.slice() : GROUPS[b.dataset.group].slice();
+    store.set("sets",sets); rerender();
+  });
+  const w = app.querySelector("[data-weak]");
+  if(w) w.onclick=()=>{ weakOnly=!weakOnly; store.set("weak",weakOnly); rerender(); };
+  const d = app.querySelector("details.sets");
+  if(d) d.ontoggle = () => { setsOpen = d.open; };
+}
+const metaHTML = q => `<div class="meta"><span>${esc(setName(q.set))} · ${esc(q.label || "Q"+q.n)}</span><span>${stats[q.id]?`✓${stats[q.id].r} ✗${stats[q.id].w}`:"new"}</span></div>`;
+// a mode with nothing to show in the chosen sets keeps the filters so the user can widen them
+function emptyPool(rerender, message){
+  app.innerHTML = filtersHTML() + `<div class="card"><p class="muted">${esc(message)} Choose other sets above.</p></div>`;
+  bindFilters(rerender);
+}
+
+// ---------------------------------------------------------------------------
+// Question content: types, rich text, images
+// type: open (default) | tf | mc | multi | dropdown. Questions with html:true
+// keep HTML in q/options/ctx; LaTeX between \( \) or \[ \] is typeset by KaTeX.
+// ---------------------------------------------------------------------------
+const TYPES = ["open", "tf", "mc", "multi", "dropdown"];
+const kind = q => q.type || "open";
+const isChoice = q => kind(q) !== "open";
+const rich = (q, s) => q.html ? String(s) : esc(s);
+const plain = s => String(s).replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+const imgList = v => (Array.isArray(v) ? v : v ? [v] : []).map(i => typeof i === "string" ? {src:i} : i);
+const imgsHTML = v => imgList(v).map(i => `<figure><img src="${esc(i.src)}" alt="${esc(i.alt || "Diagram")}" loading="lazy">${i.caption ? `<figcaption>${esc(i.caption)}</figcaption>` : ""}</figure>`).join("");
+const optHTML = (q, o) => typeof o === "string" ? rich(q, o) : rich(q, o.text || "") + imgsHTML(o.img);
+const correctSet = q => new Set([].concat(q.correct));
+const BLANK = /\[\[([A-Za-z0-9_-]+)\]\]/g;
+// question stem: shared definitions (ctx), text with dropdown blanks filled by blankFn, then images
+function stemHTML(q, blankFn = b => `<span class="blank">${esc(b)}</span>`){
+  let body = rich(q, q.q);
+  if(kind(q) === "dropdown") body = body.replace(BLANK, (m, b) => q.blanks[b] ? blankFn(b) : m);
+  return `${q.ctx ? `<details class="ctx"><summary>Definitions used by this question</summary>${rich(q, q.ctx)}</details>` : ""}
+    <div class="q${q.html ? " rich" : ""}">${body}</div>${imgsHTML(q.img)}`;
+}
+// read-only prompt (flashcards, answer list): choice questions list their options in order
+function promptHTML(q){
+  const k = kind(q);
+  if(k === "tf") return stemHTML(q) + `<p class="muted small">True or false?</p>`;
+  if(k === "mc" || k === "multi") return stemHTML(q) + `<ol class="opts-list" type="A">${q.options.map(o => `<li>${optHTML(q, o)}</li>`).join("")}</ol>`
+    + (k === "multi" ? `<p class="muted small">Select all that apply.</p>` : "");
+  return stemHTML(q);
+}
+function correctHTML(q){
+  const k = kind(q);
+  if(k === "tf") return `<p><b>Answer:</b> <span class="good-t">${q.answer ? "True" : "False"}</span></p>`;
+  if(k === "mc" || k === "multi"){
+    const c = correctSet(q);
+    return `<p><b>Correct answer${c.size > 1 ? "s" : ""}:</b></p><ul class="correct">${q.options.filter((o,i) => c.has(i)).map(o => `<li>${optHTML(q, o)}</li>`).join("")}</ul>`;
+  }
+  if(k === "dropdown") return `<p><b>Answers:</b></p><ul class="correct">${Object.entries(q.blanks).map(([b,v]) => `<li>${esc(b)} = ${esc(v.answer)}</li>`).join("")}</ul>`;
+  return "";
+}
+
+// typeset LaTeX whenever the app re-renders (KaTeX loads asynchronously; see typesetAll)
+let typesetQueued = false;
+function typesetAll(){
+  typesetQueued = false;
+  if(window.renderMathInElement) renderMathInElement(app, {throwOnError:false,
+    delimiters:[{left:"\\[", right:"\\]", display:true}, {left:"\\(", right:"\\)", display:false}]});
+}
+new MutationObserver(() => { if(!typesetQueued){ typesetQueued = true; setTimeout(typesetAll); } })
+  .observe(app, {childList:true, subtree:true});
+// click a diagram to enlarge it; click again to close
+app.addEventListener("click", e => { if(e.target.matches(".q img, .ans img, figure img") && !e.target.closest(".opt")) e.target.classList.toggle("zoom"); });
+const ytUrl = id => `https://www.youtube.com/watch?v=${id}`;
+const vidLinks = q => (VID[q.id]||[]).map(k => V[k]).map(([id,t,c,l]) =>
+  `<a class="vlink" href="${ytUrl(id)}" target="_blank" rel="noopener">▶ ${esc(t)} <span class="muted">· ${esc(c)} · ${esc(l)}</span></a>`).join("");
+// "S-W4 'Test and Set'; T-W3" -> labelled list items: Slides · Week 4, Lecture transcript · Week 3, Textbook
+function srcItems(src){
+  return src.split(";").map(s => s.trim()).filter(Boolean).map(s => {
+    let m;
+    if((m = s.match(/^S-W(\d+)\s*(.*)$/))) return `<li><span class="tag slides">Slides · Week ${m[1]}</span> ${esc(m[2])}</li>`;
+    if((m = s.match(/^T-W(\d+)\s*(.*)$/))) return `<li><span class="tag trans">Lecture transcript · Week ${m[1]}</span> ${esc(m[2])}</li>`;
+    if((m = s.match(/^Tutorial\s*(.*)$/))) return `<li><span class="tag slides">Tutorial</span> ${esc(m[1])}</li>`;
+    if((m = s.match(/^Canvas quiz\s*(.*)$/))) return `<li><span class="tag trans">Quiz</span> ${esc(m[1])}</li>`;
+    if((m = s.match(/^Canvas assignment\s*(.*)$/))) return `<li><span class="tag book">Assignment</span> ${esc(m[1])}</li>`;
+    const book = /tanenbaum|silberschatz|textbook/i.test(s);
+    return `<li><span class="tag ${book?"book":""}">${book?"Textbook (beyond course)":"Other"}</span> ${esc(s)}</li>`;
+  }).join("");
+}
+const refsHTML = q => `<div class="refs">
+  <div><h4>Course sources</h4><ul>${srcItems(q.src)}</ul></div>
+  ${VID[q.id]?`<div><h4>Watch on YouTube</h4>${vidLinks(q)}</div>`:""}</div>`;
+const ansHTML = q => `<div class="ans">${correctHTML(q)}${q.a || ""}${imgsHTML(q.aImg)}${refsHTML(q)}</div>`;
+
+// ---------------------------------------------------------------------------
+// Flashcards
+// ---------------------------------------------------------------------------
+let cur = null;
+function flash(){
+  const p = pool();
+  if(!p.length) return emptyPool(flash, "No questions in the selected sets.");
+  cur = nextQ(p, cur && cur.id);
+  app.innerHTML = filtersHTML() + `<div class="card">${metaHTML(cur)}${promptHTML(cur)}
+    <div id="rev"></div>
+    <div class="row" id="btns"><button class="primary" id="show">Show answer</button><button id="skip">Skip</button></div></div>`;
+  bindFilters(flash);
+  document.getElementById("skip").onclick = flash;
+  document.getElementById("show").onclick = () => {
+    document.getElementById("rev").innerHTML = ansHTML(cur);
+    document.getElementById("btns").innerHTML = `<span class="muted small" style="align-self:center">Did you get it?</span>
+      <button id="yes">✓ Got it</button><button id="no">✗ Missed it</button>`;
+    document.getElementById("yes").onclick = () => { record(cur.id,true); flash(); };
+    document.getElementById("no").onclick  = () => { record(cur.id,false); flash(); };
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Multiple choice
+// ---------------------------------------------------------------------------
+// Open questions use one of their generated MCQs; tf/mc/multi/dropdown questions are asked directly.
+let mcqSession = {n:0, r:0};
+function mcq(){
+  const p = pool(q => isChoice(q) || (q.mcq || []).length);
+  if(!p.length) return emptyPool(mcq, "No multiple-choice questions in the selected sets.");
+  cur = nextQ(p, cur && cur.id);
+  const k = kind(cur);
+  let stem, opts = null;                       // opts: [{o: option, ok: is correct}]
+  if(k === "open"){
+    const m = pick(cur.mcq);
+    stem = `<div class="muted small" style="margin-bottom:6px">${rich(cur, cur.q)}</div><div class="q${cur.html ? " rich" : ""}">${rich(cur, m.q)}</div>`;
+    opts = shuffle([m.a, ...m.w].map((o,i) => ({o, ok: i === 0})));
+  }else if(k === "tf"){
+    stem = stemHTML(cur);
+    opts = [{o:"True", ok: cur.answer === true}, {o:"False", ok: cur.answer === false}];
+  }else if(k === "mc" || k === "multi"){
+    const c = correctSet(cur);
+    stem = stemHTML(cur);
+    opts = shuffle(cur.options.map((o,i) => ({o, ok: c.has(i)})));
+  }else{
+    stem = stemHTML(cur, b => `<select class="blank-sel" data-b="${esc(b)}" aria-label="${esc(b)}"><option value="">choose…</option>${cur.blanks[b].options.map((o,i) => `<option value="${i}">${esc(o)}</option>`).join("")}</select>`);
+  }
+  const needsCheck = k === "multi" || k === "dropdown";
+  app.innerHTML = filtersHTML() + `<div class="card">${metaHTML(cur)}${stem}
+    ${opts ? `<div id="opts">${opts.map((x,i) => `<button class="opt" data-i="${i}">${String.fromCharCode(65+i)}. ${optHTML(cur, x.o)}</button>`).join("")}</div>` : ""}
+    ${k === "multi" ? `<p class="muted small">Select all that apply, then check.</p>` : ""}
+    <div id="rev"></div>
+    <div class="row"><span class="muted small" style="align-self:center" id="sess">Session: ${mcqSession.r}/${mcqSession.n}</span>${needsCheck ? `<button id="chk">Check</button>` : ""}<button id="nxt" class="primary" style="margin-left:auto">Skip</button></div></div>`;
+  bindFilters(mcq);
+  const nxt = document.getElementById("nxt"); nxt.onclick = mcq;
+  const optBtns = [...app.querySelectorAll(".opt")];
+  const finish = ok => {
+    optBtns.forEach(x => { x.disabled = true; if(opts[+x.dataset.i].ok) x.classList.add("good"); });
+    app.querySelectorAll(".blank-sel").forEach(s => s.disabled = true);
+    document.getElementById("chk")?.remove();
+    mcqSession.n++; if(ok) mcqSession.r++;
+    document.getElementById("sess").textContent = `Session: ${mcqSession.r}/${mcqSession.n}`;
+    record(cur.id, ok);
+    document.getElementById("rev").innerHTML = `<p class="${ok?"good-t":"bad-t"}">${ok?"Correct!":"Not quite."}</p>` + (k === "open"
+      ? `<details><summary class="small">Full model answer</summary><div class="ans">${cur.a}${imgsHTML(cur.aImg)}</div></details>${refsHTML(cur)}`
+      : ansHTML(cur));
+    nxt.textContent = "Next →";
+  };
+  if(k === "multi"){
+    optBtns.forEach(b => b.onclick = () => b.classList.toggle("sel"));
+    document.getElementById("chk").onclick = () => {
+      let ok = true;
+      optBtns.forEach(b => { const sel = b.classList.contains("sel"); if(sel !== opts[+b.dataset.i].ok) ok = false; if(sel && !opts[+b.dataset.i].ok) b.classList.add("bad"); });
+      finish(ok);
+    };
+  }else if(k === "dropdown"){
+    document.getElementById("chk").onclick = () => {
+      let ok = true;
+      app.querySelectorAll(".blank-sel").forEach(s => {
+        const blank = cur.blanks[s.dataset.b], good = s.value !== "" && blank.options[+s.value] === blank.answer;
+        s.classList.add(good ? "good" : "bad"); if(!good) ok = false;
+      });
+      finish(ok);
+    };
+  }else{
+    optBtns.forEach(b => b.onclick = () => { const ok = opts[+b.dataset.i].ok; if(!ok) b.classList.add("bad"); finish(ok); });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Type & keyword match
+// ---------------------------------------------------------------------------
+const norm = s => s.toLowerCase().replace(/[‐-–—]/g,"-").replace(/\s+/g," ");
+function scoreText(text, kw){
+  const t = norm(text);
+  return kw.map(g => ({label:g[0], hit: g.some(alt => t.includes(norm(alt)))}));
+}
+function typeMode(){
+  const p = pool(q => (q.kw || []).length);
+  if(!p.length) return emptyPool(typeMode, "No questions with keyword lists in the selected sets.");
+  cur = nextQ(p, cur && cur.id);
+  app.innerHTML = filtersHTML() + `<div class="card">${metaHTML(cur)}${stemHTML(cur)}
+    <textarea id="txt" placeholder="Type your answer in your own words… key terms are what's scored."></textarea>
+    <div id="rev"></div>
+    <div class="row" id="btns"><button class="primary" id="chk">Check</button><button id="skip">Skip</button></div></div>`;
+  bindFilters(typeMode);
+  const txt = document.getElementById("txt"); txt.focus();
+  document.getElementById("skip").onclick = typeMode;
+  document.getElementById("chk").onclick = () => {
+    const res = scoreText(txt.value, cur.kw);
+    const hits = res.filter(r=>r.hit).length, pct = Math.round(100*hits/res.length);
+    const ok = pct >= 60;
+    record(cur.id, ok);
+    document.getElementById("rev").innerHTML = `<p style="margin-top:14px"><span class="${ok?"good-t":"bad-t"}">${pct}% of key terms</span> <span class="muted small">(≥60% counts as correct)</span></p>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div>${res.map(r=>`<span class="kw ${r.hit?"hit":"miss"}">${r.hit?"✓":"✗"} ${esc(r.label)}</span>`).join("")}</div>
+      ${ansHTML(cur)}`;
+    document.getElementById("btns").innerHTML = `<button class="primary" id="nx">Next →</button>`;
+    document.getElementById("nx").onclick = typeMode;
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Calculation drills: randomised variants of the numeric tute questions
+// each generator returns {title, prompt(html), fields:[{label, check(str)->bool}], work(html)}
+// ---------------------------------------------------------------------------
+function parseNum(s){
+  s = String(s).trim().toLowerCase().replace(/,/g,"").replace(/×/g,"x").replace(/\s/g,"");
+  let m;
+  if((m = s.match(/^([\d.]+)x10\^?(-?\d+)$/))) return parseFloat(m[1]) * Math.pow(10, +m[2]);
+  if((m = s.match(/^2\^(\d+)$/))) return Math.pow(2, +m[1]);
+  if((m = s.match(/^([\d.]+)\/([\d.]+)$/))) return parseFloat(m[1]) / parseFloat(m[2]);
+  s = s.replace(/%$/,"");
+  const v = Number(s); return isNaN(v) ? null : v;
+}
+const near = (v, target, tol=0.01) => v !== null && Math.abs(v - target) <= Math.max(Math.abs(target)*tol, 1e-12);
+const numField = (label, target, tol) => ({label, check: s => near(parseNum(s), target, tol), ans: target});
+const trapOr = (label, target) => ({label, ans: target===null ? "trap" : target,
+  check: s => target===null ? /trap|illegal|invalid|error|fault/i.test(s) : near(parseNum(s), target, 0)});
+
+const DRILLS = {
+  seg: {name:"Segment table", sub:"base + offset or trap", gen(){
+    const segs = Array.from({length:5}, () => ({b: rnd(1,40)*50 + rnd(0,49), l: pick([14,64,96,100,200,300,580,600,750])}));
+    const qs = Array.from({length:4}, () => { const s = rnd(0,4); const off = Math.random()<0.5 ? rnd(0, segs[s].l-1) : rnd(segs[s].l, segs[s].l+500); return {s, off}; });
+    return {title:"Segment table translation",
+      prompt:`<table><tr><th>Seg</th><th>Base</th><th>Length</th></tr>${segs.map((g,i)=>`<tr><td>${i}</td><td>${g.b}</td><td>${g.l}</td></tr>`).join("")}</table>
+        Give the physical address for each logical address, or type <b>trap</b>.`,
+      fields: qs.map(q => trapOr(`(${q.s}, ${q.off})`, q.off < segs[q.s].l ? segs[q.s].b + q.off : null)),
+      work: qs.map(q => `(${q.s}, ${q.off}): ${q.off} ${q.off<segs[q.s].l?"<":"≥"} ${segs[q.s].l} → ${q.off<segs[q.s].l ? segs[q.s].b+" + "+q.off+" = "+(segs[q.s].b+q.off) : "trap"}`).join("\n")};
+  }},
+  fit: {name:"First / Best / Worst fit", sub:"variable partitions", gen(){
+    const holes = Array.from({length:rnd(6,8)}, () => rnd(2,25));
+    const reqs = Array.from({length:3}, () => rnd(3,18));
+    const algo = pick(["First","Best","Worst"]);
+    const h = holes.map((s,i)=>({s, i, left:s}));
+    const out = [], log = [];
+    reqs.forEach(r => {
+      const ok = h.filter(x => x.left >= r);
+      let c = null;
+      if(ok.length){ c = algo==="First" ? ok[0] : algo==="Best" ? ok.reduce((a,b)=>b.left<a.left?b:a) : ok.reduce((a,b)=>b.left>a.left?b:a); }
+      if(c){ log.push(`${r} MB → hole #${c.i+1} (orig ${c.s} MB, had ${c.left} free, leaves ${c.left-r})`); c.left -= r; out.push(c.s); }
+      else { log.push(`${r} MB → no hole big enough`); out.push(null); }
+    });
+    return {title:`${algo} Fit`,
+      prompt:`Holes in memory order (MB): <span class="mono">${holes.join(", ")}</span><br>Requests in order: <span class="mono">${reqs.join(", ")}</span> MB<br>
+        Using <b>${algo} Fit</b> (leftovers stay as smaller holes in place), enter the <b>original size</b> of the hole each request goes into (or <b>none</b>).`,
+      fields: reqs.map((r,k) => ({label:`${r} MB`, ans: out[k]===null?"none":out[k],
+        check: s => out[k]===null ? /none|no|wait/i.test(s) : parseNum(s)===out[k]})),
+      work: log.join("\n")};
+  }},
+  frame: {name:"Frame number / offset", sub:"split a physical address", gen(){
+    const n = pick([8,8,10,12]); const fb = rnd(2, n-3); const addr = rnd(0, 2**n - 1);
+    const bin = addr.toString(2).padStart(n,"0");
+    const f = parseInt(bin.slice(0,fb),2), o = parseInt(bin.slice(fb),2);
+    return {title:"Frame number & offset",
+      prompt:`Physical memory is 2<sup>${n}</sup> bytes. Frame numbers use <b>${fb} bits</b>.<br>Physical address: <span class="mono">${bin}</span>`,
+      fields:[numField("Frame number (decimal)", f, 0), numField("Offset (decimal)", o, 0), numField("Frame size (bytes)", 2**(n-fb), 0)],
+      work:`frame bits = ${bin.slice(0,fb)} = ${f}\noffset bits = ${bin.slice(fb)} = ${o}\nframe size = 2^${n-fb} = ${2**(n-fb)} B`};
+  }},
+  pt: {name:"Multi-level page table", sub:"address split & table sizes", gen(){
+    const opts = [[32,12,2],[32,10,2],[64,12,2],[64,12,4],[48,12,4],[48,12,3],[64,16,2],[40,10,3]];
+    const [bits, off, lv] = pick(opts); const per = (bits-off)/lv;
+    return {title:`${lv}-level page table`,
+      prompt:`${bits}-bit logical address, page size 2<sup>${off}</sup> B (${off===10?"1 KB":off===12?"4 KB":"64 KB"}), ${lv}-level page table, all tables with the same number of entries.`,
+      fields:[numField("Offset bits", off, 0), numField("Bits per level", per, 0), {label:"PTEs per table (e.g. 2^26)", ans:`2^${per}`, check:s=>near(parseNum(s), 2**per, 0)}],
+      work:`offset = log2(page size) = ${off}\nremaining = ${bits} - ${off} = ${bits-off}\nper level = ${bits-off} / ${lv} = ${per}\nentries per table = 2^${per}${lv===2?`\nnumber of tables = 1 + 2^${per}`:""}`};
+  }},
+  eat: {name:"Effective access time", sub:"max page-fault rate", gen(){
+    const m = pick([100,150,200,250]); const f = pick([5,8,10,20]); const target = m + pick([20,50,100,200]);
+    const p = (target - m) / (f*1e6 - m);
+    return {title:"EAT & page-fault rate",
+      prompt:`Memory access = ${m} ns, page-fault service = ${f} ms. What is the maximum page-fault rate p so that EAT &lt; ${target} ns?<br><span class="muted small">Accept e.g. 1e-5, 1x10^-5, 0.00001</span>`,
+      fields:[numField("p <", p, 0.02)],
+      work:`EAT = (1-p)·${m} + p·${f*1e6} < ${target}\np·(${f*1e6} - ${m}) < ${target-m}\np < ${(target-m)}/${f*1e6-m} ≈ ${p.toExponential(3)}`};
+  }},
+  mp: {name:"Multiprogramming CPU use", sub:"1 − pⁿ", gen(){
+    const p = pick([0.2,0.4,0.5,0.6,0.8]); const n = rnd(2,5); const u = 1 - Math.pow(p,n);
+    const cpu = pick([5,10,20]);
+    const seq = n * cpu/(1-p), par = cpu / (u/n);
+    return {title:"Multiprogramming",
+      prompt:`${n} jobs start together, each needing ${cpu} min of CPU time, each with ${Math.round(p*100)}% I/O wait.`,
+      fields:[numField("CPU utilisation (%)", u*100, 0.01), numField("Last finish, run sequentially (min)", seq, 0.01), numField("Last finish, run in parallel (min)", par, 0.01)],
+      work:`utilisation = 1 - ${p}^${n} = ${(u*100).toFixed(2)}%\nalone each takes ${cpu}/(1-${p}) = ${(cpu/(1-p)).toFixed(2)} min → sequential = ${seq.toFixed(2)}\nparallel: each gets ${(u/n).toFixed(4)} CPU-min/min → ${cpu}/${(u/n).toFixed(4)} = ${par.toFixed(2)} min`};
+  }},
+  rt: {name:"Real-time schedulability", sub:"Σ C/P ≤ 1", gen(){
+    const tasks = Array.from({length:rnd(2,4)}, () => { const P = pick([5,10,20,40,50,100]); return {P, C: rnd(1, Math.max(1,Math.floor(P*0.45)))}; });
+    const U = tasks.reduce((a,t)=>a+t.C/t.P,0);
+    return {title:"Periodic real-time tasks",
+      prompt:`<table><tr><th>Task</th><th>Period (ms)</th><th>CPU (ms)</th></tr>${tasks.map((t,i)=>`<tr><td>${i+1}</td><td>${t.P}</td><td>${t.C}</td></tr>`).join("")}</table>`,
+      fields:[numField("Utilisation Σ C/P (decimal)", U, 0.01), {label:"Schedulable? (yes/no)", ans: U<=1?"yes":"no", check:s=>/^y/i.test(s.trim()) === (U<=1)}],
+      work: tasks.map(t=>`${t.C}/${t.P}`).join(" + ") + ` = ${U.toFixed(3)} → ${U<=1?"≤ 1 schedulable":"> 1 NOT schedulable"}`};
+  }},
+  sched: {name:"FIFO vs SJF waiting", sub:"average waiting time", gen(){
+    const ps = Array.from({length:rnd(3,4)}, (_,i) => ({n:`P${i+1}`, b: rnd(1,24)}));
+    const avgW = order => { let t=0, s=0; order.forEach(p=>{ s+=t; t+=p.b; }); return s/order.length; };
+    const sjf = ps.slice().sort((a,b)=>a.b-b.b);
+    return {title:"Average waiting time (all arrive at t=0)",
+      prompt:`Arrival order: ${ps.map(p=>`${p.n} (burst ${p.b})`).join(", ")}`,
+      fields:[numField("FIFO avg waiting", avgW(ps), 0.01), numField("SJF avg waiting", avgW(sjf), 0.01)],
+      work:`FIFO order ${ps.map(p=>p.n).join(", ")} → avg ${avgW(ps).toFixed(2)}\nSJF order ${sjf.map(p=>p.n).join(", ")} → avg ${avgW(sjf).toFixed(2)}`};
+  }},
+};
+let drillKey = null;
+function calc(){
+  if(!drillKey){
+    app.innerHTML = `<p class="muted">Randomised versions of the numeric tute questions. A new set of numbers every time.</p>
+      <div class="grid">${Object.entries(DRILLS).map(([k,d])=>`<button class="drill" data-k="${k}"><b>${d.name}</b><span>${d.sub}${stats["calc_"+k]?` · ✓${stats["calc_"+k].r} ✗${stats["calc_"+k].w}`:""}</span></button>`).join("")}</div>`;
+    app.querySelectorAll(".drill").forEach(b=>b.onclick=()=>{ drillKey=b.dataset.k; calc(); });
+    return;
+  }
+  const d = DRILLS[drillKey].gen();
+  app.innerHTML = `<div class="row" style="margin-top:14px"><button id="back">← All drills</button></div>
+    <div class="card"><div class="meta"><span>Calc drill</span><span>${esc(DRILLS[drillKey].name)}</span></div>
+    <p class="q">${d.title}</p><div class="ans" style="border:0;padding:0;margin:0">${d.prompt}</div>
+    ${d.fields.map((f,i)=>`<label class="small" style="display:block;margin-top:12px">${esc(f.label)}<input type="text" data-f="${i}" autocomplete="off"></label><div class="small" id="fb${i}"></div>`).join("")}
+    <div id="rev"></div>
+    <div class="row" id="btns"><button class="primary" id="chk">Check</button><button id="new">New numbers</button></div></div>`;
+  document.getElementById("back").onclick = () => { drillKey=null; calc(); };
+  document.getElementById("new").onclick = calc;
+  const first = app.querySelector("[data-f]"); if(first) first.focus();
+  app.querySelectorAll("[data-f]").forEach(inp => inp.onkeydown = e => { if(e.key==="Enter") document.getElementById("chk")?.click(); });
+  document.getElementById("chk").onclick = () => {
+    let all = true;
+    d.fields.forEach((f,i) => {
+      const v = app.querySelector(`[data-f="${i}"]`).value, ok = f.check(v);
+      all = all && ok;
+      const shown = typeof f.ans === "number" && !Number.isInteger(f.ans) ? (Math.abs(f.ans)<0.001 ? f.ans.toExponential(3) : f.ans.toFixed(3)) : f.ans;
+      document.getElementById("fb"+i).innerHTML = ok ? `<span class="good-t">✓</span>` : `<span class="bad-t">✗ answer: ${esc(shown)}</span>`;
+    });
+    record("calc_"+drillKey, all);
+    document.getElementById("rev").innerHTML = `<div class="ans"><b>Working</b><pre class="work">${esc(d.work)}</pre></div>`;
+    document.getElementById("btns").innerHTML = `<button class="primary" id="nx">Next →</button>`;
+    document.getElementById("nx").onclick = calc;
+  };
+}
+
+// ---------------------------------------------------------------------------
+// All answers (read-through) and progress
+// ---------------------------------------------------------------------------
+function list(){
+  app.innerHTML = filtersHTML() + Q.filter(q=>sets.includes(q.set)).map(q =>
+    `<div class="card">${metaHTML(q)}${promptHTML(q)}${ansHTML(q)}</div>`).join("");
+  bindFilters(list);
+}
+function videos(){
+  app.innerHTML = `<p class="muted small" style="margin-top:14px">Grouped by tute. Each card opens YouTube; the tute questions each video helps with are listed under it.</p>` +
+    SETS.map(s => {
+      const qs = Q.filter(q => q.set === s), seen = {};
+      qs.forEach(q => (VID[q.id]||[]).forEach(k => (seen[k] = seen[k] || []).push("Q"+q.n)));
+      return `<h2>${esc(setName(s))}</h2><div class="vgrid">${Object.entries(seen).map(([k,ns]) => { const [id,t,c,l] = V[k];
+        return `<a class="vcard" href="${ytUrl(id)}" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="">
+          <div>${esc(t)}<div class="muted">${esc(c)} · ${esc(l)} · ${ns.join(", ")}</div></div></a>`; }).join("")}</div>`;
+    }).join("");
+}
+function statsView(){
+  const rows = Q.map(q => ({q, s: stats[q.id] || {r:0,w:0}, wk: weakness(q.id)})).sort((a,b)=>b.wk-a.wk);
+  const drill = Object.entries(DRILLS).map(([k,d]) => ({d, s: stats["calc_"+k] || {r:0,w:0}}));
+  // plain-text preview; LaTeX is dropped so a cut-off formula cannot break the typesetting
+  const preview = q => { const t = plain(q.html ? q.q : esc(q.q)).replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, "…"); return t.length > 70 ? t.slice(0,70)+"…" : t; };
+  app.innerHTML = `<div class="card"><p class="q">Weakest first</p>
+    ${rows.map(({q,s,wk})=>`<div class="stat"><span>${esc(setName(q.set))} ${esc(q.label || "Q"+q.n)} — ${esc(preview(q))}</span><span class="${s.r+s.w===0?"muted":wk>0.5?"bad-t":"good-t"}" style="white-space:nowrap">${s.r+s.w===0?"—":`✓${s.r} ✗${s.w}`}</span></div>`).join("")}</div>
+    ${drillsOn ? `<div class="card"><p class="q">Calc drills</p>${drill.map(({d,s})=>`<div class="stat"><span>${d.name}</span><span>${s.r+s.w?`✓${s.r} ✗${s.w}`:"—"}</span></div>`).join("")}</div>` : ""}
+    <div class="row"><button id="reset">Reset progress on this device</button></div>`;
+  document.getElementById("reset").onclick = () => { if(confirm("Clear all progress on this device?")){ stats={}; store.set("stats",stats); renderScore(); statsView(); } };
+}
+
+// ---------------------------------------------------------------------------
+const MODES = {flash, mcq, type:typeMode, calc, list, videos, stats:statsView};
+let drillsOn = true;
+// modes a dataset cannot use (no drills, no videos, no keyword lists) are hidden from the nav
+const navShown = m => document.querySelector(`#nav [data-m="${m}"]`).hidden === false;
+function go(m){
+  if(!Q.length) return;
+  if(!Object.prototype.hasOwnProperty.call(MODES,m) || !navShown(m)) m = "flash";
+  mode = m; store.set("mode", m); drillKey = null;
+  document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("on", b.dataset.m===m));
+  MODES[m](); window.scrollTo(0,0);
+}
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => go(b.dataset.m));
+
+function validateData(data){
+  const object = v => v !== null && typeof v === "object" && !Array.isArray(v);
+  const text = v => typeof v === "string" && v.trim().length > 0;
+  const strings = v => Array.isArray(v) && v.length > 0 && v.every(text);
+  const safeKey = v => text(v) && v !== "prototype" && !Object.prototype.hasOwnProperty.call(Object.prototype,v);
+  const require = (ok, message) => { if(!ok) throw new Error(message); };
+  const optional = (v, check) => v === undefined || check(v);
+  // images: relative paths (resolved against index.html), http(s) URLs or data:image URIs
+  const safeSrc = s => text(s) && (/^(https?:|data:image\/)/i.test(s) || !/^\s*[a-z][a-z0-9+.-]*:/i.test(s));
+  const image = v => text(v) ? safeSrc(v) : object(v) && safeSrc(v.src) && optional(v.alt, x => typeof x === "string") && optional(v.caption, x => typeof x === "string");
+  const images = v => v === undefined || image(v) || (Array.isArray(v) && v.every(image));
+  const option = v => text(v) || (object(v) && optional(v.text, x => typeof x === "string") && (text(v.text) || v.img !== undefined) && images(v.img));
+  require(object(data), "The JSON must contain an object.");
+  require(data.title === undefined || text(data.title), "title must be a non-empty string.");
+  require(strings(data.sets) && new Set(data.sets).size === data.sets.length, "sets must contain unique, non-empty names.");
+  require(optional(data.setLabel, x => typeof x === "string"), "setLabel must be a string.");
+  require(optional(data.drills, x => typeof x === "boolean"), "drills must be true or false.");
+  require(optional(data.images, m => object(m) && Object.entries(m).every(([k,v]) => text(k) && typeof v === "string" && /^data:image\/[a-z0-9.+-]+;base64,[A-Za-z0-9+/=\s]+$/i.test(v))),
+    "images must map image keys to base64 data:image URIs.");
+  require(optional(data.groups, g =>object(g) && Object.entries(g).every(([k,v]) => safeKey(k) && strings(v) && v.every(s => data.sets.includes(s)))), "groups must map names to arrays of known sets.");
+  require(Array.isArray(data.questions) && data.questions.length > 0, "questions must be a non-empty array.");
+  const ids = new Set();
+  data.questions.forEach((q,i) => {
+    const label = `Question ${i+1}`;
+    require(object(q) && safeKey(q.id) && !q.id.startsWith("calc_") && !ids.has(q.id), `${label} needs a unique id (not a reserved name or calc_ prefix).`);
+    ids.add(q.id);
+    const k = q.type === undefined ? "open" : q.type;
+    require(TYPES.includes(k), `${label} has an unknown type (use ${TYPES.join(", ")}).`);
+    require(data.sets.includes(q.set) && Number.isInteger(q.n) && q.n > 0, `${label} needs a known set and positive integer n.`);
+    require(text(q.q) && typeof q.src === "string", `${label} needs q and src strings.`);
+    require(k === "open" ? text(q.a) : optional(q.a, x => typeof x === "string"), `${label} needs a model answer (a).`);
+    require(optional(q.html, x => typeof x === "boolean") && optional(q.label, text) && optional(q.ctx, text), `${label}: html must be true/false; label and ctx must be non-empty strings.`);
+    require(images(q.img) && images(q.aImg), `${label}: img and aImg must be image paths or {src, alt, caption} objects.`);
+    require(optional(q.kw, kw => Array.isArray(kw) && kw.every(strings)), `${label}: kw must be an array of keyword groups.`);
+    require(optional(q.mcq, m => Array.isArray(m) && m.every(x => object(x) && text(x.q) && text(x.a) && strings(x.w))), `${label} needs MCQs with q, a and a non-empty w array.`);
+    if(k === "tf") require(typeof q.answer === "boolean", `${label} (tf) needs answer: true or false.`);
+    if(k === "mc" || k === "multi"){
+      require(Array.isArray(q.options) && q.options.length >= 2 && q.options.every(option), `${label} needs at least two options (text or {text, img}).`);
+      const c = [].concat(q.correct);
+      require(c.length > 0 && (k === "multi" || c.length === 1) && new Set(c).size === c.length && c.every(n => Number.isInteger(n) && n >= 0 && n < q.options.length),
+        `${label} needs ${k === "mc" ? "one correct option index" : "an array of correct option indexes"} (correct).`);
+    }
+    if(k === "dropdown"){
+      require(object(q.blanks) && Object.keys(q.blanks).length > 0, `${label} (dropdown) needs blanks.`);
+      Object.entries(q.blanks).forEach(([b,v]) => require(/^[A-Za-z0-9_-]+$/.test(b) && q.q.includes(`[[${b}]]`) && object(v) && strings(v.options) && v.options.includes(v.answer),
+        `${label}: blank ${b} needs a [[${b}]] marker in q, options, and an answer taken from the options.`));
+    }
+  });
+  require(data.sets.every(s => data.questions.some(q => q.set === s)), "Each set must contain at least one question.");
+  require(object(data.videos), "videos must be an object.");
+  Object.entries(data.videos).forEach(([key,v]) => {
+    require(safeKey(key) && Array.isArray(v) && v.length === 4 && v.every(text) && /^[A-Za-z0-9_-]{11}$/.test(v[0]), `Video ${key} must be [YouTube ID, title, channel, duration].`);
+  });
+  require(object(data.questionVideos), "questionVideos must be an object (use {} if there are no videos).");
+  Object.entries(data.questionVideos).forEach(([id,keys]) => {
+    require(ids.has(id) && Array.isArray(keys) && keys.every(k => typeof k === "string" && Object.prototype.hasOwnProperty.call(data.videos,k)), `questionVideos entry ${id} must reference an existing question and video keys.`);
+  });
+  return data;
+}
+
+// Embedded images: data.images maps a key (e.g. "images/q06_tm.png") to a base64 data URI.
+// Questions refer to images by key, so one copy serves every question; swap keys for data here.
+function resolveImages(data){
+  const map = data.images || {};
+  const has = k => Object.prototype.hasOwnProperty.call(map, k);
+  const swap = s => typeof s === "string" ? s.replace(/(<img\b[^>]*?\bsrc=")([^"]*)"/g, (m, pre, src) => has(src) ? `${pre}${map[src]}"` : m) : s;
+  const field = v => v === undefined ? v : imgList(v).map(i => ({...i, src: has(i.src) ? map[i.src] : i.src}));
+  data.questions.forEach(q => {
+    ["q", "a", "ctx"].forEach(k => { q[k] = swap(q[k]); });
+    q.img = field(q.img); q.aImg = field(q.aImg);
+    if(q.options) q.options = q.options.map(o => typeof o === "string" ? swap(o) : {...o, text: swap(o.text), img: field(o.img)});
+  });
+  return data;
+}
+
+let loadRequest = 0;
+const dataStatus = document.getElementById("data-status");
+function showDataStatus(message, error=false){
+  dataStatus.textContent = message;
+  dataStatus.classList.toggle("error", error);
+}
+async function loadData(read, source, isDefault=false){
+  const request = ++loadRequest;
+  showDataStatus(`Loading ${source}...`);
+  try{
+    const data = resolveImages(validateData(JSON.parse(await read())));
+    if(request !== loadRequest) return;
+    Q = data.questions; SETS = data.sets; V = data.videos; VID = data.questionVideos;
+    GROUPS = data.groups || {}; SET_LABEL = data.setLabel ?? "Tute "; drillsOn = data.drills !== false;
+    storagePrefix = isDefault ? "osp_" : `osp_data_${encodeURIComponent(source)}_`;
+    stats = store.get("stats", {});
+    const savedSets = store.get("sets", SETS.slice());
+    sets = Array.isArray(savedSets) ? savedSets.filter(s => SETS.includes(s)) : [];
+    if(!sets.length) sets = SETS.slice();
+    weakOnly = store.get("weak", false);
+    mode = store.get("mode", "flash");
+    cur = null; mcqSession = {n:0, r:0};
+    document.title = data.title || "Revision";
+    document.querySelector("h1").textContent = document.title;
+    document.querySelectorAll("#nav button").forEach(b => b.disabled = false);
+    const hide = {calc: !drillsOn, videos: !Object.keys(V).length, type: !Q.some(q => (q.kw || []).length),
+      mcq: !Q.some(q => isChoice(q) || (q.mcq || []).length)};
+    document.querySelectorAll("#nav button").forEach(b => b.hidden = !!hide[b.dataset.m]);
+    renderScore();
+    go(mode);
+    showDataStatus(`${source}: ${Q.length} questions loaded.`);
+  }catch(error){
+    if(request !== loadRequest) return;
+    console.error("Unable to load revision JSON:", error);
+    showDataStatus(`Unable to load ${source}: ${error.message}${Q.length ? " The current dataset is unchanged." : " Choose a trusted JSON file above."}`, true);
+  }
+}
+document.getElementById("data-file").onchange = event => {
+  const file = event.target.files[0];
+  if(file) loadData(() => file.text(), file.name);
+  event.target.value = "";
+};
+document.querySelectorAll("#nav button").forEach(b => b.disabled = true);
+app.innerHTML = `<p class="muted">Load a trusted revision JSON file to begin. Answer fields support HTML; images come from the JSON's embedded images map or from paths relative to this page.</p>`;
+if(location.protocol === "file:"){
+  showDataStatus("Choose eoc-revision.json above. Automatic loading requires an HTTP server.");
+}else{
+  const source = new URLSearchParams(location.search).get("data") || "eoc-revision.json";
+  loadData(async () => {
+    const response = await fetch(source);
+    if(!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    return response.text();
+  }, source, source === "revision-data.json");
+}
+</script>
+</body>
+</html>

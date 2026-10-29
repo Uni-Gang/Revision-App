@@ -1,0 +1,3146 @@
+{
+  "title": "OSP Tute Revision",
+  "sets": [
+    "W1-3",
+    "W4-6",
+    "W7",
+    "W8-10",
+    "W11"
+  ],
+  "questions": [
+    {
+      "id": "a1",
+      "set": "W1-3",
+      "n": 1,
+      "q": "Give an example of two OS design goals that may contradict one another.",
+      "a": "<b>Efficiency (resource utilisation) vs user convenience/responsiveness.</b> You can't optimise both: a supercomputer (expensive hardware) optimises utilisation, while a PC (cheap hardware) optimises convenience. Other pairs: <b>fairness vs throughput</b> (SJF maximises throughput but is unfair), and <b>response time vs utilisation</b> (a small RR quantum is responsive but wastes CPU on context switches).",
+      "kw": [
+        [
+          "efficiency",
+          "efficien",
+          "utilis",
+          "utiliz"
+        ],
+        [
+          "convenience",
+          "convenien",
+          "responsive",
+          "interactiv"
+        ],
+        [
+          "fairness",
+          "fair"
+        ],
+        [
+          "throughput"
+        ],
+        [
+          "context switch",
+          "context-switch",
+          "overhead"
+        ]
+      ],
+      "src": "S-W1 'OS Goals', 'Design Trade-offs'; S-W7 'Pros and Cons'",
+      "mcq": [
+        {
+          "q": "According to the W1 slides, which two goals \"cannot both be optimised\"?",
+          "a": "Efficiency (utilisation) and user convenience",
+          "w": [
+            "Robustness and security",
+            "Throughput and turnaround time",
+            "Memory protection and paging"
+          ]
+        },
+        {
+          "q": "Why does a supercomputer favour utilisation while a PC favours convenience?",
+          "a": "Supercomputer hardware is expensive; PC hardware is cheap and the user's time matters more",
+          "w": [
+            "PCs have no kernel mode",
+            "Supercomputers have no I/O devices",
+            "Utilisation and convenience are the same thing on a PC"
+          ]
+        },
+        {
+          "q": "Which is an example of fairness conflicting with throughput?",
+          "a": "SJF gives the best throughput/waiting time but can starve long jobs",
+          "w": [
+            "FIFO gives the best throughput and is perfectly fair",
+            "RR has no context-switch overhead",
+            "Priority scheduling never starves anyone"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a2",
+      "set": "W1-3",
+      "n": 2,
+      "q": "What is the difference between kernel and user mode? How does having two modes aid OS design?",
+      "a": "<b>Kernel mode:</b> full access to hardware and all instructions (including privileged ones); a crash is catastrophic.<br><b>User mode:</b> no direct hardware access, no privileged instructions (I/O, memory management); a crash only affects that process.<br><b>Why it helps:</b> it <b>protects the OS from errant users</b> and processes from each other. User code must request services through <b>system calls</b> (traps), so the kernel controls all hardware access.",
+      "kw": [
+        [
+          "privileged",
+          "privilege"
+        ],
+        [
+          "hardware",
+          "direct access"
+        ],
+        [
+          "protect",
+          "protection"
+        ],
+        [
+          "system call",
+          "syscall"
+        ],
+        [
+          "crash",
+          "catastroph"
+        ]
+      ],
+      "src": "S-W2 'Kernel vs User Mode'; T-W1",
+      "mcq": [
+        {
+          "q": "Which statement about user mode is correct?",
+          "a": "It cannot execute privileged instructions such as I/O or memory management",
+          "w": [
+            "It has full access to hardware",
+            "A crash in user mode brings down the whole system",
+            "Kernel code runs in user mode for speed"
+          ]
+        },
+        {
+          "q": "How does a user program get a kernel service?",
+          "a": "Through a system call, which traps into kernel mode",
+          "w": [
+            "By writing directly to device registers",
+            "By disabling interrupts",
+            "By editing its own PCB"
+          ]
+        },
+        {
+          "q": "The main design benefit of dual mode is:",
+          "a": "Protecting the OS (and other processes) from errant user code",
+          "w": [
+            "Making user programs run faster",
+            "Removing the need for scheduling",
+            "Allowing user code to manage page tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a3",
+      "set": "W1-3",
+      "n": 3,
+      "q": "What is the difference between a trap and an interrupt?",
+      "a": "<b>Trap</b> (exception/fault): <b>internally generated, software-based</b>, caused by the running instruction. Examples: system call, error (illegal instruction, div by zero, addressing violation), page fault.<br><b>Interrupt:</b> <b>externally generated, hardware-based</b>, asynchronous. Examples: keyboard, disk operation complete, <b>hardware timer</b> (time slice).",
+      "kw": [
+        [
+          "internal",
+          "internally"
+        ],
+        [
+          "external",
+          "externally"
+        ],
+        [
+          "software"
+        ],
+        [
+          "hardware"
+        ],
+        [
+          "system call",
+          "syscall"
+        ],
+        [
+          "timer"
+        ],
+        [
+          "page fault"
+        ]
+      ],
+      "src": "S-W2 'OS and Control?'; T-W3; T-W10",
+      "mcq": [
+        {
+          "q": "Which pair of keywords did the lecturer use for traps?",
+          "a": "Internally generated, software-based",
+          "w": [
+            "Externally generated, hardware-based",
+            "Asynchronous, device-driven",
+            "Periodic, timer-based"
+          ]
+        },
+        {
+          "q": "A page fault is a(n):",
+          "a": "Trap",
+          "w": [
+            "Interrupt",
+            "Context switch",
+            "Deadlock"
+          ]
+        },
+        {
+          "q": "Which of these is an interrupt?",
+          "a": "The hardware timer expiring at the end of a time slice",
+          "w": [
+            "A divide-by-zero error",
+            "A system call",
+            "An illegal instruction"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a4",
+      "set": "W1-3",
+      "n": 4,
+      "q": "What are the ways to transfer control of the CPU to the OS? Why is a separate kernel stack generally used?",
+      "a": "<b>Ways:</b> while a process runs the OS has lost control. It regains it via <b>traps</b> (system calls, errors, page faults) and <b>interrupts</b> (I/O devices, and especially the <b>hardware timer</b>, which enables preemptive multitasking).<br><b>Separate kernel stack</b> (textbook reasoning): the user stack pointer can't be trusted (it may be invalid, corrupt, or full), and kernel data left on the user stack could be read or modified by user code, so a kernel stack is needed for <b>reliability and protection/security</b>.",
+      "kw": [
+        [
+          "trap"
+        ],
+        [
+          "interrupt"
+        ],
+        [
+          "timer"
+        ],
+        [
+          "system call",
+          "syscall"
+        ],
+        [
+          "stack pointer",
+          "invalid",
+          "corrupt",
+          "full"
+        ],
+        [
+          "security",
+          "protect",
+          "leak"
+        ]
+      ],
+      "src": "S-W2 'OS and Control?'; kernel stack: Tanenbaum (not in slides)",
+      "mcq": [
+        {
+          "q": "Which is NOT a way for the OS to regain control of the CPU?",
+          "a": "The user process calling a normal library function like strlen()",
+          "w": [
+            "A timer interrupt",
+            "A system call",
+            "A page fault"
+          ]
+        },
+        {
+          "q": "Why use a separate kernel stack instead of the interrupted process's stack?",
+          "a": "The user stack may be invalid or full, and kernel data left there could be read or modified by user code",
+          "w": [
+            "Kernel stacks are faster because they're stored on disk",
+            "User stacks can't hold return addresses",
+            "To allow user code to call kernel functions directly"
+          ]
+        },
+        {
+          "q": "Which mechanism is most important for preemptive multitasking?",
+          "a": "Hardware timer interrupt",
+          "w": [
+            "Keyboard interrupt",
+            "Divide-by-zero trap",
+            "Dynamic linking"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a5",
+      "set": "W1-3",
+      "n": 5,
+      "q": "Two jobs each need 10 min of CPU and start simultaneously. With 50% I/O wait, how long until the last completes sequentially? In parallel?",
+      "a": "Each job alone takes <b>20 min</b> (10 CPU + 10 waiting).<br><b>Sequential:</b> 20 + 20 = <b>40 min</b>.<br><b>Parallel:</b> CPU utilisation = 1 − p<sup>n</sup> = 1 − 0.5² = 0.75, shared between 2 jobs, so 0.375 CPU-min per minute each. 10 / 0.375 ≈ <b>26.7 min</b>.",
+      "kw": [
+        [
+          "40"
+        ],
+        [
+          "26.6",
+          "26.7",
+          "26 2/3",
+          "80/3"
+        ],
+        [
+          "1 - p",
+          "1-p",
+          "1 − p",
+          "0.75",
+          "75%"
+        ],
+        [
+          "0.375"
+        ]
+      ],
+      "src": "S-W2 'Modelling Multiprogramming'; T-W3 (1 − pⁿ)",
+      "mcq": [
+        {
+          "q": "Sequentially, when does the last job finish?",
+          "a": "40 minutes",
+          "w": [
+            "20 minutes",
+            "26.7 minutes",
+            "30 minutes"
+          ]
+        },
+        {
+          "q": "In parallel, roughly when does the last job finish?",
+          "a": "≈ 26.7 minutes",
+          "w": [
+            "20 minutes",
+            "40 minutes",
+            "15 minutes"
+          ]
+        },
+        {
+          "q": "CPU utilisation with n processes each waiting on I/O a fraction p of the time is:",
+          "a": "1 − pⁿ",
+          "w": [
+            "pⁿ",
+            "1 − p/n",
+            "n(1 − p)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a6",
+      "set": "W1-3",
+      "n": 6,
+      "q": "What are multiprogramming, multitasking and multiprocessing? What's the difference?",
+      "a": "<b>Multiprogramming:</b> several programs in memory share one CPU; when one blocks on I/O another runs. Goal: <b>hardware utilisation</b>, with no user interaction.<br><b>Multitasking/time-sharing:</b> <b>rapid switching</b> between tasks (preemptive or cooperative), giving the <b>illusion of parallelism</b> for user experience.<br><b>Multiprocessing:</b> <b>multiple processing units</b>, so <b>true parallelism</b>.",
+      "kw": [
+        [
+          "utilisation",
+          "utiliz",
+          "utilis"
+        ],
+        [
+          "illusion"
+        ],
+        [
+          "true parallel",
+          "real parallel"
+        ],
+        [
+          "multiple processor",
+          "multiple cpu",
+          "multiple core",
+          "multiple processing",
+          "multi-core",
+          "multicore"
+        ],
+        [
+          "switch"
+        ],
+        [
+          "interact",
+          "user experience"
+        ]
+      ],
+      "src": "S-W1 'Computing Paradigms'",
+      "mcq": [
+        {
+          "q": "Which paradigm provides TRUE parallelism?",
+          "a": "Multiprocessing",
+          "w": [
+            "Multiprogramming",
+            "Multitasking",
+            "Batch spooling"
+          ]
+        },
+        {
+          "q": "Multitasking's key goal is:",
+          "a": "The illusion of parallelism and good user interaction via rapid switching",
+          "w": [
+            "Maximum hardware utilisation with no interaction",
+            "Running on multiple CPUs",
+            "Avoiding all context switches"
+          ]
+        },
+        {
+          "q": "Multiprogramming switches to another job when:",
+          "a": "The current job blocks on I/O",
+          "w": [
+            "A fixed time slice expires",
+            "A second CPU becomes free",
+            "The user presses a key"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a7",
+      "set": "W1-3",
+      "n": 7,
+      "q": "What is a process? What does it include? What is a PCB?",
+      "a": "<b>Process:</b> a program in execution; a container holding everything needed to run a program; an entity with an address space and resources.<br><b>Includes:</b> code (text), data, stack, open files, PC, registers, stack pointer.<br><b>PCB:</b> the kernel data structure representing a process: <b>state, PID, program counter, registers, scheduling info, memory structure (page/segment tables), open file table, accounting info</b>. It's kept in kernel space and used to save and restore context on a context switch.",
+      "kw": [
+        [
+          "program in execution",
+          "running program"
+        ],
+        [
+          "address space"
+        ],
+        [
+          "stack"
+        ],
+        [
+          "program counter",
+          "pc"
+        ],
+        [
+          "registers"
+        ],
+        [
+          "state"
+        ],
+        [
+          "open file"
+        ],
+        [
+          "context switch",
+          "save",
+          "restore"
+        ]
+      ],
+      "src": "S-W2 'What is a process', 'Process Control Block (PCB)', 'PCB: Other Fields'",
+      "mcq": [
+        {
+          "q": "Which is NOT typically stored in a PCB?",
+          "a": "The source code of the program",
+          "w": [
+            "Program counter",
+            "Process state",
+            "Open file table"
+          ]
+        },
+        {
+          "q": "Where is the PCB kept?",
+          "a": "In kernel space, for protection",
+          "w": [
+            "In the process's user stack",
+            "On disk only",
+            "In the TLB"
+          ]
+        },
+        {
+          "q": "A process's memory has three main segments:",
+          "a": "Text (code), data, stack",
+          "w": [
+            "Kernel, user, swap",
+            "Page, frame, offset",
+            "Heap, cache, register"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a8",
+      "set": "W1-3",
+      "n": 8,
+      "q": "What are the two models of IPC? Strengths and weaknesses of each?",
+      "a": "<b>Shared memory:</b> + <b>fast</b>, convenient; − needs <b>protection and synchronisation</b> (race conditions).<br><b>Message passing:</b> + <b>no conflicts</b> and no explicit synchronisation needed (the kernel passes messages), <b>easy to implement</b>; − <b>slow</b> (kernel on every message), only good for <b>small amounts of data</b>.",
+      "kw": [
+        [
+          "shared memory"
+        ],
+        [
+          "message passing"
+        ],
+        [
+          "fast"
+        ],
+        [
+          "synchroni"
+        ],
+        [
+          "slow"
+        ],
+        [
+          "small amount",
+          "small data"
+        ],
+        [
+          "easy to implement",
+          "simple"
+        ]
+      ],
+      "src": "S-W2 'Interprocess Communication'; T-W12",
+      "mcq": [
+        {
+          "q": "Which IPC model is fastest for large data?",
+          "a": "Shared memory",
+          "w": [
+            "Message passing",
+            "RPC",
+            "Signals"
+          ]
+        },
+        {
+          "q": "Main weakness of shared memory:",
+          "a": "Requires synchronisation/protection to avoid race conditions",
+          "w": [
+            "Too slow for any data",
+            "Can only send small messages",
+            "Needs a network"
+          ]
+        },
+        {
+          "q": "Message passing is best for:",
+          "a": "Small amounts of data, with no explicit synchronisation needed",
+          "w": [
+            "Huge data transfers at maximum speed",
+            "Avoiding the kernel entirely",
+            "Sharing page tables"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a9",
+      "set": "W1-3",
+      "n": 9,
+      "q": "Describe the actions taken by a kernel to context-switch between processes.",
+      "a": "1. Kernel gains control (timer interrupt, trap/system call, I/O block).<br>2. <b>Save current process state into its PCB</b> (PC, registers, SP, memory info), and update its state (Running → Ready/Blocked).<br>3. <b>Scheduler picks</b> the next ready process.<br>4. <b>Load the new process's state from its PCB</b> (including page table / memory mappings), set it to Running, return to user mode at its saved PC.",
+      "kw": [
+        [
+          "save"
+        ],
+        [
+          "pcb"
+        ],
+        [
+          "registers",
+          "program counter"
+        ],
+        [
+          "state"
+        ],
+        [
+          "schedul"
+        ],
+        [
+          "reload",
+          "restore",
+          "load"
+        ],
+        [
+          "page table",
+          "memory"
+        ]
+      ],
+      "src": "S-W2 'Context Switch Using PCB'; S-W9 'Context Switch'",
+      "mcq": [
+        {
+          "q": "During a context switch, the current process's registers are saved to:",
+          "a": "Its PCB",
+          "w": [
+            "The TLB",
+            "The new process's stack",
+            "The disk swap area"
+          ]
+        },
+        {
+          "q": "What decides which process runs next?",
+          "a": "The scheduler/dispatcher, choosing from the ready queue",
+          "w": [
+            "The process that was just interrupted",
+            "The MMU",
+            "The file system"
+          ]
+        },
+        {
+          "q": "Why is the page table pointer part of the saved context?",
+          "a": "Each process has its own address space; the same logical address maps to different frames",
+          "w": [
+            "Page tables are shared by all processes",
+            "The TLB stores PCBs",
+            "It isn't; page tables are global"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a10",
+      "set": "W1-3",
+      "n": 10,
+      "q": "What resources are used when a thread is created? How do they differ from creating a process?",
+      "a": "<b>Thread:</b> only a small private context: its own <b>registers (incl. PC), stack, and TCB</b>. It <b>shares</b> code, data, heap, open files, and address space with its process.<br><b>Process:</b> needs a new <b>PCB, a whole new address space</b>, and a copy of the parent's context (fork duplicates the whole context including virtual memory, plus open files).<br>So threads are much cheaper to create and switch.",
+      "kw": [
+        [
+          "stack"
+        ],
+        [
+          "registers",
+          "program counter"
+        ],
+        [
+          "share",
+          "shared"
+        ],
+        [
+          "address space",
+          "memory"
+        ],
+        [
+          "pcb",
+          "tcb",
+          "control block"
+        ],
+        [
+          "cheap",
+          "lighter",
+          "light weight",
+          "lightweight",
+          "expensive"
+        ]
+      ],
+      "src": "S-W3 'Threads', 'Processes vs Threads', 'Threads: Benefits'; S-W2 'Fork Steps'",
+      "mcq": [
+        {
+          "q": "Which items are private to each thread?",
+          "a": "Registers (PC) and stack",
+          "w": [
+            "Code and data",
+            "Open files",
+            "Address space"
+          ]
+        },
+        {
+          "q": "Why is thread creation cheaper than process creation?",
+          "a": "Threads share the process's address space, code, data and files, so little new state is needed",
+          "w": [
+            "Threads don't need a CPU",
+            "Threads are created on disk",
+            "Processes have no stack"
+          ]
+        },
+        {
+          "q": "fork() creating a process involves:",
+          "a": "A new PCB and duplicating the parent's entire context, including virtual memory",
+          "w": [
+            "Only allocating a new stack",
+            "Sharing the parent's PCB",
+            "Nothing until exec() is called"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b1",
+      "set": "W4-6",
+      "n": 1,
+      "q": "Explain what a race condition and a critical section are, and how they're related.",
+      "a": "<b>Race condition:</b> shared data is read/written by multiple threads and the <b>final result depends on the precise execution order</b> (e.g. <code>x++</code> and <code>x--</code> each compile to LOAD/INC/STORE, which can interleave).<br><b>Critical section:</b> <b>the part of a program that accesses shared memory</b>.<br><b>Relation:</b> races happen when multiple threads are in their critical sections at the same time, so critical sections need <b>mutual exclusion</b> (plus progress and bounded wait).",
+      "kw": [
+        [
+          "shared"
+        ],
+        [
+          "order",
+          "sequence",
+          "interleav"
+        ],
+        [
+          "critical section",
+          "critical region"
+        ],
+        [
+          "mutual exclusion",
+          "mutex",
+          "one at a time",
+          "one thread"
+        ],
+        [
+          "atomic"
+        ]
+      ],
+      "src": "S-W4 'A Race Condition', 'Critical Region / Section', 'Critical Section Requirements'",
+      "mcq": [
+        {
+          "q": "A race condition is when:",
+          "a": "The result depends on the exact order of execution of threads accessing shared data",
+          "w": [
+            "Two threads run on different CPUs",
+            "A thread finishes faster than expected",
+            "The scheduler uses round robin"
+          ]
+        },
+        {
+          "q": "Which is NOT one of the three critical-section requirements?",
+          "a": "Preemption",
+          "w": [
+            "Mutual exclusion",
+            "Progress",
+            "Bounded waiting"
+          ]
+        },
+        {
+          "q": "Why does x++ cause a race?",
+          "a": "It's not atomic: load, increment, store can interleave with another thread",
+          "w": [
+            "It is a privileged instruction",
+            "It always triggers a page fault",
+            "Compilers reorder it into x--"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b2",
+      "set": "W4-6",
+      "n": 2,
+      "q": "Give an example of an atomic machine instruction and explain what it does.",
+      "a": "<b>Test-and-Set:</b> atomically sets a boolean <code>lock</code> to TRUE and <b>returns the original value</b>. <code>while(TestAndSet(&lock));</code> spins until it returns false (the lock was free), then you enter the critical section; on exit set <code>lock=false</code>.<br><b>Swap / Compare-and-Swap:</b> atomically exchanges two values (<code>key=true; while(key) swap(&lock,&key);</code>).<br>Both give mutual exclusion and progress, but <b>not bounded waiting</b>.",
+      "kw": [
+        [
+          "test and set",
+          "test-and-set",
+          "testandset"
+        ],
+        [
+          "swap",
+          "compare and swap",
+          "compare-and-swap"
+        ],
+        [
+          "original value",
+          "old value",
+          "return"
+        ],
+        [
+          "atomic",
+          "indivisible",
+          "uninterrupt"
+        ],
+        [
+          "true"
+        ]
+      ],
+      "src": "S-W4 'Test and Set', 'Swap', 'Meet the Requirements?'; T-W12",
+      "mcq": [
+        {
+          "q": "TestAndSet(&lock) does what, atomically?",
+          "a": "Sets lock to TRUE and returns its previous value",
+          "w": [
+            "Sets lock to FALSE and returns TRUE",
+            "Increments lock and returns the new value",
+            "Swaps lock with the PC"
+          ]
+        },
+        {
+          "q": "Which requirement do plain TestAndSet/Swap locks NOT satisfy?",
+          "a": "Bounded waiting",
+          "w": [
+            "Mutual exclusion",
+            "Progress",
+            "Atomicity"
+          ]
+        },
+        {
+          "q": "With while(TestAndSet(&lock));, a thread enters the critical section when TestAndSet returns:",
+          "a": "FALSE (the lock was free)",
+          "w": [
+            "TRUE",
+            "The thread ID",
+            "An error code"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b3",
+      "set": "W4-6",
+      "n": 3,
+      "q": "What does \"busy waiting\" mean? What other kinds of waiting are there? Can busy waiting be avoided altogether?",
+      "a": "<b>Busy waiting (spinning):</b> repeatedly looping and testing a condition (e.g. <code>while(TestAndSet(&lock));</code>), so it <b>burns CPU doing no useful work</b>. A spin lock is the typical case.<br><b>Other kind:</b> <b>blocking/sleeping</b>: the thread sleeps on a wait queue and <b>gives up the CPU</b> until it's woken/signalled (semaphores with block/wakeup, condition variables, I/O wait).<br><b>Avoid altogether? No.</b> Blocking primitives are built from atomic instructions, and guarding their own queue/count needs a very short spin (or disabled interrupts). It can only be <b>minimised</b>; modern mutexes spin briefly then sleep.",
+      "kw": [
+        [
+          "cpu",
+          "processor time",
+          "waste"
+        ],
+        [
+          "loop",
+          "spin"
+        ],
+        [
+          "sleep",
+          "block"
+        ],
+        [
+          "wake",
+          "signal"
+        ],
+        [
+          "queue"
+        ],
+        [
+          "not completely",
+          "cannot",
+          "can't",
+          "minimi",
+          "short"
+        ]
+      ],
+      "src": "S-W4 'Peterson's Solution', 'Mutex Locks...'; S-W5 'Building Semaphores'; T-W4",
+      "mcq": [
+        {
+          "q": "Busy waiting is undesirable mainly because:",
+          "a": "The waiting thread consumes CPU cycles doing nothing useful",
+          "w": [
+            "It causes deadlock every time",
+            "It can't provide mutual exclusion",
+            "It requires a second CPU"
+          ]
+        },
+        {
+          "q": "The alternative to busy waiting is:",
+          "a": "Blocking: sleep on a wait queue and be woken later",
+          "w": [
+            "Disabling the MMU",
+            "Using a bigger time quantum",
+            "Spinning faster"
+          ]
+        },
+        {
+          "q": "Can busy waiting be eliminated completely?",
+          "a": "No: implementing block/wakeup still needs a brief atomic spin to protect the queue, but it can be minimised",
+          "w": [
+            "Yes, semaphores need no atomic operations",
+            "Yes, by using Peterson's algorithm",
+            "No, because blocking is impossible in modern OSes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b4",
+      "set": "W4-6",
+      "n": 4,
+      "q": "Explain why disabling interrupts is not appropriate for implementing synchronisation primitives in multiprocessor systems.",
+      "a": "Disabling interrupts only affects the <b>CPU that executes it</b>. <b>Other cores keep running</b> and can enter the same critical section at the same time, so there's no mutual exclusion. Disabling interrupts on all CPUs needs messages to every processor (slow), and letting user code disable interrupts is dangerous (the timer can't preempt, so the OS loses control). It only works on <b>single-core</b> machines.",
+      "kw": [
+        [
+          "other cpu",
+          "other core",
+          "other processor",
+          "multiple core",
+          "multiple cpu",
+          "multi-core",
+          "multicore"
+        ],
+        [
+          "single",
+          "one cpu",
+          "one core",
+          "uniprocessor"
+        ],
+        [
+          "mutual exclusion",
+          "simultaneous",
+          "same time"
+        ],
+        [
+          "timer",
+          "lose control",
+          "loses control"
+        ],
+        [
+          "slow",
+          "message",
+          "overhead"
+        ]
+      ],
+      "src": "T-W4 ('it's not going to work for the multi-core system'); T-W3; S-W4",
+      "mcq": [
+        {
+          "q": "Disabling interrupts fails on multicore because:",
+          "a": "Only the local CPU stops being interrupted; other cores can still enter the critical section",
+          "w": [
+            "Multicore CPUs have no interrupts",
+            "It causes a page fault",
+            "It disables the TLB"
+          ]
+        },
+        {
+          "q": "Where does disabling interrupts work as a (naive) solution?",
+          "a": "Single-processor systems",
+          "w": [
+            "Distributed systems",
+            "Multicore systems",
+            "Clusters"
+          ]
+        },
+        {
+          "q": "An extra risk of letting user code disable interrupts:",
+          "a": "The OS loses control: the timer can't preempt the process",
+          "w": [
+            "The disk gets corrupted",
+            "Memory gets fragmented",
+            "Pages get swapped out"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b5",
+      "set": "W4-6",
+      "n": 5,
+      "q": "There are two operations on a semaphore. What are they, and how do you make them atomic?",
+      "a": "<b>P() / down / wait / acquire</b> (Proberen, test): wait while s ≤ 0, then decrement. In the blocking version: <code>count--; if(count&lt;0) block</code>.<br><b>V() / up / signal / release</b> (Verhogen, increment): <code>count++; if(count&lt;=0) wake one waiter</code>.<br><b>Atomicity:</b> only one P or V at a time on a semaphore. Implementing them is itself a critical-section problem, solved with <b>hardware atomic instructions (Test-and-Set/Swap)</b> guarding the count and queue (or disabling interrupts on a uniprocessor).",
+      "kw": [
+        [
+          "p()",
+          "wait",
+          "down",
+          "acquire",
+          "proberen"
+        ],
+        [
+          "v()",
+          "signal",
+          "up",
+          "release",
+          "verhogen"
+        ],
+        [
+          "decrement"
+        ],
+        [
+          "increment"
+        ],
+        [
+          "test and set",
+          "test-and-set",
+          "testandset",
+          "swap",
+          "hardware"
+        ],
+        [
+          "atomic"
+        ]
+      ],
+      "src": "S-W5 'Semaphores', 'Binary Semaphores', 'Building Semaphores'",
+      "mcq": [
+        {
+          "q": "P() on a semaphore:",
+          "a": "Waits until the value is positive, then decrements it",
+          "w": [
+            "Increments the value and wakes a waiter",
+            "Resets the value to 0",
+            "Destroys the semaphore"
+          ]
+        },
+        {
+          "q": "How are P and V made atomic?",
+          "a": "Using hardware atomic instructions like Test-and-Set to protect the semaphore's count and queue",
+          "w": [
+            "By running them in user mode",
+            "By making the semaphore a float",
+            "By calling them twice"
+          ]
+        },
+        {
+          "q": "In the blocking implementation, V() wakes a thread when, after incrementing, count is:",
+          "a": "≤ 0 (someone is still waiting)",
+          "w": [
+            "> 0",
+            "Exactly N",
+            "Negative infinity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b6",
+      "set": "W4-6",
+      "n": 6,
+      "q": "How does signal() for monitors differ from the corresponding semaphore operation?",
+      "a": "<b>Semaphore V()</b> always <b>increments the count</b>, so it's remembered even if nobody is waiting, and a later P() won't block.<br><b>Monitor/condition-variable signal()</b> only <b>wakes a thread currently waiting</b> on that condition. <b>If none is waiting, the signal has no effect (it's lost)</b>. CVs have no value or history.<br>Course framing: \"CV is about condition; semaphore is about integer.\"",
+      "kw": [
+        [
+          "increment",
+          "count",
+          "integer"
+        ],
+        [
+          "no effect",
+          "lost",
+          "nothing happens",
+          "ignored"
+        ],
+        [
+          "waiting"
+        ],
+        [
+          "remember",
+          "history",
+          "state"
+        ],
+        [
+          "condition"
+        ]
+      ],
+      "src": "S-W5 'Condition Variables', 'CV vs Semaphore', 'Monitors'; lost-signal detail: Silberschatz",
+      "mcq": [
+        {
+          "q": "If signal() is called on a monitor condition with no waiting threads:",
+          "a": "Nothing happens; the signal is lost",
+          "w": [
+            "The count increments for later",
+            "The caller blocks",
+            "The monitor deadlocks"
+          ]
+        },
+        {
+          "q": "If V() is called on a semaphore with no waiting threads:",
+          "a": "The semaphore value is incremented and remembered",
+          "w": [
+            "Nothing happens",
+            "It returns an error",
+            "All threads wake up"
+          ]
+        },
+        {
+          "q": "The slides summarise the difference as:",
+          "a": "CV is about a condition; a semaphore is about an integer",
+          "w": [
+            "CV is hardware; semaphore is software",
+            "CV is for processes; semaphore for threads",
+            "They are identical"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b7",
+      "set": "W4-6",
+      "n": 7,
+      "q": "Explain the conditions required to create a deadlock.",
+      "a": "All four must hold at the same time:<br>1. <b>Mutual exclusion:</b> at least one resource can't be shared.<br>2. <b>Hold and wait:</b> a process holds a resource while waiting for others.<br>3. <b>No preemption:</b> resources can't be taken from their holder.<br>4. <b>Circular wait:</b> A waits on B waits on C waits on A.",
+      "kw": [
+        [
+          "mutual exclusion"
+        ],
+        [
+          "hold and wait",
+          "hold-and-wait"
+        ],
+        [
+          "no preemption",
+          "non-preempt",
+          "no pre-emption"
+        ],
+        [
+          "circular wait",
+          "circular"
+        ]
+      ],
+      "src": "S-W6 'Necessary Conditions'",
+      "mcq": [
+        {
+          "q": "Which is NOT a necessary condition for deadlock?",
+          "a": "Starvation",
+          "w": [
+            "Mutual exclusion",
+            "Hold and wait",
+            "Circular wait"
+          ]
+        },
+        {
+          "q": "\"A resource cannot be seized from its holder\" is:",
+          "a": "No preemption",
+          "w": [
+            "Mutual exclusion",
+            "Hold and wait",
+            "Bounded waiting"
+          ]
+        },
+        {
+          "q": "How many of the four conditions must hold for deadlock?",
+          "a": "All four, simultaneously",
+          "w": [
+            "Any one",
+            "Any two",
+            "Three of four"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "set": "W4-6",
+      "n": 8,
+      "q": "4 resources of the same type, shared by 3 processes, each needing at most 2. Show the system is deadlock-free.",
+      "a": "Worst case: each process holds 1 and wants a 2nd, which is 3 held, so <b>1 is still free</b>. Whichever process gets it reaches its max of 2, <b>finishes, and releases 2</b>, letting the others finish too. There's always a process that can complete, so no circular wait and <b>no deadlock</b>.<br>General rule: Σ(max − 1) + 1 ≤ resources → 3·1 + 1 = 4 ≤ 4.",
+      "kw": [
+        [
+          "each hold",
+          "holds one",
+          "hold 1",
+          "holds 1",
+          "one each"
+        ],
+        [
+          "one free",
+          "1 free",
+          "one left",
+          "1 left",
+          "one remaining",
+          "spare"
+        ],
+        [
+          "finish",
+          "complete",
+          "terminate"
+        ],
+        [
+          "release"
+        ],
+        [
+          "no circular",
+          "safe"
+        ]
+      ],
+      "src": "S-W6 'Deadlock Avoidance' (safe sequence); argument: textbook",
+      "mcq": [
+        {
+          "q": "In the worst case, how many resources remain free?",
+          "a": "1 (each process holds one)",
+          "w": [
+            "0",
+            "2",
+            "4"
+          ]
+        },
+        {
+          "q": "Why can't deadlock occur?",
+          "a": "The free resource lets one process reach its max of 2, finish, and release both",
+          "w": [
+            "Processes never request resources",
+            "Resources are preemptible",
+            "Only one process ever runs"
+          ]
+        },
+        {
+          "q": "With 3 resources instead of 4 (same processes), could deadlock occur?",
+          "a": "Yes: each could hold 1 and wait forever for a 2nd",
+          "w": [
+            "No, never",
+            "Only with 4 processes",
+            "Only if resources are shareable"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b9",
+      "set": "W4-6",
+      "n": 9,
+      "q": "Explain deadlock prevention and deadlock avoidance.",
+      "a": "<b>Prevention:</b> by design, <b>break one of the four conditions</b> so deadlock can never happen: e.g. request all resources at once (no hold-and-wait), preempt resources, or impose a global <b>resource ordering</b> (no circular wait). Downside: low utilisation and throughput.<br><b>Avoidance:</b> allow the conditions but <b>check each request dynamically</b> and only grant it if the system stays in a <b>safe state</b> (a sequence exists in which all processes can finish). Needs <b>a priori max-need info</b> (Banker's/RAG). Unsafe ≠ deadlock. Cost: checking overhead.",
+      "kw": [
+        [
+          "break",
+          "eliminate",
+          "negate"
+        ],
+        [
+          "four conditions",
+          "4 conditions",
+          "one of the conditions",
+          "necessary condition"
+        ],
+        [
+          "safe state",
+          "safe"
+        ],
+        [
+          "maximum",
+          "max",
+          "a priori",
+          "advance"
+        ],
+        [
+          "banker"
+        ],
+        [
+          "ordering",
+          "order"
+        ]
+      ],
+      "src": "S-W6 'Handling Deadlocks', 'Deadlock Prevention', 'Deadlock Avoidance'",
+      "mcq": [
+        {
+          "q": "Deadlock prevention works by:",
+          "a": "Ensuring at least one of the four necessary conditions can never hold",
+          "w": [
+            "Detecting cycles and killing processes",
+            "Checking for a safe state on each request",
+            "Ignoring the problem"
+          ]
+        },
+        {
+          "q": "Deadlock avoidance requires:",
+          "a": "Advance knowledge of each process's maximum resource needs",
+          "w": [
+            "No information at all",
+            "Disabling interrupts",
+            "Preemptible CPUs only"
+          ]
+        },
+        {
+          "q": "An unsafe state means:",
+          "a": "Deadlock is possible (not guaranteed)",
+          "w": [
+            "Deadlock has already occurred",
+            "The system is deadlock-free",
+            "All processes are blocked"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b10",
+      "set": "W4-6",
+      "n": 10,
+      "q": "Compare the circular-wait scheme (prevention) with deadlock avoidance w.r.t. (a) runtime overhead and (b) throughput.",
+      "a": "<b>(a) Runtime overhead:</b> circular-wait ordering is <b>very low</b> (just request in a fixed order, no runtime checks); avoidance is <b>high</b> (a safety check on every allocation, tracking allocations and max needs).<br><b>(b) Throughput:</b> circular wait can be <b>lower</b> (resources grabbed in order, often early and held longer, which reduces concurrency); avoidance can be <b>higher</b> (it allows more concurrent allocations and only refuses unsafe ones).",
+      "kw": [
+        [
+          "low overhead",
+          "little overhead",
+          "minimal overhead",
+          "no runtime",
+          "low runtime"
+        ],
+        [
+          "safety check",
+          "check",
+          "banker"
+        ],
+        [
+          "throughput"
+        ],
+        [
+          "utilisation",
+          "utilization",
+          "concurren"
+        ],
+        [
+          "order"
+        ]
+      ],
+      "src": "S-W6 'Deadlock Prevention' summary, 'Deadlock Avoidance'; comparison: Silberschatz",
+      "mcq": [
+        {
+          "q": "Which has the lower runtime overhead?",
+          "a": "Circular-wait (resource ordering) prevention",
+          "w": [
+            "Deadlock avoidance (Banker's)",
+            "They're identical",
+            "Deadlock detection every allocation"
+          ]
+        },
+        {
+          "q": "Which typically allows higher throughput?",
+          "a": "Deadlock avoidance: it permits more concurrent allocation",
+          "w": [
+            "Circular-wait prevention",
+            "Neither affects throughput",
+            "Disabling interrupts"
+          ]
+        },
+        {
+          "q": "Why can resource ordering hurt throughput?",
+          "a": "Processes must acquire resources in a fixed order, often earlier than needed, holding them longer",
+          "w": [
+            "It requires a safety algorithm each request",
+            "It needs a priori max needs",
+            "It kills processes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c1",
+      "set": "W7",
+      "n": 1,
+      "q": "N processes are ready to run on a single processor. How many different schedules are possible?",
+      "a": "<b>N!</b> (N factorial): N choices for the first, N−1 for the second, and so on (each running to completion once).",
+      "kw": [
+        [
+          "n!",
+          "factorial",
+          "n factorial"
+        ]
+      ],
+      "src": "Tanenbaum (not in slides)",
+      "mcq": [
+        {
+          "q": "How many schedules for N processes on one CPU?",
+          "a": "N!",
+          "w": [
+            "N²",
+            "2ᴺ",
+            "N"
+          ]
+        },
+        {
+          "q": "How many schedules for 4 processes?",
+          "a": "24",
+          "w": [
+            "16",
+            "8",
+            "4"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "set": "W7",
+      "n": 2,
+      "q": "What would happen if a process appeared twice or more in the round-robin list? Any reason to allow it?",
+      "a": "It gets <b>two (or more) quanta per round</b>, so a bigger share of the CPU (2/(n+1) instead of 1/n). <b>Reason:</b> a simple way to implement <b>priority/weighted share</b> in round robin: more important processes get more turns.",
+      "kw": [
+        [
+          "more cpu",
+          "more time",
+          "bigger share",
+          "larger share",
+          "twice",
+          "two quant",
+          "more quant",
+          "more turns"
+        ],
+        [
+          "priority",
+          "priorit",
+          "weight",
+          "important"
+        ]
+      ],
+      "src": "S-W7 'Round Robin (RR)'; duplicate idea: Tanenbaum",
+      "mcq": [
+        {
+          "q": "A process listed twice in an RR queue will:",
+          "a": "Get two quanta per round: a larger CPU share",
+          "w": [
+            "Crash the scheduler",
+            "Be skipped entirely",
+            "Run only once anyway"
+          ]
+        },
+        {
+          "q": "A reason to allow duplicate entries:",
+          "a": "To give higher priority/weight to important processes",
+          "w": [
+            "To reduce context switches",
+            "To prevent deadlock",
+            "To save memory"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "set": "W7",
+      "n": 3,
+      "q": "Explain how time quantum and context-switch time affect each other in round robin.",
+      "a": "<b>Large q</b> → less responsive; RR degrades to <b>FIFO</b> (a thread waits up to q(n−1)).<br><b>Small q</b> → more responsive, but <b>context-switch overhead</b> takes a bigger share (useful fraction ≈ q/(q+s)).<br>So <b>q must be much larger than the context-switch time</b> while still small enough for response time (typically 10–100 ms).",
+      "kw": [
+        [
+          "fifo",
+          "fcfs",
+          "first come"
+        ],
+        [
+          "overhead"
+        ],
+        [
+          "much larger",
+          "much longer",
+          "significantly",
+          "greater than"
+        ],
+        [
+          "respons"
+        ],
+        [
+          "q(n-1)",
+          "q(n−1)",
+          "n-1"
+        ]
+      ],
+      "src": "S-W7 'Round Robin (RR)' performance; T-W7",
+      "mcq": [
+        {
+          "q": "If q is very large, RR behaves like:",
+          "a": "FIFO",
+          "w": [
+            "SJF",
+            "Priority",
+            "Multilevel queue"
+          ]
+        },
+        {
+          "q": "If q is too small:",
+          "a": "Most CPU time is wasted on context switching",
+          "w": [
+            "Response time gets worse",
+            "RR becomes SJF",
+            "Starvation increases"
+          ]
+        },
+        {
+          "q": "The rule of thumb for q is:",
+          "a": "Much longer than the context-switch time",
+          "w": [
+            "Equal to the context-switch time",
+            "Shorter than the context-switch time",
+            "Exactly 1 ms"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "set": "W7",
+      "n": 4,
+      "q": "Explain the difference between preemptive and nonpreemptive scheduling. Give an example.",
+      "a": "<b>Non-preemptive:</b> a process keeps the CPU until it <b>finishes its burst or blocks</b>. Examples: <b>FIFO/FCFS, non-preemptive SJF</b>.<br><b>Preemptive:</b> the OS can <b>take the CPU away</b> (timer interrupt, or a higher-priority/shorter job arrives). Examples: <b>Round Robin, SRTF</b>, preemptive priority.",
+      "kw": [
+        [
+          "take away",
+          "taken away",
+          "interrupt",
+          "forcibly",
+          "preempt"
+        ],
+        [
+          "until",
+          "finish",
+          "complete",
+          "block",
+          "voluntar"
+        ],
+        [
+          "fifo",
+          "fcfs",
+          "first come"
+        ],
+        [
+          "round robin",
+          "rr"
+        ],
+        [
+          "srtf",
+          "shortest remaining"
+        ]
+      ],
+      "src": "S-W7 'FIFO', 'SJF', 'Priority Scheduling'",
+      "mcq": [
+        {
+          "q": "Which is a preemptive algorithm?",
+          "a": "Shortest Remaining Time First (SRTF)",
+          "w": [
+            "FIFO",
+            "Non-preemptive SJF",
+            "FCFS"
+          ]
+        },
+        {
+          "q": "In non-preemptive scheduling a process gives up the CPU when:",
+          "a": "It finishes its CPU burst or blocks",
+          "w": [
+            "Its quantum expires",
+            "A shorter job arrives",
+            "The timer fires"
+          ]
+        },
+        {
+          "q": "Round robin is preemptive because:",
+          "a": "The process is preempted when its quantum expires",
+          "w": [
+            "It runs the shortest job first",
+            "It never context-switches",
+            "It uses priorities"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "set": "W7",
+      "n": 5,
+      "q": "Real-time system: two voice calls (period 5 ms, 1 ms CPU each) and one video stream (period 40 ms, 12 ms CPU). Schedulable?",
+      "a": "Utilisation = Σ Cᵢ/Pᵢ = 1/5 + 1/5 + 12/40 = 0.2 + 0.2 + 0.3 = <b>0.7 ≤ 1</b>, so <b>schedulable</b>.<br>(The formula is textbook; the course stresses that real-time means meeting deadlines/guarantees.)",
+      "kw": [
+        [
+          "0.7",
+          "70%",
+          "70 %"
+        ],
+        [
+          "sum",
+          "Σ",
+          "c/p",
+          "ci/pi"
+        ],
+        [
+          "≤ 1",
+          "<= 1",
+          "less than 1",
+          "< 1",
+          "under 1"
+        ],
+        [
+          "schedulable",
+          "yes"
+        ]
+      ],
+      "src": "Tanenbaum periodic real-time condition; S-W7 'Scheduling Goals'",
+      "mcq": [
+        {
+          "q": "Total CPU utilisation for this system:",
+          "a": "0.7",
+          "w": [
+            "0.5",
+            "1.2",
+            "0.3"
+          ]
+        },
+        {
+          "q": "A periodic real-time system is schedulable (in this simple model) if:",
+          "a": "Σ Cᵢ/Pᵢ ≤ 1",
+          "w": [
+            "Σ Pᵢ/Cᵢ ≤ 1",
+            "max Cᵢ ≤ min Pᵢ",
+            "Σ Cᵢ ≤ 1 ms"
+          ]
+        },
+        {
+          "q": "Key difference between real-time and interactive systems:",
+          "a": "Real-time must guarantee deadlines",
+          "w": [
+            "Real-time has no scheduling",
+            "Interactive systems have deadlines",
+            "Real-time ignores predictability"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c6",
+      "set": "W7",
+      "n": 6,
+      "q": "Propose a scheduling algorithm that favours I/O-bound programs without starving CPU-bound programs.",
+      "a": "<b>Multilevel feedback queue + aging.</b> New jobs start in the top queue (high priority, short quantum). <b>I/O-bound</b> jobs block before their quantum ends, so they <b>stay high</b> and get fast response. <b>CPU-bound</b> jobs use their full quantum and get <b>demoted</b> to lower queues with longer quanta. <b>Aging</b> (promoting long-waiting jobs), or a guaranteed time share per level (e.g. 80/20), stops starvation.",
+      "kw": [
+        [
+          "multilevel feedback",
+          "multi-level feedback",
+          "mlfq",
+          "feedback queue"
+        ],
+        [
+          "demot",
+          "move down",
+          "lower queue"
+        ],
+        [
+          "aging",
+          "ageing",
+          "promot"
+        ],
+        [
+          "quantum"
+        ],
+        [
+          "starv"
+        ]
+      ],
+      "src": "S-W7 'Multilevel Feedback Queue', 'Multilevel Queue', 'Priority Scheduling'",
+      "mcq": [
+        {
+          "q": "Best fit for \"favour I/O-bound, don't starve CPU-bound\":",
+          "a": "Multilevel feedback queue with aging",
+          "w": [
+            "Plain FIFO",
+            "Non-preemptive SJF with no aging",
+            "Fixed-priority with CPU-bound always lowest and no aging"
+          ]
+        },
+        {
+          "q": "In an MLFQ, a CPU-bound process that uses its full quantum is:",
+          "a": "Demoted to a lower-priority queue",
+          "w": [
+            "Promoted to the top queue",
+            "Terminated",
+            "Moved to the I/O queue"
+          ]
+        },
+        {
+          "q": "What prevents starvation in priority-based schemes?",
+          "a": "Aging: increasing priority the longer a process waits",
+          "w": [
+            "Smaller quanta",
+            "Disabling interrupts",
+            "Dynamic linking"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c7",
+      "set": "W7",
+      "n": 7,
+      "q": "One scheduling algorithm may decay into another under some circumstances. Give a couple of examples.",
+      "a": "• <b>RR with a very large quantum → FIFO</b>.<br>• <b>Priority with all-equal priorities → FIFO</b> (or RR).<br>• <b>SJF/SRTF with equal-length jobs → FIFO</b>.<br>• <b>Priority = 1/(next burst length) → SJF</b>.<br>• <b>MLFQ with a single queue → RR</b>.",
+      "kw": [
+        [
+          "fifo",
+          "fcfs"
+        ],
+        [
+          "large quantum",
+          "big quantum",
+          "quantum is large",
+          "infinite"
+        ],
+        [
+          "equal priorit",
+          "same priorit"
+        ],
+        [
+          "sjf",
+          "shortest job"
+        ],
+        [
+          "equal length",
+          "same length",
+          "same burst"
+        ]
+      ],
+      "src": "S-W7 'Round Robin (RR)' ('q large → FIFO'); others: textbook",
+      "mcq": [
+        {
+          "q": "Round robin with a huge quantum becomes:",
+          "a": "FIFO",
+          "w": [
+            "SJF",
+            "SRTF",
+            "Priority"
+          ]
+        },
+        {
+          "q": "Priority scheduling where priority = 1/predicted burst is:",
+          "a": "SJF",
+          "w": [
+            "FIFO",
+            "RR",
+            "Lottery"
+          ]
+        },
+        {
+          "q": "SJF where all jobs have the same burst length behaves like:",
+          "a": "FIFO",
+          "w": [
+            "RR",
+            "Priority with aging",
+            "MLFQ"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d1",
+      "set": "W8-10",
+      "n": 1,
+      "q": "Explain what dynamic loading and dynamic linking are.",
+      "a": "<b>Dynamic loading:</b> a routine isn't loaded into memory <b>until it's called</b>; unused code stays on disk, which reduces memory use.<br><b>Dynamic linking:</b> <b>system libraries are linked at run time</b>, not compile time. A small <b>stub</b> locates or loads the library routine when it's first called. Programs are smaller and one shared library copy serves all processes.",
+      "kw": [
+        [
+          "when needed",
+          "when called",
+          "until",
+          "on demand",
+          "only load"
+        ],
+        [
+          "disk"
+        ],
+        [
+          "run time",
+          "runtime",
+          "execution time"
+        ],
+        [
+          "librar"
+        ],
+        [
+          "stub"
+        ],
+        [
+          "share",
+          "smaller"
+        ]
+      ],
+      "src": "S-W8 'Dynamic Loading', 'Dynamic Linking'; T-W12",
+      "mcq": [
+        {
+          "q": "Dynamic loading means:",
+          "a": "A routine is only loaded into memory when it is called",
+          "w": [
+            "Libraries are linked at compile time",
+            "The whole program is loaded at start",
+            "Pages are swapped to disk on fault"
+          ]
+        },
+        {
+          "q": "In dynamic linking, the small piece of code that locates the library routine is the:",
+          "a": "Stub",
+          "w": [
+            "Trap",
+            "Frame",
+            "Superblock"
+          ]
+        },
+        {
+          "q": "A key benefit of dynamic linking:",
+          "a": "Smaller executables, and shared library code across processes",
+          "w": [
+            "No need for an MMU",
+            "Eliminates page faults",
+            "Faster context switches"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "set": "W8-10",
+      "n": 2,
+      "q": "What is the key function of the MMU? In memory protection, what is the limit register used for?",
+      "a": "<b>MMU:</b> a <b>hardware device that maps virtual/logical addresses to physical addresses at run time</b> (e.g. physical = logical + relocation register). User programs never see physical addresses.<br><b>Limit register:</b> holds the <b>range (max logical address)</b>; every address is checked (logical &lt; limit), otherwise <b>trap</b>. This keeps a process inside its own address space. (The relocation register holds the smallest physical address.)",
+      "kw": [
+        [
+          "hardware"
+        ],
+        [
+          "logical",
+          "virtual"
+        ],
+        [
+          "physical"
+        ],
+        [
+          "range",
+          "maximum",
+          "max",
+          "size"
+        ],
+        [
+          "trap",
+          "error"
+        ],
+        [
+          "relocation",
+          "base"
+        ]
+      ],
+      "src": "S-W8 'Memory-Management Unit', 'Memory Protection'; T-W8",
+      "mcq": [
+        {
+          "q": "The MMU's key function is:",
+          "a": "Mapping logical (virtual) addresses to physical addresses at run time",
+          "w": [
+            "Scheduling processes",
+            "Managing the file system",
+            "Allocating disk blocks"
+          ]
+        },
+        {
+          "q": "A process is loaded at physical 14000–15000. The limit register holds:",
+          "a": "1000",
+          "w": [
+            "14000",
+            "15000",
+            "0"
+          ]
+        },
+        {
+          "q": "If a logical address ≥ limit:",
+          "a": "A trap (addressing error) to the OS",
+          "w": [
+            "It wraps around to 0",
+            "The relocation register is increased",
+            "It is silently ignored"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "set": "W8-10",
+      "n": 3,
+      "q": "Holes in order: 10, 4, 20, 18, 7, 9, 12, 15 MB. Requests 15, 10, 5 MB. Which hole for First Fit and Best Fit?",
+      "a": "<b>First Fit:</b> 15 → <b>20 MB</b> hole (5 left); 10 → <b>10 MB</b>; 5 → the <b>5 MB leftover of the 20 MB hole</b> (the 4 MB hole is too small). <i>(If leftovers are ignored: 18 MB.)</i><br><b>Best Fit:</b> 15 → <b>15 MB</b>; 10 → <b>10 MB</b>; 5 → <b>7 MB</b>.",
+      "kw": [
+        [
+          "20"
+        ],
+        [
+          "10"
+        ],
+        [
+          "15"
+        ],
+        [
+          "7"
+        ],
+        [
+          "first fit",
+          "first-fit"
+        ],
+        [
+          "best fit",
+          "best-fit"
+        ]
+      ],
+      "src": "S-W8 'Allocation strategies', worked best-fit example",
+      "mcq": [
+        {
+          "q": "First Fit: where does the 15 MB request go?",
+          "a": "20 MB hole",
+          "w": [
+            "15 MB hole",
+            "18 MB hole",
+            "10 MB hole"
+          ]
+        },
+        {
+          "q": "Best Fit: where does the 5 MB request go?",
+          "a": "7 MB hole",
+          "w": [
+            "4 MB hole",
+            "9 MB hole",
+            "10 MB hole"
+          ]
+        },
+        {
+          "q": "Best Fit: where does the 15 MB request go?",
+          "a": "15 MB hole",
+          "w": [
+            "20 MB hole",
+            "18 MB hole",
+            "12 MB hole"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "set": "W8-10",
+      "n": 4,
+      "q": "Segment table (Seg: Base, Length): 0: 219,600 | 1: 2300,14 | 2: 90,100 | 3: 1327,580 | 4: 1952,96\nPhysical address for (a) 0,500  (b) 1,30  (c) 2,400  (d) 3,800  (e) 4,12?",
+      "a": "Rule: offset &lt; length → base + offset, else trap.<br>(a) 500&lt;600 → <b>719</b><br>(b) 30≥14 → <b>trap</b><br>(c) 400≥100 → <b>trap</b><br>(d) 800≥580 → <b>trap</b><br>(e) 12&lt;96 → <b>1964</b>",
+      "kw": [
+        [
+          "719"
+        ],
+        [
+          "1964"
+        ],
+        [
+          "trap",
+          "illegal",
+          "invalid",
+          "error"
+        ],
+        [
+          "base + offset",
+          "base+offset"
+        ],
+        [
+          "length",
+          "limit"
+        ]
+      ],
+      "src": "S-W9 'Segmentation', 'Mapping Segments'",
+      "mcq": [
+        {
+          "q": "Physical address of (0, 500)?",
+          "a": "719",
+          "w": [
+            "500",
+            "819",
+            "Trap"
+          ]
+        },
+        {
+          "q": "Physical address of (4, 12)?",
+          "a": "1964",
+          "w": [
+            "1952",
+            "2048",
+            "Trap"
+          ]
+        },
+        {
+          "q": "Result of (1, 30)?",
+          "a": "Trap: offset 30 ≥ length 14",
+          "w": [
+            "2330",
+            "2314",
+            "30"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d5",
+      "set": "W8-10",
+      "n": 5,
+      "q": "What are a page and a frame?",
+      "a": "<b>Page:</b> a fixed-size block of <b>logical</b> memory.<br><b>Frame:</b> a block of <b>physical</b> memory <b>of the same size</b>.<br>The page table maps page number → frame number; a program of n pages needs n free frames (not necessarily contiguous).",
+      "kw": [
+        [
+          "logical",
+          "virtual"
+        ],
+        [
+          "physical"
+        ],
+        [
+          "same size",
+          "equal size",
+          "fixed size",
+          "fixed-size"
+        ],
+        [
+          "page table"
+        ]
+      ],
+      "src": "S-W9 'Paging'",
+      "mcq": [
+        {
+          "q": "A frame is:",
+          "a": "A fixed-size block of physical memory",
+          "w": [
+            "A fixed-size block of logical memory",
+            "A variable-size segment",
+            "A TLB entry"
+          ]
+        },
+        {
+          "q": "Pages and frames are:",
+          "a": "The same size",
+          "w": [
+            "Different sizes",
+            "Pages are always larger",
+            "Frames are variable-sized"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d6",
+      "set": "W8-10",
+      "n": 6,
+      "q": "Physical memory is 2⁸ bytes. For physical address 11000001, what is the frame number if frame numbers use 2, 3, and 4 bits?",
+      "a": "High bits = frame number, the rest = offset.<br>2 bits: <code>11</code> = <b>3</b> (offset 1, frame size 64 B)<br>3 bits: <code>110</code> = <b>6</b> (offset 1, 32 B)<br>4 bits: <code>1100</code> = <b>12</b> (offset 1, 16 B)",
+      "kw": [
+        [
+          "3"
+        ],
+        [
+          "6"
+        ],
+        [
+          "12"
+        ],
+        [
+          "offset"
+        ],
+        [
+          "high",
+          "most significant",
+          "leading",
+          "first"
+        ]
+      ],
+      "src": "S-W9 'Paging - Physical Memory'; T-W9",
+      "mcq": [
+        {
+          "q": "Frame number with 3-bit frame numbers?",
+          "a": "6",
+          "w": [
+            "3",
+            "12",
+            "1"
+          ]
+        },
+        {
+          "q": "Frame size with 4-bit frame numbers (2⁸ B memory)?",
+          "a": "16 bytes",
+          "w": [
+            "4 bytes",
+            "32 bytes",
+            "256 bytes"
+          ]
+        },
+        {
+          "q": "Frame number with 2-bit frame numbers?",
+          "a": "3",
+          "w": [
+            "6",
+            "1",
+            "12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d7",
+      "set": "W8-10",
+      "n": 7,
+      "q": "What is a TLB? Why is it needed?",
+      "a": "<b>TLB (Translation Look-aside Buffer):</b> a small, fast, <b>fully associative hardware cache</b> of recent <b>page → frame</b> translations; all entries are compared in parallel (64–1024 entries).<br><b>Why:</b> the page table lives in memory, so every access would need <b>2 memory accesses</b> (page table + data). The TLB avoids the page-table access in most cases.",
+      "kw": [
+        [
+          "cache"
+        ],
+        [
+          "associative",
+          "parallel"
+        ],
+        [
+          "page",
+          "frame"
+        ],
+        [
+          "two memory access",
+          "2 memory access",
+          "two access",
+          "double",
+          "2 access"
+        ],
+        [
+          "fast"
+        ]
+      ],
+      "src": "S-W9 'Performance issue', 'Translation Look-aside Buffer'",
+      "mcq": [
+        {
+          "q": "The TLB caches:",
+          "a": "Recent page-number → frame-number translations",
+          "w": [
+            "Disk blocks",
+            "PCBs",
+            "Open file entries"
+          ]
+        },
+        {
+          "q": "Without a TLB, each memory reference costs:",
+          "a": "Two memory accesses (page table + data)",
+          "w": [
+            "One",
+            "Zero",
+            "A disk read"
+          ]
+        },
+        {
+          "q": "TLB lookups are fast because:",
+          "a": "All entries are compared in parallel (associative)",
+          "w": [
+            "It's stored on disk",
+            "It's very large",
+            "It's searched linearly"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d8",
+      "set": "W8-10",
+      "n": 8,
+      "q": "Explain how the TLB works on a hit and on a miss.",
+      "a": "<b>Hit:</b> page number p is in the TLB, so the frame f comes straight from it; physical = f + offset (one memory access).<br><b>Miss:</b> p isn't in the TLB, so <b>walk the page table</b> in memory (via PTBR) to get f, form the address, and <b>insert (p, f) into the TLB</b> (replacing an entry if full). If the PTE is invalid, that's a <b>page fault</b>.",
+      "kw": [
+        [
+          "page table"
+        ],
+        [
+          "insert",
+          "add",
+          "update",
+          "load into"
+        ],
+        [
+          "replace"
+        ],
+        [
+          "frame"
+        ],
+        [
+          "offset"
+        ],
+        [
+          "page fault"
+        ]
+      ],
+      "src": "S-W9 'Paging Hardware with TLB', 'Handling a Miss'",
+      "mcq": [
+        {
+          "q": "On a TLB miss the hardware/OS:",
+          "a": "Looks up the page table in memory and then adds the translation to the TLB",
+          "w": [
+            "Raises a segmentation fault",
+            "Reads the page from disk immediately",
+            "Terminates the process"
+          ]
+        },
+        {
+          "q": "On a TLB hit the frame number comes from:",
+          "a": "The TLB entry directly",
+          "w": [
+            "The page table in memory",
+            "The disk",
+            "The PCB"
+          ]
+        },
+        {
+          "q": "A TLB miss where the page-table entry is marked invalid leads to:",
+          "a": "A page fault",
+          "w": [
+            "A TLB hit",
+            "An interrupt from the keyboard",
+            "Deadlock"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d9",
+      "set": "W8-10",
+      "n": 9,
+      "q": "64-bit machine, 4 KB pages, two-level page table with all tables having the same number of PTEs. How many page tables, and how many PTEs per table?",
+      "a": "Offset = 12 bits (4 KB = 2¹²). 64 − 12 = 52, split equally: <b>p1 = 26, p2 = 26</b>.<br><b>PTEs per table = 2²⁶</b> (≈67M).<br><b>Number of tables = 1 outer + 2²⁶ inner = 2²⁶ + 1</b>.",
+      "kw": [
+        [
+          "12"
+        ],
+        [
+          "52"
+        ],
+        [
+          "26"
+        ],
+        [
+          "2^26",
+          "2²⁶",
+          "2**26",
+          "67"
+        ],
+        [
+          "+ 1",
+          "+1",
+          "outer"
+        ]
+      ],
+      "src": "S-W9 'Two-Level Paging Example', '64-bit Logical Address Space'; T-W10",
+      "mcq": [
+        {
+          "q": "How many offset bits for 4 KB pages?",
+          "a": "12",
+          "w": [
+            "10",
+            "16",
+            "4"
+          ]
+        },
+        {
+          "q": "PTEs per page table?",
+          "a": "2²⁶",
+          "w": [
+            "2⁵²",
+            "2¹²",
+            "2³²"
+          ]
+        },
+        {
+          "q": "Total number of page tables?",
+          "a": "2²⁶ + 1",
+          "w": [
+            "2",
+            "2²⁶",
+            "2⁵²"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d10",
+      "set": "W8-10",
+      "n": 10,
+      "q": "Memory access = 200 ns, page-fault service = 10 ms. For EAT below 300 ns, what page-fault rate is needed?",
+      "a": "EAT = (1 − p)·200 + p·10,000,000 &lt; 300<br>→ p·9,999,800 &lt; 100 → <b>p &lt; ≈1.0 × 10⁻⁵</b> (fewer than 1 fault per ~100,000 accesses).",
+      "kw": [
+        [
+          "(1 - p)",
+          "(1-p)",
+          "1 − p",
+          "1-p"
+        ],
+        [
+          "10,000,000",
+          "10000000",
+          "10^7",
+          "10⁷",
+          "10 ms"
+        ],
+        [
+          "10^-5",
+          "10⁻⁵",
+          "1e-5",
+          "0.00001",
+          "100,000",
+          "100000"
+        ]
+      ],
+      "src": "S-W10 'Page Fault Penalty', 'Optimizations'; EAT formula: Silberschatz",
+      "mcq": [
+        {
+          "q": "The EAT formula is:",
+          "a": "(1 − p)·memory time + p·fault service time",
+          "w": [
+            "p·memory time + fault time",
+            "memory time / p",
+            "(1 + p)·memory time"
+          ]
+        },
+        {
+          "q": "Required page-fault rate:",
+          "a": "p < ~1 × 10⁻⁵",
+          "w": [
+            "p < 0.01",
+            "p < 0.5",
+            "p < 10⁻¹⁰"
+          ]
+        },
+        {
+          "q": "10 ms expressed in ns is:",
+          "a": "10,000,000 ns",
+          "w": [
+            "10,000 ns",
+            "1,000,000 ns",
+            "100,000 ns"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e1",
+      "set": "W11",
+      "n": 1,
+      "q": "Discuss the relationship between the File Control Block, system-wide open file table, and per-process open file table.",
+      "a": "<b>FCB</b> (on disk, e.g. an inode): permissions, size, dates, pointers to data blocks.<br><b>System-wide open file table</b> (memory): <b>a copy of the FCB of each open file + an open count</b>.<br><b>Per-process open file table</b>: entries <b>pointing to the system-wide entry</b> (plus per-process position); the fd indexes it.<br>open(): if not in the system-wide table, search the directory and load the FCB, then add a per-process entry and return the fd. close(): remove the per-process entry and decrement the count; at 0, write metadata back and remove the system-wide entry.",
+      "kw": [
+        [
+          "copy"
+        ],
+        [
+          "pointer",
+          "points"
+        ],
+        [
+          "count"
+        ],
+        [
+          "inode",
+          "fcb"
+        ],
+        [
+          "descriptor",
+          "handle",
+          "fd"
+        ],
+        [
+          "directory"
+        ]
+      ],
+      "src": "S-W11 'On-Disk Structures', 'In-Memory Structures', 'open() and read()', 'close()'",
+      "mcq": [
+        {
+          "q": "The system-wide open file table contains:",
+          "a": "A copy of each open file's FCB plus an open count",
+          "w": [
+            "One pointer per process",
+            "The file's data blocks",
+            "The free-space bitmap"
+          ]
+        },
+        {
+          "q": "A per-process open file table entry contains:",
+          "a": "A pointer to the system-wide table entry",
+          "w": [
+            "A full copy of the file",
+            "The FCB on disk",
+            "The FAT"
+          ]
+        },
+        {
+          "q": "When the last process closes a file:",
+          "a": "Metadata is written back and the system-wide entry is removed",
+          "w": [
+            "The file is deleted",
+            "The FCB is erased from disk",
+            "Nothing happens"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "set": "W11",
+      "n": 2,
+      "q": "A file varies between 4 KB and 4 MB. Which allocation scheme (contiguous, linked, indexed) is most efficient? Justify.",
+      "a": "<b>Indexed</b> (ideally the combined/UFS scheme).<br>• <b>Contiguous:</b> must know or reserve the max size (wasting space while small); growing may need relocation; <b>external fragmentation</b>/compaction.<br>• <b>Linked:</b> grows fine, but <b>direct access is slow</b> (follow pointers) and it's <b>unreliable</b> (one bad pointer loses the rest).<br>• <b>Indexed:</b> grows block by block, <b>no external fragmentation</b>, supports <b>sequential and direct access</b>. 4 KB blocks with 4 B pointers give 1024 pointers = 4 MB, so one index block (or UFS direct + single indirect) covers it.",
+      "kw": [
+        [
+          "indexed",
+          "index"
+        ],
+        [
+          "external fragmentation",
+          "fragment"
+        ],
+        [
+          "direct access",
+          "random access"
+        ],
+        [
+          "grow",
+          "growth",
+          "size change"
+        ],
+        [
+          "reliab",
+          "corrupt"
+        ],
+        [
+          "1024",
+          "4 mb"
+        ]
+      ],
+      "src": "S-W11 'Contiguous', 'Linked', 'Indexed Allocation', 'Combined Scheme: UFS'",
+      "mcq": [
+        {
+          "q": "Best scheme for a file that grows from 4 KB to 4 MB?",
+          "a": "Indexed allocation",
+          "w": [
+            "Contiguous allocation",
+            "Linked allocation",
+            "Fixed partitions"
+          ]
+        },
+        {
+          "q": "Main problem with contiguous allocation here:",
+          "a": "Must know/reserve the max size; growth causes relocation and external fragmentation",
+          "w": [
+            "No sequential access",
+            "Too many pointers",
+            "Unreliable if a pointer breaks"
+          ]
+        },
+        {
+          "q": "Main problem with linked allocation:",
+          "a": "Direct access needs many I/Os, and one corrupt pointer loses the rest",
+          "w": [
+            "External fragmentation",
+            "Must know the max size",
+            "No sequential access"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "set": "W11",
+      "n": 3,
+      "q": "In general, what are the considerations when choosing a file allocation strategy?",
+      "a": "• <b>Access pattern:</b> sequential vs direct/random.<br>• <b>File size & growth:</b> known/fixed vs dynamic.<br>• <b>Space efficiency/fragmentation:</b> external fragmentation and compaction; pointer/index overhead.<br>• <b>Performance:</b> number of disk seeks/I/Os per access (contiguous is best; FAT is cacheable).<br>• <b>Reliability:</b> corrupted pointers.<br>• <b>Complexity/overhead</b> of index structures and levels.",
+      "kw": [
+        [
+          "sequential"
+        ],
+        [
+          "direct",
+          "random"
+        ],
+        [
+          "size",
+          "grow"
+        ],
+        [
+          "fragment",
+          "space"
+        ],
+        [
+          "performance",
+          "speed",
+          "seek",
+          "i/o"
+        ],
+        [
+          "reliab"
+        ]
+      ],
+      "src": "S-W11 'Space Management' (best use of space, performance, reliability)",
+      "mcq": [
+        {
+          "q": "Which is NOT a main consideration for file allocation?",
+          "a": "The CPU scheduling algorithm",
+          "w": [
+            "Access pattern (sequential vs direct)",
+            "Fragmentation/space efficiency",
+            "Reliability"
+          ]
+        },
+        {
+          "q": "If files are mostly read randomly, avoid:",
+          "a": "Linked allocation",
+          "w": [
+            "Indexed allocation",
+            "Contiguous allocation",
+            "FAT with a cached table"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e4",
+      "set": "W11",
+      "n": 4,
+      "q": "Explain how FAT works.",
+      "a": "<b>FAT (File Allocation Table)</b> is linked allocation with all the links kept <b>together in one table</b> at the <b>start of the volume</b>, <b>indexed by block number</b>. The <b>directory entry stores the first block</b>; each FAT entry holds the <b>next block number</b>, ending with an <b>EOF</b> marker. It's <b>faster and cacheable</b> (the table can sit in memory, so direct access is just table lookups). To add a block: find a free entry, link it from the old EOF, and mark it EOF.",
+      "kw": [
+        [
+          "table"
+        ],
+        [
+          "first block",
+          "starting block",
+          "start block"
+        ],
+        [
+          "next block",
+          "next"
+        ],
+        [
+          "eof",
+          "end of file",
+          "end-of-file"
+        ],
+        [
+          "cache",
+          "memory",
+          "faster"
+        ],
+        [
+          "beginning",
+          "start of the volume",
+          "start of volume"
+        ]
+      ],
+      "src": "S-W11 'FAT'; T-W12",
+      "mcq": [
+        {
+          "q": "In FAT, the directory entry stores:",
+          "a": "The block number of the file's first block",
+          "w": [
+            "All block numbers of the file",
+            "The file's index block",
+            "Only the file size"
+          ]
+        },
+        {
+          "q": "Each FAT entry contains:",
+          "a": "The number of the next block in the file (or EOF)",
+          "w": [
+            "The file's data",
+            "A pointer to the FCB",
+            "The free-space count"
+          ]
+        },
+        {
+          "q": "FAT's advantage over plain linked allocation:",
+          "a": "Links are in one table that can be cached, so traversal is faster",
+          "w": [
+            "No table is needed",
+            "No pointers at all",
+            "It's contiguous"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e5",
+      "set": "W11",
+      "n": 5,
+      "q": "Where do you want to place the bit map? Explain why.",
+      "a": "<b>Keep it on disk</b> (volume control block/superblock area) so free-space info is <b>persistent</b>, and <b>cache it in main memory</b> for speed: finding free or contiguous blocks then needs no disk I/O (the CPU scans it a word at a time). 1 TB / 4 KB = 2²⁸ bits = 32 MB, which is affordable to cache. Trade-off: the in-memory copy must be <b>written back</b> carefully so a crash doesn't leave the disk copy <b>inconsistent</b>.",
+      "kw": [
+        [
+          "memory",
+          "ram"
+        ],
+        [
+          "disk"
+        ],
+        [
+          "persist",
+          "reboot",
+          "crash"
+        ],
+        [
+          "fast",
+          "speed",
+          "quick"
+        ],
+        [
+          "consisten",
+          "write back",
+          "written back",
+          "sync"
+        ]
+      ],
+      "src": "S-W11 'On-Disk Structures', 'Bit map'; T-W12; caching trade-off: Silberschatz",
+      "mcq": [
+        {
+          "q": "Best placement for the free-space bit map:",
+          "a": "Stored on disk, with a cached copy in main memory",
+          "w": [
+            "Only in CPU registers",
+            "Only in the TLB",
+            "Only in the per-process open file table"
+          ]
+        },
+        {
+          "q": "Why cache it in memory?",
+          "a": "Fast lookup of free/contiguous blocks without disk I/O",
+          "w": [
+            "Memory is persistent",
+            "It saves disk space",
+            "The bitmap can't be stored on disk"
+          ]
+        },
+        {
+          "q": "Bitmap size for a 1 TB disk with 4 KB blocks:",
+          "a": "32 MB (2²⁸ bits)",
+          "w": [
+            "4 KB",
+            "1 GB",
+            "256 KB"
+          ]
+        }
+      ]
+    }
+  ],
+  "videos": {
+    "cc18": [
+      "26QPDBe-NB8",
+      "Operating Systems: Crash Course CS #18",
+      "CrashCourse",
+      "13:36"
+    ],
+    "cs162L1": [
+      "pPzVV2kkGHc",
+      "CS162 Lecture 1: What is an Operating System?",
+      "UC Berkeley (Kubiatowicz)",
+      "1:23:03"
+    ],
+    "cs162L3": [
+      "QSep-J6vtdc",
+      "CS162 Lecture 3: Threads and Processes",
+      "UC Berkeley (Kubiatowicz)",
+      "1:27:53"
+    ],
+    "fireship": [
+      "MtxP2pyCvYA",
+      "Every operating system concept in one video",
+      "Fireship",
+      "11:31"
+    ],
+    "cpKernel": [
+      "yV4fGeIv7MI",
+      "CPU Kernel Mode",
+      "Computerphile",
+      "13:27"
+    ],
+    "cdBit": [
+      "H4SDPLiUnv4",
+      "How a Single Bit Inside Your Processor Shields Your OS's Integrity",
+      "Core Dumped",
+      "21:30"
+    ],
+    "cpInt": [
+      "tGMSARJk7cA",
+      "CPU Interrupts",
+      "Computerphile",
+      "16:47"
+    ],
+    "cpProgInt": [
+      "54BrU82ANww",
+      "Program, Interrupted",
+      "Computerphile",
+      "6:41"
+    ],
+    "cdHw": [
+      "1HHeyUVz43k",
+      "How Hardware Assists Software When Multitasking",
+      "Core Dumped",
+      "13:15"
+    ],
+    "cpMP": [
+      "MB0yDMQj1lU",
+      "Multi Programming",
+      "Computerphile",
+      "12:30"
+    ],
+    "cpMulti": [
+      "3RvkfuXUv1c",
+      "Multiple Processor Systems",
+      "Computerphile",
+      "14:52"
+    ],
+    "cdThreads": [
+      "M9HHWFp84f0",
+      "Why Are Threads Needed On Single Core Processors",
+      "Core Dumped",
+      "16:07"
+    ],
+    "cdProg": [
+      "7ge7u5VUSbE",
+      "A PROGRAM is not a PROCESS.",
+      "Core Dumped",
+      "8:08"
+    ],
+    "nesoPCB": [
+      "4s2MKuVYKV8",
+      "Process Control Block",
+      "Neso Academy",
+      "7:02"
+    ],
+    "cdIPC": [
+      "Y2mDwW2pMv4",
+      "IPC: To Share Memory Or To Send Messages",
+      "Core Dumped",
+      "14:15"
+    ],
+    "nesoIPC": [
+      "dJuYKfR8vec",
+      "Interprocess Communication",
+      "Neso Academy",
+      "12:49"
+    ],
+    "cpCtx": [
+      "DKmBRl8j3Ak",
+      "OS Context Switching",
+      "Computerphile",
+      "14:49"
+    ],
+    "nesoCtx": [
+      "vTgccrbYHYs",
+      "Context Switch",
+      "Neso Academy",
+      "10:34"
+    ],
+    "nesoThreads": [
+      "LOfGJcVnvAk",
+      "Introduction to Threads",
+      "Neso Academy",
+      "14:06"
+    ],
+    "nesoModels": [
+      "HW2Wcx-ktsc",
+      "Multithreading Models & Hyperthreading",
+      "Neso Academy",
+      "17:57"
+    ],
+    "cdFork": [
+      "SwIPOf2YAgI",
+      "The Weird Way Linux Creates Processes",
+      "Core Dumped",
+      "17:51"
+    ],
+    "cpRace": [
+      "W0jPTqIo5oE",
+      "Race Conditions on a Human Scale",
+      "Computerphile",
+      "20:14"
+    ],
+    "cdRace": [
+      "bhpzTWtee2A",
+      "The Weirdest Bug in Programming: Race Conditions",
+      "Core Dumped",
+      "18:19"
+    ],
+    "nesoCS": [
+      "UtEORPakw5Y",
+      "The Critical-Section Problem",
+      "Neso Academy",
+      "13:50"
+    ],
+    "nesoPeterson": [
+      "gYCiTtgGR5Q",
+      "Peterson's Solution",
+      "Neso Academy",
+      "21:31"
+    ],
+    "nesoTSL": [
+      "5oZYS5dTrmk",
+      "Test and Set Lock",
+      "Neso Academy",
+      "19:01"
+    ],
+    "cdHwThreads": [
+      "IMceN4_rieo",
+      "How Hardware Makes Threads Less of a Nightmare",
+      "Core Dumped",
+      "18:41"
+    ],
+    "cdSleep": [
+      "e5g8eYKEhMw",
+      "What Happens When a Program Calls Sleep?",
+      "Core Dumped",
+      "19:41"
+    ],
+    "cdMulticore": [
+      "5sw9XJokAqw",
+      "Threads On Multicore Systems",
+      "Core Dumped",
+      "11:27"
+    ],
+    "nesoSem": [
+      "XDIOC2EY5JE",
+      "Semaphores",
+      "Neso Academy",
+      "22:51"
+    ],
+    "sorberSem": [
+      "ukM_zzrIeXs",
+      "What is a semaphore? How do they work? (Example in C)",
+      "Jacob Sorber",
+      "13:27"
+    ],
+    "nesoSemDis": [
+      "2cGo2HdA0dM",
+      "Disadvantages of Semaphores",
+      "Neso Academy",
+      "11:05"
+    ],
+    "nesoMon": [
+      "ufdQ0GR855M",
+      "Monitors",
+      "Neso Academy",
+      "13:46"
+    ],
+    "nesoDP": [
+      "FYUi-u7UWgw",
+      "The Dining Philosophers Problem",
+      "Neso Academy",
+      "20:16"
+    ],
+    "jennyDL": [
+      "x9FF723STvo",
+      "Necessary Conditions for Deadlock",
+      "Jenny's Lectures CS IT",
+      "13:15"
+    ],
+    "kanichDL": [
+      "oEbXlSH8hyE",
+      "Everything you should know about deadlock in three minutes",
+      "Chris Kanich (UIC)",
+      "2:50"
+    ],
+    "gsPrev": [
+      "pPM9Ajqmy_4",
+      "Deadlock Handling Methods and Deadlock Prevention",
+      "Gate Smashers",
+      "24:49"
+    ],
+    "gsBank": [
+      "7gMLNiEz3nw",
+      "Deadlock Avoidance: Banker's Algorithm with Example",
+      "Gate Smashers",
+      "24:04"
+    ],
+    "nesoPre": [
+      "4DhFmL-6SDA",
+      "Preemptive and Non-Preemptive Scheduling",
+      "Neso Academy",
+      "18:57"
+    ],
+    "nesoSJF": [
+      "t0g9b3SJECg",
+      "Scheduling Algorithms: Shortest Job First",
+      "Neso Academy",
+      "28:47"
+    ],
+    "nesoRR": [
+      "YzBBJYfwdi8",
+      "Scheduling Algorithms: Round Robin",
+      "Neso Academy",
+      "15:16"
+    ],
+    "nesoPrio": [
+      "yKD3pcFvGmY",
+      "Scheduling Algorithms: Priority Scheduling",
+      "Neso Academy",
+      "17:11"
+    ],
+    "nesoMLQ": [
+      "fvkSXMZaBNY",
+      "Multilevel Queue Scheduling",
+      "Neso Academy",
+      "14:36"
+    ],
+    "nesoMLFQ": [
+      "1KLuC0knvs8",
+      "Multilevel Feedback-Queue Scheduling",
+      "Neso Academy",
+      "14:13"
+    ],
+    "nesoSolved": [
+      "g6QjVDyGgSE",
+      "Scheduling Algorithms: Solved Problems",
+      "Neso Academy",
+      "21:59"
+    ],
+    "cdSched": [
+      "O2tV9q6784k",
+      "The Fancy Algorithms That Make Your Computer Feel Smoother",
+      "Core Dumped",
+      "45:02"
+    ],
+    "kanichLink": [
+      "l8oIupRzahU",
+      "What's so good about dynamic linking anyway?",
+      "Chris Kanich (UIC)",
+      "11:55"
+    ],
+    "cdMem": [
+      "Zmtxl7LZwjQ",
+      "Why Can't Programs Access Each Other's Memory?",
+      "Core Dumped",
+      "14:51"
+    ],
+    "gsFit": [
+      "N3rG_1CEQkQ",
+      "First Fit, Next Fit, Best Fit, Worst Fit",
+      "Gate Smashers",
+      "16:22"
+    ],
+    "coleContig": [
+      "dFrDy8910j8",
+      "Contiguous Memory Allocation",
+      "Casey Cole",
+      "23:42"
+    ],
+    "gsSeg": [
+      "dz9Tk6KCMlQ",
+      "Segmentation vs Paging",
+      "Gate Smashers",
+      "16:30"
+    ],
+    "cpVM": [
+      "5lFnKYCZT5o",
+      "What's Virtual Memory?",
+      "Computerphile",
+      "22:40"
+    ],
+    "bitlemonVM": [
+      "fGP6VHxqkIM",
+      "Virtual Memory Explained (including Paging)",
+      "BitLemon",
+      "7:54"
+    ],
+    "colePaging": [
+      "LKYKp_ZzlvM",
+      "Paging",
+      "Casey Cole",
+      "29:12"
+    ],
+    "blackTLB": [
+      "95QpHJX55bM",
+      "Virtual Memory: TLB Example",
+      "David Black-Schaffer (Uppsala)",
+      "4:26"
+    ],
+    "mitVM": [
+      "8yO2FBBfaB0",
+      "Basics of Virtual Memory",
+      "MIT OpenCourseWare",
+      "12:20"
+    ],
+    "gs2lvl": [
+      "PiEq1CoP0ds",
+      "2-Level Paging / Multilevel Paging",
+      "Gate Smashers",
+      "15:45"
+    ],
+    "bitlemonML": [
+      "zNPVmTGt7Ds",
+      "Multi-Level Page Tables (Animation)",
+      "BitLemon",
+      "4:53"
+    ],
+    "cdBits64": [
+      "bV3GD--FHu8",
+      "You've Been Lied To About 64-Bit CPUs",
+      "Core Dumped",
+      "13:29"
+    ],
+    "coleDemand": [
+      "58TYdisGrX0",
+      "Demand Paging and Page Faults",
+      "Casey Cole",
+      "21:23"
+    ],
+    "gsThrash": [
+      "IyWaK8pbN6A",
+      "What is Thrashing",
+      "Gate Smashers",
+      "8:34"
+    ],
+    "gsPR": [
+      "8rcUs5RutX0",
+      "Page Replacement Intro & FIFO",
+      "Gate Smashers",
+      "16:07"
+    ],
+    "cc20": [
+      "KN8YgJnShPM",
+      "Files & File Systems: Crash Course CS #20",
+      "CrashCourse",
+      "12:03"
+    ],
+    "inode": [
+      "_6VJ8WfWI4k",
+      "Understanding Linux and UNIX inodes and file metadata",
+      "theurbanpenguin",
+      "13:46"
+    ],
+    "coleAlloc": [
+      "B1_er2nGKao",
+      "File Allocation Methods",
+      "Casey Cole",
+      "20:12"
+    ],
+    "udacityFAT": [
+      "V2Gxqv3bJCk",
+      "File Allocation Table",
+      "Udacity",
+      "2:55"
+    ],
+    "cantrellFAT": [
+      "HjVktRd35G8",
+      "FAT File System Explained",
+      "Gary Cantrell",
+      "8:39"
+    ],
+    "coleFree": [
+      "CCNGuS-yh_c",
+      "Free Space Management",
+      "Casey Cole",
+      "6:06"
+    ]
+  },
+  "questionVideos": {
+    "a1": [
+      "cc18",
+      "cs162L1",
+      "fireship"
+    ],
+    "a2": [
+      "cpKernel",
+      "cdBit"
+    ],
+    "a3": [
+      "cpInt",
+      "cpProgInt"
+    ],
+    "a4": [
+      "cpInt",
+      "cdHw"
+    ],
+    "a5": [
+      "cpMP"
+    ],
+    "a6": [
+      "cpMP",
+      "cpMulti",
+      "cdThreads"
+    ],
+    "a7": [
+      "cdProg",
+      "nesoPCB"
+    ],
+    "a8": [
+      "cdIPC",
+      "nesoIPC"
+    ],
+    "a9": [
+      "cpCtx",
+      "nesoCtx"
+    ],
+    "a10": [
+      "nesoThreads",
+      "nesoModels",
+      "cdFork",
+      "cs162L3"
+    ],
+    "b1": [
+      "cpRace",
+      "cdRace",
+      "nesoCS"
+    ],
+    "b2": [
+      "nesoTSL",
+      "cdHwThreads",
+      "nesoPeterson"
+    ],
+    "b3": [
+      "cdSleep",
+      "nesoTSL"
+    ],
+    "b4": [
+      "cdMulticore",
+      "cdHwThreads"
+    ],
+    "b5": [
+      "nesoSem",
+      "sorberSem"
+    ],
+    "b6": [
+      "nesoMon",
+      "nesoSemDis"
+    ],
+    "b7": [
+      "jennyDL",
+      "kanichDL",
+      "nesoDP"
+    ],
+    "b8": [
+      "kanichDL",
+      "gsBank"
+    ],
+    "b9": [
+      "gsPrev",
+      "gsBank"
+    ],
+    "b10": [
+      "gsPrev",
+      "gsBank"
+    ],
+    "c1": [
+      "nesoPre"
+    ],
+    "c2": [
+      "nesoRR"
+    ],
+    "c3": [
+      "nesoRR",
+      "cpCtx"
+    ],
+    "c4": [
+      "nesoPre",
+      "nesoSJF"
+    ],
+    "c5": [
+      "cdSched"
+    ],
+    "c6": [
+      "nesoMLFQ",
+      "cdSched"
+    ],
+    "c7": [
+      "nesoMLQ",
+      "nesoPrio",
+      "nesoSolved"
+    ],
+    "d1": [
+      "kanichLink"
+    ],
+    "d2": [
+      "cdMem"
+    ],
+    "d3": [
+      "gsFit",
+      "coleContig"
+    ],
+    "d4": [
+      "gsSeg"
+    ],
+    "d5": [
+      "colePaging",
+      "bitlemonVM"
+    ],
+    "d6": [
+      "colePaging"
+    ],
+    "d7": [
+      "blackTLB",
+      "cpVM"
+    ],
+    "d8": [
+      "blackTLB",
+      "mitVM"
+    ],
+    "d9": [
+      "gs2lvl",
+      "bitlemonML",
+      "cdBits64"
+    ],
+    "d10": [
+      "coleDemand",
+      "gsThrash",
+      "gsPR"
+    ],
+    "e1": [
+      "cc20",
+      "inode"
+    ],
+    "e2": [
+      "coleAlloc"
+    ],
+    "e3": [
+      "coleAlloc",
+      "cc20"
+    ],
+    "e4": [
+      "udacityFAT",
+      "cantrellFAT"
+    ],
+    "e5": [
+      "coleFree"
+    ]
+  }
+}
